@@ -34,7 +34,7 @@ $observers = array(
     array(
         'eventname' => '\core\event\user_enrolment_created',
         'callback' => '\local_autogroup\event_handler::user_created',
-        'includefile' => 'local/autogroup/locallib.php',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
