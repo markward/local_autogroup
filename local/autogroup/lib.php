@@ -30,4 +30,4 @@
 
 namespace local_autogroup;
 
-include('locallib.php');
+include_once(__DIR__ . '/locallib.php');
