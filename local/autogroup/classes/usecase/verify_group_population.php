@@ -33,21 +33,17 @@ namespace local_autogroup\usecase;
 use local_autogroup\usecase;
 use local_autogroup\domain;
 
-class verify_course_groups_population extends usecase
+class verify_group_population extends usecase
 {
-    public function __construct($courseid, \moodle_database $db){
-        $this->course = new domain\course($courseid, $db);
+    public function __construct($groupid, \moodle_database $db){
+        $this->group = new domain\group($groupid, $db);
     }
 
     public function __invoke(){
-        $groupmemberships = $this->course->get_membership_counts();
-
-        foreach($groupmemberships as $groupid => $groupmembership){
-            if($groupmembership == 0){
-                $this->course->remove_group($groupid);
-            }
+        if($this->group->membership_count() == 0){
+            $this->group->remove();
         }
     }
 
-    private $course;
+    private $group;
 }

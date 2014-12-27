@@ -30,18 +30,21 @@
 
 namespace local_autogroup;
 
-use \core\event\user_enrolment_created;
-use \core\event\group_member_removed;
+use \core\event;
+use \local_autogroup\usecase;
 
 class event_handler
 {
-    public static function user_enrolled(user_enrolment_created $event)
+    public static function user_enrolled(event\user_enrolment_created $event)
     {
         debugging('user enrolled');
     }
 
-    public static function group_member_removed(group_member_removed $event)
+    public static function group_member_removed(event\group_member_removed $event)
     {
-        debugging('user removed from group');
+        global $DB;
+
+        $usecase = new usecase\verify_group_population($event->objectid, $DB);
+        return $usecase();
     }
 }
