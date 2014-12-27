@@ -43,7 +43,12 @@ use local_autogroup\exception;
  */
 class user extends domain
 {
-
+    /**
+     * @param object|int $user
+     * @param \moodle_database $db
+     * @param bool $lazyload
+     * @throws exception\invalid_user_argument
+     */
     public function __construct ($user, \moodle_database $db, $lazyload = false)
     {
         //get the id for this user
@@ -60,6 +65,9 @@ class user extends domain
         return true;
     }
 
+    /**
+     * @param \moodle_database $db
+     */
     private function get_courses(\moodle_database $db)
     {
         $sql = "SELECT e.courseid".PHP_EOL
@@ -72,6 +80,9 @@ class user extends domain
         $this->courses = $db->get_fieldset_sql($sql,$param);
     }
 
+    /**
+     * @param \moodle_database $db
+     */
     private function get_group_membership(\moodle_database $db)
     {
         $sql = "SELECT g.id, g.courseid".PHP_EOL
@@ -85,6 +96,11 @@ class user extends domain
         $this->membership = $db->get_records_sql_menu($sql,$param);
     }
 
+    /**
+     * @param object|int $user
+     * @return bool
+     * @throws exception\invalid_user_argument
+     */
     private function parse_user_id ($user)
     {
         if(is_int($user) && $user > 0){
@@ -100,6 +116,12 @@ class user extends domain
         throw new exception\invalid_user_argument($user);
     }
 
+    /**
+     * @var array
+     */
     private $membership = array();
+    /**
+     * @var array
+     */
     private $courses = array();
 }
