@@ -78,6 +78,14 @@ class user extends domain
         $param = array('userid' => $this->get_id());
 
         $this->courses = $db->get_fieldset_sql($sql,$param);
+
+        foreach($this->courses as $k => $courseid){
+            try {
+                $this->courses[$k] = new course($courseid, $db);
+            } catch (exception\invalid_course_argument $e){
+                unset($this->courses[$k]);
+            }
+        }
     }
 
     /**
