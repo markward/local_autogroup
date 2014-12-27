@@ -17,9 +17,9 @@
 /**
  * autogroup local plugin
  *
- * This plugin automatically assigns users to a group within any course
- * upon which they may be enrolled and which has auto-grouping
- * configured.
+ * A course object relates to a Moodle course and acts as a container
+ * for multiple groups. Initialising a course object will automatically
+ * load each autogroup group for that course into memory.
  *
  * @package    local
  * @subpackage autogroup

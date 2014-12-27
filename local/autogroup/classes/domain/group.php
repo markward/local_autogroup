@@ -17,9 +17,8 @@
 /**
  * autogroup local plugin
  *
- * This plugin automatically assigns users to a group within any course
- * upon which they may be enrolled and which has auto-grouping
- * configured.
+ * A group object relates to a Moodle group and is generally the end
+ * point for most usecases.
  *
  * @package    local
  * @subpackage autogroup

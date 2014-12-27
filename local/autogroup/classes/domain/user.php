@@ -17,9 +17,13 @@
 /**
  * autogroup local plugin
  *
- * This plugin automatically assigns users to a group within any course
- * upon which they may be enrolled and which has auto-grouping
- * configured.
+ * A user object relates to a real Moodle user; it acts as a container
+ * for multiple courses which in turn contain multiple groups.
+ * Initialising a course object will automatically load each autogroup
+ * group which could be relevant for a user into memory.
+ *
+ * A user is also a group member; a membership register is also maintained
+ * by this class.
  *
  * @package    local
  * @subpackage autogroup
@@ -32,7 +36,25 @@ namespace local_autogroup\domain;
 
 use local_autogroup\domain;
 
+/**
+ * Class user
+ * @package local_autogroup\domain
+ */
 class user extends domain
 {
+
+    /**
+     * @param $userid
+     * @param \moodle_database $db
+     * @param bool $lazyload
+     */
+    public function __construct ($user, \moodle_database $db, $lazyload = false)
+    {
+        //Firstly we want to cache user details we need
+        if(!is_object($user) && !is_int($user)) {
+            throw exception('$user must be an object or int');
+        }
+
+    }
 
 }
