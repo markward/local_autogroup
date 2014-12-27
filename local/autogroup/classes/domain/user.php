@@ -44,18 +44,62 @@ use local_autogroup\exception;
 class user extends domain
 {
 
-    /**
-     * @param $userid
-     * @param \moodle_database $db
-     * @param bool $lazyload
-     */
     public function __construct ($user, \moodle_database $db, $lazyload = false)
     {
-        //Check the user argument
-        if(!is_object($user) && !is_int($user)) {
-            throw new exception\invalid_user_argument($user);
+        //get the id for this user
+        $this->parse_user_id($user);
+
+        //register which autogroup groups this user is a member of currently
+        $this->get_group_membership($db);
+
+        //if applicable, load courses this user is on and their autogroup groups
+        if(!$lazyload){
+            $this->get_courses($db);
         }
 
+        return true;
     }
 
+    private function get_courses(\moodle_database $db)
+    {
+        $sql = "SELECT e.courseid".PHP_EOL
+            ."FROM {enrol} e".PHP_EOL
+            ."LEFT JOIN {user_enrolments} ue".PHP_EOL
+            ."ON ue.enrol = e.id".PHP_EOL
+            ."WHERE ue.userid = :userid";
+        $param = array('userid' => $this->get_id());
+
+        $this->courses = $db->get_fieldset_sql($sql,$param);
+    }
+
+    private function get_group_membership(\moodle_database $db)
+    {
+        $sql = "SELECT g.id, g.courseid".PHP_EOL
+              ."FROM {groups} g".PHP_EOL
+              ."LEFT JOIN {group_members} gm".PHP_EOL
+              ."ON gm.groupid = g.id".PHP_EOL
+              ."WHERE gm.userid = :userid".PHP_EOL
+              ."AND ".$db->sql_like('g.idnumber', 'autogroup|%');
+        $param = array('userid' => $this->get_id());
+
+        $this->membership = $db->get_records_sql_menu($sql,$param);
+    }
+
+    private function parse_user_id ($user)
+    {
+        if(is_int($user) && $user > 0){
+            $this->set_id($user);
+            return true;
+        }
+
+        if(is_object($user) && isset($user->id) && $user->id > 0){
+            $this->set_id($user->id);
+            return true;
+        }
+
+        throw new exception\invalid_user_argument($user);
+    }
+
+    private $membership = array();
+    private $courses = array();
 }
