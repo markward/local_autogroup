@@ -32,4 +32,11 @@ namespace local_autogroup;
 
 abstract class usecase {
 
+    /**
+     * Child classes will probably override this method.
+     * @return string
+     */
+    public function __toString() {
+        return get_class($this);
+    }
 }
