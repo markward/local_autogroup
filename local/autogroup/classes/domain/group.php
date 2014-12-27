@@ -32,6 +32,8 @@ namespace local_autogroup\domain;
 use local_autogroup\domain;
 use local_autogroup\exception;
 
+require_once(__DIR__ . __DIR__ . __DIR__ . __DIR__ ."/group/lib.php" );
+
 /**
  * Class group
  * @package local_autogroup\domain
@@ -56,6 +58,30 @@ class group extends domain
         else {
             throw new exception\invalid_group_argument($group);
         }
+
+        $this->get_members($db);
+    }
+
+    /**
+     * @return int
+     */
+    public function membership_count(){
+        return count($this->members);
+    }
+
+    /**
+     * delete this group from the application
+     */
+    public function remove(){
+        \groups_delete_group($this->id);
+    }
+
+
+    /**
+     * @param \moodle_database $db
+     */
+    private function get_members(\moodle_database $db){
+        $this->members =  $db->get_records_menu('group_members', array('groupid' => $this->id),'id','id,userid');
     }
 
     /**
