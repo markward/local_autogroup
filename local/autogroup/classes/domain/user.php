@@ -75,7 +75,7 @@ class user extends domain
             ."LEFT JOIN {user_enrolments} ue".PHP_EOL
             ."ON ue.enrol = e.id".PHP_EOL
             ."WHERE ue.userid = :userid";
-        $param = array('userid' => $this->get_id());
+        $param = array('userid' => $this->id);
 
         $this->courses = $db->get_fieldset_sql($sql,$param);
 
@@ -99,7 +99,7 @@ class user extends domain
               ."ON gm.groupid = g.id".PHP_EOL
               ."WHERE gm.userid = :userid".PHP_EOL
               ."AND ".$db->sql_like('g.idnumber', 'autogroup|%');
-        $param = array('userid' => $this->get_id());
+        $param = array('userid' => $this->id);
 
         $this->membership = $db->get_records_sql_menu($sql,$param);
     }
@@ -112,12 +112,12 @@ class user extends domain
     private function parse_user_id ($user)
     {
         if(is_int($user) && $user > 0){
-            $this->set_id($user);
+            $this->id = $user;
             return true;
         }
 
         if(is_object($user) && isset($user->id) && $user->id > 0){
-            $this->set_id($user->id);
+            $this->id = $user->id;
             return true;
         }
 

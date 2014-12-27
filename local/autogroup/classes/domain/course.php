@@ -54,12 +54,12 @@ class course extends domain
     private function parse_course_id ($course)
     {
         if(is_int($course) && $course > 0){
-            $this->set_id($course);
+            $this->id = $course;
             return true;
         }
 
         if(is_object($course) && isset($course->id) && $course->id > 0){
-            $this->set_id($course->id);
+            $this->id = $course->id;
             return true;
         }
 
@@ -71,7 +71,7 @@ class course extends domain
             ."FROM {groups} g".PHP_EOL
             ."WHERE g.courseid = :courseid".PHP_EOL
             ."AND ".$db->sql_like('g.idnumber', 'autogroup|');
-        $param = array('courseid' => $this->get_id());
+        $param = array('courseid' => $this->id);
 
         $this->autogroups = $db->get_fieldset_sql($sql,$param);
 
