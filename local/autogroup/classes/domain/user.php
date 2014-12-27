@@ -35,6 +35,7 @@
 namespace local_autogroup\domain;
 
 use local_autogroup\domain;
+use local_autogroup\exception;
 
 /**
  * Class user
@@ -50,9 +51,9 @@ class user extends domain
      */
     public function __construct ($user, \moodle_database $db, $lazyload = false)
     {
-        //Firstly we want to cache user details we need
+        //Check the user argument
         if(!is_object($user) && !is_int($user)) {
-            throw exception('$user must be an object or int');
+            throw new exception\invalid_user_argument($user);
         }
 
     }
