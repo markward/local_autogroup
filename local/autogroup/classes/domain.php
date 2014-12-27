@@ -30,6 +30,10 @@
 
 namespace local_autogroup;
 
+/**
+ * Class domain
+ * @package local_autogroup
+ */
 abstract class domain {
     /**
      * Child classes will probably override this method.
@@ -40,16 +44,57 @@ abstract class domain {
     }
 
     /**
+     * @param $attribute
+     * @return int|null
+     */
+    public function __get($attribute)
+    {
+        if(!in_array($attribute, $this->attributes)) {
+            return null;
+        }
+
+        if($attribute == 'id'){
+            return $this->get_id();
+        }
+        else {
+            return $this->$attribute;
+        }
+    }
+
+    /**
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    public function __set($attribute,$value)
+    {
+        if(!in_array($attribute, $this->attributes)) {
+            return false;
+        }
+
+        if($attribute == 'id'){
+            $this->set_id($value);
+        }
+        else {
+            $this->$attribute = $value;
+        }
+
+        //timemodified will always reflect the last change
+        $this->timemodified = time();
+        return true;
+    }
+
+    /**
      * @return int
      */
-    public function get_id() {
+    private function get_id() {
         return $this->id;
     }
 
     /**
      * @param int $id
      */
-    public function set_id($id) {
+    private function set_id($id) {
         $this->id = (int) $id;
     }
 
@@ -57,4 +102,14 @@ abstract class domain {
      * @type int
      */
     private $id = 0;
+
+    /**
+     * @var int
+     */
+    private $timemodified = 0;
+
+    /**
+     * @var array
+     */
+    private $attributes = array('id');
 }
