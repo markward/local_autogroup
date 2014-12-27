@@ -30,7 +30,16 @@
 
 namespace local_autogroup;
 
+/**
+ * Class usecase
+ * @package local_autogroup
+ */
 abstract class usecase {
+
+    /**
+     * @return mixed
+     */
+    public abstract function execute();
 
     /**
      * Child classes will probably override this method.
@@ -38,5 +47,22 @@ abstract class usecase {
      */
     public function __toString() {
         return get_class($this);
+    }
+
+    /**
+     * @param $attribute
+     * @return null
+     */
+    public function __get($attribute){
+        return null;
+    }
+
+    /**
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    public function __set($attribute, $value){
+        return false;
     }
 }
