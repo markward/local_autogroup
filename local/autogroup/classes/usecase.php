@@ -39,7 +39,7 @@ abstract class usecase {
     /**
      * @return mixed
      */
-    public abstract function execute();
+    public abstract function __invoke();
 
     /**
      * Child classes will probably override this method.
