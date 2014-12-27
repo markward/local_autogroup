@@ -33,8 +33,18 @@ namespace local_autogroup\domain;
 use local_autogroup\domain;
 use local_autogroup\exception;
 
+/**
+ * Class course
+ * @package local_autogroup\domain
+ */
 class course extends domain
 {
+    /**
+     * @param $course
+     * @param \moodle_database $db
+     * @param bool $lazyload
+     * @throws exception\invalid_course_argument
+     */
     public function __construct ($course, \moodle_database $db, $lazyload = false)
     {
         //get the id for this course
@@ -44,6 +54,30 @@ class course extends domain
         if(!$lazyload){
             $this->get_autogroups($db);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function get_membership_counts(){
+        $result = array();
+        foreach($this->autogroups as $groupid => $group){
+            $result[$groupid] = $group->membership_count();
+        }
+        return $result;
+    }
+
+    /**
+     * @param $groupid
+     * @throws exception\invalid_group_argument
+     */
+    public function remove_group($groupid){
+        if(!is_int($groupid) || $groupid < 1){
+            throw new exception\invalid_group_argument($groupid);
+        }
+
+        $this->autogroups[$groupid]->remove();
+        unset($this->autogroups[$groupid]);
     }
 
     /**
@@ -66,6 +100,9 @@ class course extends domain
         throw new exception\invalid_course_argument($course);
     }
 
+    /**
+     * @param \moodle_database $db
+     */
     private function get_autogroups(\moodle_database $db){
         $sql = "SELECT g.id".PHP_EOL
             ."FROM {groups} g".PHP_EOL
@@ -77,13 +114,16 @@ class course extends domain
 
         foreach($this->autogroups as $k => $groupid){
             try {
-                $this->autogroups[$k] = new group($groupid, $db);
+                $this->autogroups[$k] = new domain\group($groupid, $db);
             } catch (exception\invalid_group_argument $e){
                 unset($this->autogroups[$k]);
             }
         }
     }
 
+    /**
+     * @var array
+     */
     private $autogroups = array();
 
 }
