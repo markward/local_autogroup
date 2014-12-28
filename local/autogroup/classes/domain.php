@@ -49,7 +49,7 @@ abstract class domain {
      */
     public function __get($attribute)
     {
-        if(!in_array($attribute, $this->attributes)) {
+        if(!\in_array($attribute, $this->attributes)) {
             return null;
         }
 
@@ -99,6 +99,11 @@ abstract class domain {
     }
 
     /**
+     * @var array
+     */
+    protected $attributes = array('id');
+
+    /**
      * @type int
      */
     private $id = 0;
@@ -107,9 +112,4 @@ abstract class domain {
      * @var int
      */
     private $timemodified = 0;
-
-    /**
-     * @var array
-     */
-    private $attributes = array('id');
 }

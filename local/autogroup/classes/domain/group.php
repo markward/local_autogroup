@@ -117,58 +117,64 @@ class group extends domain
     }
 
     /**
-     * @var int
+     * An array of DB level attributes for a group
+     * used for handling stdclass object conversion.
+     *
+     * @var array
      */
-    private $id = 0;
+    protected $attributes = array(
+        'id','courseid','idnumber','name', 'description', 'descriptionformat',
+        'enrolmentkey','picture','hidepicture','timecreated','timemodified'
+    );
 
     /**
      * @var int
      */
-    private $courseid = 0;
+    protected $courseid = 0;
 
     /**
      * @var string
      */
-    private $idnumber = '';
+    protected $idnumber = '';
 
     /**
      * @var string
      */
-    private $name = '';
+    protected $name = '';
 
     /**
      * @var string
      */
-    private $description = '';
+    protected $description = '';
 
     /**
      * @var int
      */
-    private $descriptionformat = 1;
+    protected $descriptionformat = 1;
 
     /**
      * @var string
      */
-    private $enrolmentkey = '';
+    protected $enrolmentkey = '';
 
     /**
      * @var int
      */
-    private $picture = 0;
+    protected $picture = 0;
+    /**
+     * @var int
+     */
+    protected $hidepicture = 0;
 
     /**
      * @var int
      */
-    private $hidepicture = 0;
-    /**
-     * @var int
-     */
-    private $timecreated = 0;
+    protected $timecreated = 0;
 
     /**
      * @var int
      */
-    private $timemodified = 0;
+    protected $timemodified = 0;
 
     /**
      * List of members for this group
@@ -176,16 +182,5 @@ class group extends domain
      * @var array
      */
     private $members;
-
-    /**
-     * An array of DB level attributes for a group
-     * used for handling stdclass object conversion.
-     *
-     * @var array
-     */
-    private $attributes = array(
-        'id','courseid','idnumber','name', 'description', 'descriptionformat',
-        'enrolmentkey','picture','hidepicture','timecreated','timemodified'
-    );
 
 }
