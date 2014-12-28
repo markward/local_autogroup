@@ -66,6 +66,15 @@ class autogroup_set extends domain
     }
 
     /**
+     * @param int $userid
+     * @return bool
+     */
+    public function verify_user_group_membership($userid)
+    {
+        return true;
+    }
+
+    /**
      * @param \stdclass $settings
      * @return bool
      * @throws exception\invalid_autogroup_set_argument

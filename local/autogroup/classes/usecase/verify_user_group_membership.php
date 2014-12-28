@@ -52,11 +52,11 @@ class verify_user_group_membership extends usecase
     }
 
     /**
-     * @return void
+     * @return bool
      */
     public function __invoke()
     {
-
+        return $this->user->verify_user_group_membership();
     }
 
     /**

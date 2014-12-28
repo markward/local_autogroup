@@ -68,6 +68,19 @@ class course extends domain
     }
 
     /**
+     * @param int $userid
+     * @return bool
+     */
+    public function verify_user_group_membership($userid)
+    {
+        $result = true;
+        foreach ($this->autogroups as $autogroup){
+            $result &= $autogroup->verify_user_group_membership($userid);
+        }
+        return $result;
+    }
+
+    /**
      * @param object|int $course
      * @return bool
      * @throws exception\invalid_course_argument

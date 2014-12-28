@@ -64,24 +64,36 @@ class user extends domain
     }
 
     /**
+     * @return bool
+     */
+    public function verify_user_group_membership()
+    {
+        $result = true;
+        foreach ($this->courses as $course){
+            $result &= $course->verify_user_group_membership($this->id);
+        }
+        return $result;
+    }
+
+    /**
      * @param \moodle_database $db
      */
     private function get_courses(\moodle_database $db, $onlyload = 0)
     {
-        $sql = "SELECT e.courseid".PHP_EOL
-            ."FROM {enrol} e".PHP_EOL
-            ."LEFT JOIN {user_enrolments} ue".PHP_EOL
-            ."ON ue.enrolid = e.id".PHP_EOL
-            ."WHERE ue.userid = :userid";
-        $param = array('userid' => $this->id);
+        if($onlyload < 1) {
+            $sql = "SELECT e.courseid" . PHP_EOL
+                . "FROM {enrol} e" . PHP_EOL
+                . "LEFT JOIN {user_enrolments} ue" . PHP_EOL
+                . "ON ue.enrolid = e.id" . PHP_EOL
+                . "WHERE ue.userid = :userid";
+            $param = array('userid' => $this->id);
 
-        if($onlyload > 0){
-            //TODO: this is only necessary if we are retrieving more data from the DB about this course
-            $sql .= PHP_EOL . "AND e.courseid = :courseid";
-            $param['courseid'] = $onlyload;
+            $this->courses = $db->get_fieldset_sql($sql, $param);
         }
 
-        $this->courses = $db->get_fieldset_sql($sql,$param);
+        else {
+            $this->courses[$onlyload] = $onlyload;
+        }
 
         foreach($this->courses as $k => $courseid){
             try {
