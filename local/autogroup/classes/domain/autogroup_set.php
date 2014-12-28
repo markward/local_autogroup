@@ -34,6 +34,8 @@ use local_autogroup\domain;
 use local_autogroup\exception;
 use local_autogroup\sort_module;
 
+require_once(__DIR__ . "/../../../../group/lib.php" );
+
 /**
  * Class sort
  * @package local_autogroup\domain
@@ -79,10 +81,7 @@ class autogroup_set extends domain
         $eligiblegroups = $sortmodule->eligible_groups();
 
         foreach ($eligiblegroups as $eligiblegroup){
-            debugging('1');
             $group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
-
-            debugging($group->idnumber);
 
             $group->ensure_user_is_member($user->id);
 
@@ -155,9 +154,17 @@ class autogroup_set extends domain
         }
 
         //if we don't find a match, create a new group with this idnumber.
-        $data = new stdclass();
+        $data = new \stdclass();
         $data->name = $groupname;
         $data->idnumber = $idnumber;
+        $data->courseid = $this->courseid;
+        $data->description = '';
+        $data->descriptionformat = 0;
+        $data->enrolmentkey = null;
+        $data->picture = 0;
+        $data->hidepicture = 0;
+
+
         $data->id = \groups_create_group($data);
 
         $this->groups[$data->id] = new domain\group($data,$db);
