@@ -35,9 +35,15 @@ use \local_autogroup\usecase;
 
 class event_handler
 {
-    public static function user_enrolled(event\user_enrolment_created $event)
+    public static function user_enrolment_created(event\user_enrolment_created $event)
     {
-        debugging('user enrolled');
+        global $DB;
+
+        $courseid = (int) $event->courseid;
+        $userid = (int) $event->relateduserid;
+
+        $usecase = new usecase\verify_user_group_membership($userid, $courseid, $DB);
+        return $usecase();
     }
 
     public static function group_member_removed(event\group_member_removed $event)

@@ -31,8 +31,23 @@
 namespace local_autogroup\usecase;
 
 use local_autogroup\usecase;
+use local_autogroup\domain;
 
 class verify_user_group_membership extends usecase
 {
 
+    public function __construct($userid, $courseid, \moodle_database $db)
+    {
+        $this->course = new domain\course($courseid, $db);
+    }
+
+    /**
+     * @return void
+     */
+    public function __invoke()
+    {
+
+    }
+
+    protected $course;
 }

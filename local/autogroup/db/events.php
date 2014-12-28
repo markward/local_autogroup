@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 $observers = array(
     array(
         'eventname' => '\core\event\user_enrolment_created',
-        'callback' => '\local_autogroup\event_handler::user_created',
+        'callback' => '\local_autogroup\event_handler::user_enrolment_created',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
