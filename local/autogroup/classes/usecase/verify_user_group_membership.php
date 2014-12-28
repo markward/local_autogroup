@@ -36,9 +36,14 @@ use local_autogroup\domain;
 class verify_user_group_membership extends usecase
 {
 
-    public function __construct($userid, $courseid, \moodle_database $db)
+    public function __construct($userid, $courseid = 0, \moodle_database $db)
     {
-        $this->course = new domain\course($courseid, $db);
+        if($courseid == 0) {
+            $this->user = new domain\user($userid, $db);
+        }
+        else {
+            $this->course = new domain\course($courseid, $db);
+        }
     }
 
     /**
@@ -50,4 +55,6 @@ class verify_user_group_membership extends usecase
     }
 
     protected $course;
+
+    protected $user;
 }
