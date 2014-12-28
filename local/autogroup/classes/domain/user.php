@@ -71,11 +71,12 @@ class user extends domain
         $sql = "SELECT e.courseid".PHP_EOL
             ."FROM {enrol} e".PHP_EOL
             ."LEFT JOIN {user_enrolments} ue".PHP_EOL
-            ."ON ue.enrol = e.id".PHP_EOL
+            ."ON ue.enrolid = e.id".PHP_EOL
             ."WHERE ue.userid = :userid";
         $param = array('userid' => $this->id);
 
         if($onlyload > 0){
+            //TODO: this is only necessary if we are retrieving more data from the DB about this course
             $sql .= PHP_EOL . "AND e.courseid = :courseid";
             $param['courseid'] = $onlyload;
         }
@@ -98,7 +99,7 @@ class user extends domain
     {
         $sql = "SELECT g.id, g.courseid".PHP_EOL
               ."FROM {groups} g".PHP_EOL
-              ."LEFT JOIN {group_members} gm".PHP_EOL
+              ."LEFT JOIN {groups_members} gm".PHP_EOL
               ."ON gm.groupid = g.id".PHP_EOL
               ."WHERE gm.userid = :userid".PHP_EOL
               ."AND ".$db->sql_like('g.idnumber', ':autogrouptag');
