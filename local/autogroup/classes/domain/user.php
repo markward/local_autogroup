@@ -46,10 +46,10 @@ class user extends domain
     /**
      * @param object|int $user
      * @param \moodle_database $db
-     * @param bool $lazyload
+     * @param int $onlyload a courseid to restrict loading to
      * @throws exception\invalid_user_argument
      */
-    public function __construct ($user, \moodle_database $db, $lazyload = false)
+    public function __construct ($user, \moodle_database $db, $onlyload = 0)
     {
         //get the id for this user
         $this->parse_user_id($user);
@@ -58,9 +58,7 @@ class user extends domain
         $this->get_group_membership($db);
 
         //if applicable, load courses this user is on and their autogroup groups
-        if(!$lazyload){
-            $this->get_courses($db);
-        }
+        $this->get_courses($db, $onlyload);
 
         return true;
     }
@@ -68,7 +66,7 @@ class user extends domain
     /**
      * @param \moodle_database $db
      */
-    private function get_courses(\moodle_database $db)
+    private function get_courses(\moodle_database $db, $onlyload = 0)
     {
         $sql = "SELECT e.courseid".PHP_EOL
             ."FROM {enrol} e".PHP_EOL
@@ -76,6 +74,11 @@ class user extends domain
             ."ON ue.enrol = e.id".PHP_EOL
             ."WHERE ue.userid = :userid";
         $param = array('userid' => $this->id);
+
+        if($onlyload > 0){
+            $sql .= PHP_EOL . "AND e.courseid = :courseid";
+            $param['courseid'] = $onlyload;
+        }
 
         $this->courses = $db->get_fieldset_sql($sql,$param);
 

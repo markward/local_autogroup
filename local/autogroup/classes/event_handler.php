@@ -42,7 +42,7 @@ class event_handler
         $courseid = (int) $event->courseid;
         $userid = (int) $event->relateduserid;
 
-        $usecase = new usecase\verify_user_group_membership($userid, $courseid, $DB);
+        $usecase = new usecase\verify_user_group_membership($userid, $DB, $courseid);
         return $usecase();
     }
 

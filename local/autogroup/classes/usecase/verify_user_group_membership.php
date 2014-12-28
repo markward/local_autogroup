@@ -33,17 +33,22 @@ namespace local_autogroup\usecase;
 use local_autogroup\usecase;
 use local_autogroup\domain;
 
+/**
+ * Class verify_user_group_membership
+ * @package local_autogroup\usecase
+ */
 class verify_user_group_membership extends usecase
 {
 
-    public function __construct($userid, $courseid = 0, \moodle_database $db)
+    /**
+     * @param int $userid
+     * @param \moodle_database $db
+     * @param int $courseid
+     */
+    public function __construct($userid, \moodle_database $db, $courseid = 0 )
     {
-        if($courseid == 0) {
-            $this->user = new domain\user($userid, $db);
-        }
-        else {
-            $this->course = new domain\course($courseid, $db);
-        }
+        $this->user = new domain\user($userid, $db, $courseid);
+
     }
 
     /**
@@ -54,7 +59,8 @@ class verify_user_group_membership extends usecase
 
     }
 
-    protected $course;
-
+    /**
+     * @var domain\user
+     */
     protected $user;
 }
