@@ -68,14 +68,14 @@ class course extends domain
     }
 
     /**
-     * @param int $userid
+     * @param \stdclass $user
      * @return bool
      */
-    public function verify_user_group_membership($userid)
+    public function verify_user_group_membership(\stdclass $user)
     {
         $result = true;
         foreach ($this->autogroups as $autogroup){
-            $result &= $autogroup->verify_user_group_membership($userid);
+            $result &= $autogroup->verify_user_group_membership($user);
         }
         return $result;
     }

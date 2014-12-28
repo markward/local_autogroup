@@ -51,8 +51,8 @@ class user extends domain
      */
     public function __construct ($user, \moodle_database $db, $onlyload = 0)
     {
-        //get the id for this user
-        $this->parse_user_id($user);
+        //get the data for this user
+        $this->parse_user_data($user, $db);
 
         //register which autogroup groups this user is a member of currently
         $this->get_group_membership($db);
@@ -70,7 +70,7 @@ class user extends domain
     {
         $result = true;
         foreach ($this->courses as $course){
-            $result &= $course->verify_user_group_membership($this->id);
+            $result &= $course->verify_user_group_membership($this->object);
         }
         return $result;
     }
@@ -128,15 +128,17 @@ class user extends domain
      * @return bool
      * @throws exception\invalid_user_argument
      */
-    private function parse_user_id ($user)
+    private function parse_user_data ($user, \moodle_database $db)
     {
         if(is_int($user) && $user > 0){
             $this->id = $user;
+            $this->object = $db->get_record('user',array('id'=>$user));
             return true;
         }
 
         if(is_object($user) && isset($user->id) && $user->id > 0){
             $this->id = $user->id;
+            $this->object = $user;
             return true;
         }
 
@@ -147,8 +149,14 @@ class user extends domain
      * @var array
      */
     private $membership = array();
+
     /**
      * @var array
      */
     private $courses = array();
+
+    /**
+     * @var /stdclass
+     */
+    private $object;
 }

@@ -32,6 +32,7 @@ namespace local_autogroup\domain;
 
 use local_autogroup\domain;
 use local_autogroup\exception;
+use local_autogroup\sort_module;
 
 /**
  * Class sort
@@ -66,11 +67,16 @@ class autogroup_set extends domain
     }
 
     /**
-     * @param int $userid
+     * @param \stdclass $user
      * @return bool
      */
-    public function verify_user_group_membership($userid)
+    public function verify_user_group_membership(\stdclass $user)
     {
+        $sortconfig = json_decode( $this->sortconfig);
+        $sortmodule = new sort_module\profile_field($user, $this->courseid,$sortconfig);
+
+        $groups = $sortmodule->eligible_groups();
+
         return true;
     }
 
