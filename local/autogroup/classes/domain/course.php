@@ -107,8 +107,11 @@ class course extends domain
         $sql = "SELECT g.id".PHP_EOL
             ."FROM {groups} g".PHP_EOL
             ."WHERE g.courseid = :courseid".PHP_EOL
-            ."AND ".$db->sql_like('g.idnumber', 'autogroup|');
-        $param = array('courseid' => $this->id);
+            ."AND ".$db->sql_like('g.idnumber', ':autogrouptag');
+        $param = array(
+            'courseid' => $this->id,
+            'autogrouptag' => 'autogroup|%'
+        );
 
         $this->autogroups = $db->get_fieldset_sql($sql,$param);
 

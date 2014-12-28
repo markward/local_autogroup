@@ -98,8 +98,11 @@ class user extends domain
               ."LEFT JOIN {group_members} gm".PHP_EOL
               ."ON gm.groupid = g.id".PHP_EOL
               ."WHERE gm.userid = :userid".PHP_EOL
-              ."AND ".$db->sql_like('g.idnumber', 'autogroup|%');
-        $param = array('userid' => $this->id);
+              ."AND ".$db->sql_like('g.idnumber', ':autogrouptag');
+        $param = array(
+            'userid' => $this->id,
+            'autogrouptag' => 'autogroup|%'
+        );
 
         $this->membership = $db->get_records_sql_menu($sql,$param);
     }
