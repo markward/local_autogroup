@@ -68,14 +68,25 @@ class autogroup_set extends domain
 
     /**
      * @param \stdclass $user
+     * @param \moodle_database $db
      * @return bool
      */
-    public function verify_user_group_membership(\stdclass $user)
+    public function verify_user_group_membership(\stdclass $user, \moodle_database $db)
     {
         $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
         $sortmodule = new $classname($user, $this->courseid,$this->sortconfig);
 
-        $groups = $sortmodule->eligible_groups();
+        $eligiblegroups = $sortmodule->eligible_groups();
+
+        foreach ($eligiblegroups as $eligiblegroup){
+            debugging('1');
+            $group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
+
+            debugging($group->idnumber);
+
+            $group->ensure_user_is_member($user->id);
+
+        }
 
         return true;
     }
@@ -126,6 +137,51 @@ class autogroup_set extends domain
             }
         }
     }
+
+    /**
+     * @param string $groupname
+     * @param \moodle_database $db
+     * @return domain/group $group
+     */
+    private function get_or_create_group_by_idnumber($groupname, \moodle_database $db){
+        $idnumber = $this->generate_group_idnumber($groupname);
+        $result = null;
+
+        //firstly run through existing groups and check for matches
+        foreach($this->groups as &$group){
+            if($group->idnumber == $idnumber){
+                return $group;
+            }
+        }
+
+        //if we don't find a match, create a new group with this idnumber.
+        $data = new stdclass();
+        $data->name = $groupname;
+        $data->idnumber = $idnumber;
+        $data->id = \groups_create_group($data);
+
+        $this->groups[$data->id] = new domain\group($data,$db);
+
+        return $this->groups[$data->id];
+    }
+
+    /**
+     * @param string $groupname
+     * @return string
+     */
+    private function generate_group_idnumber($groupname)
+    {
+        //generate the idnumber for this group
+        $idnumber = implode('|',
+            array(
+                'autogroup',
+                $this->id,
+                $groupname
+            )
+        );
+        return $idnumber;
+    }
+
     /**
      * An array of DB level attributes for an autogroup set
      * used for handling stdclass object conversion.

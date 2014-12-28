@@ -69,13 +69,14 @@ class course extends domain
 
     /**
      * @param \stdclass $user
+     * @param \moodle_database $db
      * @return bool
      */
-    public function verify_user_group_membership(\stdclass $user)
+    public function verify_user_group_membership(\stdclass $user, \moodle_database $db)
     {
         $result = true;
         foreach ($this->autogroups as $autogroup){
-            $result &= $autogroup->verify_user_group_membership($user);
+            $result &= $autogroup->verify_user_group_membership($user, $db);
         }
         return $result;
     }

@@ -64,13 +64,14 @@ class user extends domain
     }
 
     /**
+     * @param \moodle_database $db
      * @return bool
      */
-    public function verify_user_group_membership()
+    public function verify_user_group_membership(\moodle_database $db)
     {
         $result = true;
         foreach ($this->courses as $course){
-            $result &= $course->verify_user_group_membership($this->object);
+            $result &= $course->verify_user_group_membership($this->object, $db);
         }
         return $result;
     }

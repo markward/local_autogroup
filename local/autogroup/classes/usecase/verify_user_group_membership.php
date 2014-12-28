@@ -48,7 +48,7 @@ class verify_user_group_membership extends usecase
     public function __construct($userid, \moodle_database $db, $courseid = 0 )
     {
         $this->user = new domain\user($userid, $db, $courseid);
-
+        $this->db = $db;
     }
 
     /**
@@ -56,11 +56,16 @@ class verify_user_group_membership extends usecase
      */
     public function __invoke()
     {
-        return $this->user->verify_user_group_membership();
+        return $this->user->verify_user_group_membership($this->db);
     }
 
     /**
      * @var domain\user
      */
     protected $user;
+
+    /**
+     * @var \moodle_database
+     */
+    private $db;
 }

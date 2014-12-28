@@ -104,6 +104,17 @@ class group extends domain
     }
 
     /**
+     * @return \stdclass $group
+     */
+    private function as_object(){
+        $group = new \stdclass();
+        foreach($this->attributes as $attribute){
+            $group->$attribute = $this->$attribute;
+        }
+        return $group;
+    }
+
+    /**
      * @param $group
      * @return bool
      */
@@ -114,6 +125,22 @@ class group extends domain
                && $group->id > 0
                && strlen($group->name) > 0
                && strstr($group->idnumber,'autogroup|');
+    }
+
+
+    /**
+     * @param int $userid
+     */
+    private function ensure_user_is_member($userid){
+        foreach($this->members as $member){
+            if ($member->userid == $userid) {
+                return;
+            }
+        }
+
+        //user was not found as a member so will now make member a user
+        \groups_add_member($this->as_object(), $userid, 'local_autogroup');
+        return;
     }
 
     /**
