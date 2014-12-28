@@ -46,7 +46,9 @@ class profile_field extends sort_module
      */
     public function __construct(\stdclass $user, $courseid, $config)
     {
-
+        $config = json_decode($config);
+        $this->field = $config->field;
+        $this->user = $user;
     }
 
     /**
@@ -54,7 +56,22 @@ class profile_field extends sort_module
      */
     public function eligible_groups()
     {
-
+        if (isset($this->user->$this->field)){
+            return array($this->user->$this->field);
+        }
+        else {
+            return array();
+        }
     }
+
+    /**
+     * @var \stdclass object
+     */
+    protected $user;
+
+    /**
+     * @var string
+     */
+    private $field = '';
 
 }

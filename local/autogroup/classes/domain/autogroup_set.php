@@ -72,8 +72,8 @@ class autogroup_set extends domain
      */
     public function verify_user_group_membership(\stdclass $user)
     {
-        $sortconfig = json_decode( $this->sortconfig);
-        $sortmodule = new sort_module\profile_field($user, $this->courseid,$sortconfig);
+        $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
+        $sortmodule = new $classname($user, $this->courseid,$this->sortconfig);
 
         $groups = $sortmodule->eligible_groups();
 

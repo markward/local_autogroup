@@ -130,6 +130,8 @@ class user extends domain
      */
     private function parse_user_data ($user, \moodle_database $db)
     {
+        //TODO: restructure to allow usage of custom profile fields
+
         if(is_int($user) && $user > 0){
             $this->id = $user;
             $this->object = $db->get_record('user',array('id'=>$user));
