@@ -35,7 +35,7 @@ namespace local_autogroup;
  * on a course
  * @package local_autogroup
  */
-abstract class sorter {
+abstract class sort_module {
 
     /**
      * @param \stdclass $user
