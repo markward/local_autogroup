@@ -73,6 +73,9 @@ class user extends domain
         foreach ($this->courses as $course){
             $result &= $course->verify_user_group_membership($this->object, $db);
         }
+
+        $this->get_group_membership($db);
+
         return $result;
     }
 

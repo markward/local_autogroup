@@ -40,6 +40,14 @@ $observers = array(
     ),
 
     array(
+        'eventname' => 'core\event\group_member_added',
+        'callback' => '\local_autogroup\event_handler::group_member_added',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
+
+    array(
         'eventname' => '\core\event\group_member_removed',
         'callback' => '\local_autogroup\event_handler::group_member_removed',
         'includefile' => 'local/autogroup/classes/event_handler.php',

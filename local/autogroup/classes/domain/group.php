@@ -78,6 +78,17 @@ class group extends domain
     }
 
     /**
+     * @param int $userid
+     */
+    public function ensure_user_is_not_member($userid){
+        foreach($this->members as $member){
+            if ($member == $userid) {
+                \groups_remove_member($this->as_object(), $userid);
+            }
+        }
+    }
+
+    /**
      * @return int
      */
     public function membership_count(){

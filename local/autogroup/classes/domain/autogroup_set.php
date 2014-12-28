@@ -78,12 +78,25 @@ class autogroup_set extends domain
         $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
         $sortmodule = new $classname($user, $this->courseid,$this->sortconfig);
 
+        //an array of strings from the sort module
         $eligiblegroups = $sortmodule->eligible_groups();
+
+        //an array of groupids which will be populated as we ensure membership
+        $validgroups = array();
 
         foreach ($eligiblegroups as $eligiblegroup){
             $group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
 
+            $validgroups[] = $group->id;
+
             $group->ensure_user_is_member($user->id);
+        }
+
+        //now run through other groups and ensure user is not a member
+        foreach($this->groups as $key => $group){
+            if(!in_array($group->id,$validgroups)){
+                $group->ensure_user_is_not_member($user->id);
+            }
         }
 
         return true;

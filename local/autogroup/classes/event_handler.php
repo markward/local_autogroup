@@ -46,13 +46,31 @@ class event_handler
         return $usecase();
     }
 
+    public static function group_member_added(event\group_member_added $event)
+    {
+        global $DB;
+
+        $courseid = (int) $event->courseid;
+        $userid = (int) $event->relateduserid;
+
+        $usecase = new usecase\verify_user_group_membership($userid, $DB, $courseid);
+        return $usecase();
+    }
+
     public static function group_member_removed(event\group_member_removed $event)
     {
         global $DB, $PAGE;
 
         $groupid = (int) $event->objectid;
+        $courseid = (int) $event->courseid;
+        $userid = (int) $event->relateduserid;
 
-        $usecase = new usecase\verify_group_population($groupid, $DB, $PAGE);
-        return $usecase();
+        $usecase1 = new usecase\verify_user_group_membership($userid, $DB, $courseid);
+        $usecase1();
+
+
+        $usecase2 = new usecase\verify_group_population($groupid, $DB, $PAGE);
+        $usecase2();
+        return true;
     }
 }
