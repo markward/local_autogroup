@@ -56,8 +56,9 @@ class profile_field extends sort_module
      */
     public function eligible_groups()
     {
-        if (isset($this->user->$this->field)){
-            return array($this->user->$this->field);
+        $field = $this->field;
+        if (isset($this->user->$field)){
+            return array($this->user->$field);
         }
         else {
             return array();
