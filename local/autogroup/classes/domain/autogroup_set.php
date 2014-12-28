@@ -84,7 +84,6 @@ class autogroup_set extends domain
             $group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
 
             $group->ensure_user_is_member($user->id);
-
         }
 
         return true;
