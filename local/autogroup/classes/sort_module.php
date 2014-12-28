@@ -55,7 +55,7 @@ abstract class sort_module {
     /**
      * @return array $result
      */
-    public abstract function eligable_groups();
+    public abstract function eligible_groups();
 
     /**
      * @param string $attribute
@@ -64,7 +64,7 @@ abstract class sort_module {
     public function __get($attribute)
     {
         if($attribute = 'groups'){
-            return $this->eligable_groups();
+            return $this->eligible_groups();
         }
         return null;
     }

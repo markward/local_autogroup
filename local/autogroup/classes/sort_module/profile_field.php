@@ -52,7 +52,7 @@ class profile_field extends sort_module
     /**
      * @return array $result
      */
-    public function eligable_groups()
+    public function eligible_groups()
     {
 
     }
