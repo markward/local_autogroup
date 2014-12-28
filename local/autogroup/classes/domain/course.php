@@ -61,23 +61,10 @@ class course extends domain
      */
     public function get_membership_counts(){
         $result = array();
-        foreach($this->autogroups as $groupid => $group){
-            $result[$groupid] = $group->membership_count();
+        foreach($this->autogroups as $autogroup){
+            $result = $result + $autogroup->membership_count();
         }
         return $result;
-    }
-
-    /**
-     * @param $groupid
-     * @throws exception\invalid_group_argument
-     */
-    public function remove_group($groupid){
-        if(!is_int($groupid) || $groupid < 1){
-            throw new exception\invalid_group_argument($groupid);
-        }
-
-        $this->autogroups[$groupid]->remove();
-        unset($this->autogroups[$groupid]);
     }
 
     /**
@@ -104,22 +91,14 @@ class course extends domain
      * @param \moodle_database $db
      */
     private function get_autogroups(\moodle_database $db){
-        $sql = "SELECT g.id".PHP_EOL
-            ."FROM {groups} g".PHP_EOL
-            ."WHERE g.courseid = :courseid".PHP_EOL
-            ."AND ".$db->sql_like('g.idnumber', ':autogrouptag');
-        $param = array(
-            'courseid' => $this->id,
-            'autogrouptag' => 'autogroup|%'
-        );
 
-        $this->autogroups = $db->get_fieldset_sql($sql,$param);
+        $this->autogroups = $db->get_records('local_autogroup', array('courseid' => $this->id));
 
-        foreach($this->autogroups as $k => $groupid){
+        foreach($this->autogroups as $id => $settings){
             try {
-                $this->autogroups[$k] = new domain\group($groupid, $db);
-            } catch (exception\invalid_group_argument $e){
-                unset($this->autogroups[$k]);
+                $this->autogroups[$id] = new domain\autogroup_set($settings, $db);
+            } catch (exception\invalid_autogroup_set_argument $e){
+                unset($this->autogroups[$id]);
             }
         }
     }
