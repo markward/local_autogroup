@@ -58,11 +58,12 @@ class verify_group_population extends usecase
      */
     public function __invoke()
     {
+        $removed = false;
         if($this->group->membership_count() == 0){
-            $this->group->remove();
+            $removed = $this->group->remove();
         }
 
-        if($this->redirect){
+        if($removed && $this->redirect){
             $url = new \moodle_url('/group/index.php',array('id'=>$this->group->courseid));
             \redirect($url);
         }

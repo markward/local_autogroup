@@ -87,9 +87,15 @@ class group extends domain
 
     /**
      * delete this group from the application
+     * @return bool
      */
     public function remove(){
-        \groups_delete_group($this->id);
+        if($this->is_autogroup()) {
+            return \groups_delete_group($this->id);
+        }
+        else{
+            return false;
+        }
     }
 
     /**
@@ -97,6 +103,13 @@ class group extends domain
      */
     private function get_members(\moodle_database $db){
         $this->members =  $db->get_records_menu('groups_members', array('groupid' => $this->id),'id','id,userid');
+    }
+
+    /**
+     * @return bool   whether this group is an autogroup or not
+     */
+    private function is_autogroup(){
+        return strstr($this->idnumber,'autogroup|');
     }
 
     /**
