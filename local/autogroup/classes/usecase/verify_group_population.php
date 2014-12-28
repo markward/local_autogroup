@@ -43,18 +43,28 @@ class verify_group_population extends usecase
      * @param int $groupid
      * @param \moodle_database $db
      */
-    public function __construct($groupid, \moodle_database $db)
+    public function __construct($groupid, \moodle_database $db, \moodle_page $page)
     {
         $this->group = new domain\group($groupid, $db);
+
+        //if we are viewing the group members we should redirect to safety
+        if(strstr($page->url, 'group/members.php?group=' . $groupid)) {
+            $this->redirect = true;
+        }
     }
 
     /**
-     *
+     * @return void
      */
     public function __invoke()
     {
         if($this->group->membership_count() == 0){
             $this->group->remove();
+        }
+
+        if($this->redirect){
+            $url = new \moodle_url('/group/index.php',array('id'=>$this->group->courseid));
+            \redirect($url);
         }
     }
 
@@ -62,4 +72,9 @@ class verify_group_population extends usecase
      * @var domain\group
      */
     private $group;
+
+    /**
+     * @var bool $redirect
+     */
+    private $redirect = false;
 }

@@ -42,9 +42,11 @@ class event_handler
 
     public static function group_member_removed(event\group_member_removed $event)
     {
-        global $DB;
+        global $DB, $PAGE;
 
-        $usecase = new usecase\verify_group_population($event->objectid, $DB);
+        $groupid = (int) $event->objectid;
+
+        $usecase = new usecase\verify_group_population($groupid, $DB, $PAGE);
         return $usecase();
     }
 }
