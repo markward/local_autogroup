@@ -117,20 +117,20 @@ class autogroup_set extends domain
      * @param \moodle_database $db
      */
     private function get_autogroups(\moodle_database $db){
-        $sql = "SELECT g.id".PHP_EOL
+        $sql = "SELECT g.*".PHP_EOL
             ."FROM {groups} g".PHP_EOL
             ."WHERE g.courseid = :courseid".PHP_EOL
             ."AND ".$db->sql_like('g.idnumber', ':autogrouptag');
         $param = array(
             'courseid' => $this->courseid,
-            'autogrouptag' => 'autogroup|' . $this->id . '|%'
+            'autogrouptag' => $this->generate_group_idnumber('%')
         );
 
-        $this->groups = $db->get_fieldset_sql($sql,$param);
+        $this->groups = $db->get_records_sql($sql,$param);
 
-        foreach($this->groups as $k => $groupid){
+        foreach($this->groups as $k => $group){
             try {
-                $this->groups[$k] = new domain\group($groupid, $db);
+                $this->groups[$k] = new domain\group($group, $db);
             } catch (exception\invalid_group_argument $e){
                 unset($this->groups[$k]);
             }
@@ -147,7 +147,7 @@ class autogroup_set extends domain
         $result = null;
 
         //firstly run through existing groups and check for matches
-        foreach($this->groups as &$group){
+        foreach($this->groups as $group){
             if($group->idnumber == $idnumber){
                 return $group;
             }

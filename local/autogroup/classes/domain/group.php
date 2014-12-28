@@ -67,7 +67,7 @@ class group extends domain
      */
     public function ensure_user_is_member($userid){
         foreach($this->members as $member){
-            if ($member->userid == $userid) {
+            if ($member == $userid) {
                 return;
             }
         }
