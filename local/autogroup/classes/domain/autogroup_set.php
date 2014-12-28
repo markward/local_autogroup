@@ -165,7 +165,7 @@ class autogroup_set extends domain
         $data->hidepicture = 0;
 
 
-        $data->id = \groups_create_group($data);
+        $data->id = (int) \groups_create_group($data);
 
         $this->groups[$data->id] = new domain\group($data,$db);
 
