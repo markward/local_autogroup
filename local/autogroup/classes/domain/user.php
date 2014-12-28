@@ -96,11 +96,12 @@ class user extends domain
         }
 
         else {
-            $this->courses[$onlyload] = $onlyload;
+            $this->courses[] = $onlyload;
         }
 
         foreach($this->courses as $k => $courseid){
             try {
+                $courseid = (int) $courseid;
                 $this->courses[$k] = new course($courseid, $db);
             } catch (exception\invalid_course_argument $e){
                 unset($this->courses[$k]);

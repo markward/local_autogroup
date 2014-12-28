@@ -73,4 +73,15 @@ class event_handler
         $usecase2();
         return true;
     }
+
+    public static function user_updated(event\user_updated $event)
+    {
+        global $DB;
+
+        $userid = (int) $event->relateduserid;
+
+        $usecase = new usecase\verify_user_group_membership($userid, $DB);
+        return $usecase();
+    }
+
 }

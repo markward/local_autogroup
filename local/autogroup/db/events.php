@@ -54,4 +54,12 @@ $observers = array(
         'internal'    => true,
         'priority'    => 0,
     ),
+
+    array(
+        'eventname' => '\core\event\user_updated',
+        'callback' => '\local_autogroup\event_handler::user_updated',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
 );
