@@ -169,7 +169,7 @@ class group extends domain
      * @param $group
      * @return bool
      */
-    private function validate_object($group)
+    private function validate_object(\stdclass $group)
     {
         if(!isset($group->timecreated)){
             $group->timecreated = time();
@@ -177,8 +177,7 @@ class group extends domain
         if(!isset($group->timemodified)){
             $group->timemodified = 0;
         }
-        return is_object($group)
-               && isset($group->id)
+        return isset($group->id)
                && $group->id >= 0
                && strlen($group->name) > 0
                && strstr($group->idnumber,'autogroup|');
