@@ -137,8 +137,14 @@ class course extends domain
      */
     private $autogroups = array();
 
+    /**
+     * @var \context_course
+     */
     private $context;
 
+    /**
+     * @var array
+     */
     private $enrolledusers = array();
 
 }
