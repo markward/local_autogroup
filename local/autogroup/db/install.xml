@@ -22,7 +22,7 @@
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="setid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="What autogroup set does this link to?"/>
-                <FIELD NAME="roleid" TYPE="int" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="What role should be included in the autogroup rules?" />
+                <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="What role should be included in the autogroup rules?" />
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
