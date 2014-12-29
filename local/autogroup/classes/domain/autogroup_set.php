@@ -43,29 +43,63 @@ require_once(__DIR__ . "/../../../../group/lib.php" );
 class autogroup_set extends domain
 {
     /**
-     * @param stdclass $settings
+     * @param \stdclass $autogroupset
      * @param \moodle_database $db
      * @param bool $lazyload
      * @throws exception\invalid_course_argument
      */
-    public function __construct ($settings, \moodle_database $db)
+    public function __construct (\stdclass $autogroupset, \moodle_database $db)
     {
         //get the id for this course
-        $this->parse_settings($settings);
+        if( $this->validate_object($autogroupset) ){
+            $this->load_from_object($autogroupset);
+        }
 
-        //load autogroup groups for this autogroup set
-        $this->get_autogroups($db);
+        if( $this->exists() ) {
+            //load autogroup groups for this autogroup set
+            $this->get_autogroups($db);
+        }
     }
 
     /**
      * @return array
      */
-    public function get_membership_counts(){
+    public function get_membership_counts()
+    {
         $result = array();
         foreach($this->groups as $groupid => $group){
             $result[$groupid] = $group->membership_count();
         }
         return $result;
+    }
+
+    public function create(\moodle_database $db)
+    {
+        if($this->id > 0){
+            return false;
+        }
+
+        $autogroupset = $this->as_object();
+
+        //the DB needs to give us a proper id
+        unset($autogroupset->id);
+
+        $this->id = $db->insert_record('local_autogroup', $autogroupset);
+    }
+
+    public function exists()
+    {
+        return $this->id > 0;
+    }
+
+    public function remove(\moodle_database $db)
+    {
+        foreach($this->groups as $k => $group){
+            $group->remove();
+            unset($this->groups[$k]);
+        }
+        $db->delete_records('local_autogroup', array('id'=>$this->id));
+        $this->id = 0;
     }
 
     /**
@@ -102,32 +136,10 @@ class autogroup_set extends domain
     }
 
     /**
-     * @param \stdclass $settings
-     * @return bool
-     * @throws exception\invalid_autogroup_set_argument
-     */
-    private function parse_settings ($settings)
-    {
-        if(is_object($settings)){
-
-            foreach($this->attributes as $attribute){
-                if (isset($settings->$attribute)){
-                    $this->$attribute = $settings->$attribute;
-                }
-                else {
-                    throw new exception\invalid_autogroup_set_argument($settings);
-                }
-            }
-
-        } else {
-            throw new exception\invalid_autogroup_set_argument($settings);
-        }
-    }
-
-    /**
      * @param \moodle_database $db
      */
-    private function get_autogroups(\moodle_database $db){
+    private function get_autogroups(\moodle_database $db)
+    {
         $sql = "SELECT g.*".PHP_EOL
             ."FROM {groups} g".PHP_EOL
             ."WHERE g.courseid = :courseid".PHP_EOL
@@ -153,7 +165,8 @@ class autogroup_set extends domain
      * @param \moodle_database $db
      * @return bool|domain/group
      */
-    private function get_or_create_group_by_idnumber($groupname, \moodle_database $db){
+    private function get_or_create_group_by_idnumber($groupname, \moodle_database $db)
+    {
         $idnumber = $this->generate_group_idnumber($groupname);
         $result = null;
 
@@ -185,6 +198,37 @@ class autogroup_set extends domain
         }
 
         return $this->groups[$newgroup->id];
+    }
+
+    /**
+     * @param \stdclass $autogroupset
+     */
+    private function load_from_object(\stdclass $autogroupset)
+    {
+        foreach($this->attributes as $attribute){
+            $this->$attribute = $autogroupset->$attribute;
+        }
+    }
+
+    /**
+     * @return \stdclass $autogroupset
+     */
+    private function as_object()
+    {
+        $autogroupset = new \stdclass();
+        foreach($this->attributes as $attribute){
+            $autogroupset->$attribute = $this->$attribute;
+        }
+        return $autogroupset;
+    }
+
+    private function validate_object(\stdclass $autogroupset)
+    {
+        return is_object($autogroupset)
+        && isset($autogroupset->id)
+        && $autogroupset->id >= 0
+        && isset($autogroupset->courseid)
+        && $autogroupset->courseid > 0;
     }
 
     /**
