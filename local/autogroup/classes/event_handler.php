@@ -86,6 +86,17 @@ class event_handler
 
     public static function group_deleted(event\group_deleted $event)
     {
+        //TODO: ensure this is not executed after verify_group_population deletes a group
+        global $DB;
+
+        $courseid = (int) $event->courseid;
+
+        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+        return $usecase();
+    }
+
+    public static function group_updated(event\group_updated $event)
+    {
         global $DB;
 
         $courseid = (int) $event->courseid;
