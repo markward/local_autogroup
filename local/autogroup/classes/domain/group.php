@@ -52,7 +52,7 @@ class group extends domain
         }
 
         else if($this->validate_object($group)){
-            $this->load_from_stdclass($group);
+            $this->load_from_object($group);
         }
 
         else {
@@ -141,13 +141,13 @@ class group extends domain
     private function load_from_database($groupid, \moodle_database $db)
     {
         $group = $db->get_record('groups',array('id'=>$groupid));
-        $this->load_from_stdclass($group);
+        $this->load_from_object($group);
     }
 
     /**
      * @param \stdclass $group
      */
-    private function load_from_stdclass(\stdclass $group){
+    private function load_from_object(\stdclass $group){
         foreach($this->attributes as $attribute){
             $this->$attribute = $group->$attribute;
         }
