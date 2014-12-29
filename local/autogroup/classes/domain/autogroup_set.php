@@ -85,11 +85,10 @@ class autogroup_set extends domain
         $validgroups = array();
 
         foreach ($eligiblegroups as $eligiblegroup){
-            $group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
-
-            $validgroups[] = $group->id;
-
-            $group->ensure_user_is_member($user->id);
+            if($group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db)) {
+                $validgroups[] = $group->id;
+                $group->ensure_user_is_member($user->id);
+            }
         }
 
         //now run through other groups and ensure user is not a member
@@ -152,7 +151,7 @@ class autogroup_set extends domain
     /**
      * @param string $groupname
      * @param \moodle_database $db
-     * @return domain/group $group
+     * @return bool|domain/group
      */
     private function get_or_create_group_by_idnumber($groupname, \moodle_database $db){
         $idnumber = $this->generate_group_idnumber($groupname);
@@ -165,8 +164,9 @@ class autogroup_set extends domain
             }
         }
 
-        //if we don't find a match, create a new group with this idnumber.
+        //if we don't find a match, create a new group.
         $data = new \stdclass();
+        $data->id = 0;
         $data->name = $groupname;
         $data->idnumber = $idnumber;
         $data->courseid = $this->courseid;
@@ -176,12 +176,15 @@ class autogroup_set extends domain
         $data->picture = 0;
         $data->hidepicture = 0;
 
+        try {
+            $newgroup = new domain\group($data, $db);
+            $newgroup->create();
+            $this->groups[$newgroup->id] = $newgroup;
+        } catch (exception\invalid_group_argument $e){
+            return false;
+        }
 
-        $data->id = (int) \groups_create_group($data);
-
-        $this->groups[$data->id] = new domain\group($data,$db);
-
-        return $this->groups[$data->id];
+        return $this->groups[$newgroup->id];
     }
 
     /**

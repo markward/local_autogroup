@@ -95,6 +95,17 @@ class group extends domain
         return count($this->members);
     }
 
+    /**
+     * Adds this group to the application if it hasn't
+     * been created already
+     *
+     * @return void
+     */
+    public function create(){
+        if($this->id == 0){
+            $this->id = (int) \groups_create_group($this->as_object());
+        }
+    }
 
     /**
      * delete this group from the application
@@ -160,9 +171,15 @@ class group extends domain
      */
     private function validate_object($group)
     {
+        if(!isset($group->timecreated)){
+            $group->timecreated = time();
+        }
+        if(!isset($group->timemodified)){
+            $group->timemodified = 0;
+        }
         return is_object($group)
                && isset($group->id)
-               && $group->id > 0
+               && $group->id >= 0
                && strlen($group->name) > 0
                && strstr($group->idnumber,'autogroup|');
     }
