@@ -84,4 +84,14 @@ class event_handler
         return $usecase();
     }
 
+    public static function group_deleted(event\group_deleted $event)
+    {
+        global $DB;
+
+        $courseid = (int) $event->courseid;
+
+        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+        return $usecase();
+    }
+
 }

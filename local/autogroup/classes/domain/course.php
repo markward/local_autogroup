@@ -42,18 +42,20 @@ class course extends domain
     /**
      * @param $course
      * @param \moodle_database $db
-     * @param bool $lazyload
      * @throws exception\invalid_course_argument
      */
-    public function __construct ($course, \moodle_database $db, $lazyload = false)
+    public function __construct ($course, \moodle_database $db)
     {
         //get the id for this course
         $this->parse_course_id($course);
 
-        //load autogroup groups for this course if applicable
-        if(!$lazyload){
-            $this->get_autogroups($db);
-        }
+        $this->context = \context_course::instance($this->id);
+
+        //load autogroup groups for this course
+        $this->get_autogroups($db);
+
+        $this->enrolledusers = \get_enrolled_users($this->context);
+
     }
 
     /**
@@ -63,6 +65,19 @@ class course extends domain
         $result = array();
         foreach($this->autogroups as $autogroup){
             $result = $result + $autogroup->membership_count();
+        }
+        return $result;
+    }
+
+    /**
+     * @param \moodle_database $db
+     * @return bool
+     */
+    public function verify_all_group_membership(\moodle_database $db)
+    {
+        $result = true;
+        foreach ($this->enrolledusers as $user){
+            $result &= $this->verify_user_group_membership($user, $db);
         }
         return $result;
     }
@@ -121,5 +136,9 @@ class course extends domain
      * @var array
      */
     private $autogroups = array();
+
+    private $context;
+
+    private $enrolledusers = array();
 
 }
