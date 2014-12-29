@@ -84,7 +84,7 @@ class autogroup_set extends domain
         //the DB needs to give us a proper id
         unset($autogroupset->id);
 
-        $this->id = $db->insert_record('local_autogroup', $autogroupset);
+        $this->id = $db->insert_record('local_autogroup_set', $autogroupset);
     }
 
     public function exists()
@@ -98,7 +98,7 @@ class autogroup_set extends domain
             $group->remove();
             unset($this->groups[$k]);
         }
-        $db->delete_records('local_autogroup', array('id'=>$this->id));
+        $db->delete_records('local_autogroup_set', array('id'=>$this->id));
         $this->id = 0;
     }
 

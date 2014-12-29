@@ -4,7 +4,7 @@
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
         >
     <TABLES>
-        <TABLE NAME="local_autogroup" COMMENT="Config for autogroups on courses">
+        <TABLE NAME="local_autogroup_set" COMMENT="Config for autogroups on courses">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="What course does this link to?"/>
@@ -16,6 +16,17 @@
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
                 <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="local_autogroup_roles" COMMENT="Config for autogroups on courses">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="setid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="What autogroup set does this link to?"/>
+                <FIELD NAME="roleid" TYPE="int" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="What role should be included in the autogroup rules?" />
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="roleid" TYPE="foreign" FIELDS="roleid" REFTABLE="role" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
     </TABLES>

@@ -121,7 +121,7 @@ class course extends domain
      */
     private function get_autogroups(\moodle_database $db){
 
-        $this->autogroups = $db->get_records('local_autogroup', array('courseid' => $this->id));
+        $this->autogroups = $db->get_records('local_autogroup_set', array('courseid' => $this->id));
 
         foreach($this->autogroups as $id => $settings){
             try {
