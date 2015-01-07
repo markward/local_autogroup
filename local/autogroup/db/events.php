@@ -78,4 +78,20 @@ $observers = array(
         'internal'    => true,
         'priority'    => 0,
     ),
+
+    array(
+        'eventname' => '\core\event\role_assigned',
+        'callback' => '\local_autogroup\event_handler::role_change',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
+
+    array(
+        'eventname' => '\core\event\role_unassigned',
+        'callback' => '\local_autogroup\event_handler::role_change',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
 );

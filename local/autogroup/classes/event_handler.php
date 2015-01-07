@@ -96,4 +96,14 @@ class event_handler
         return $usecase();
     }
 
+    public static function role_change(event\base $event)
+    {
+        global $DB;
+
+        $userid = (int) $event->relateduserid;
+
+        $usecase = new usecase\verify_user_group_membership($userid, $DB);
+        return $usecase();
+    }
+
 }
