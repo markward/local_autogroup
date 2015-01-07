@@ -128,7 +128,7 @@ class autogroup_set extends domain
         $eligiblegroups = array();
 
         //we only want to check with the sorting module if this user has the correct role assignment
-        if(!$this->user_is_eligible_in_context($user->id, $db, $context)) {
+        if($this->user_is_eligible_in_context($user->id, $db, $context)) {
             $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
 
             //an array of strings from the sort module
@@ -162,8 +162,7 @@ class autogroup_set extends domain
      */
     private function get_applicable_roles(\moodle_database $db)
     {
-        $db->get_records_menu('local_autogroup_roles', array('setid'=>$this->id), 'id', 'id, roleid');
-        return array();
+        return $db->get_records_menu('local_autogroup_roles', array('setid'=>$this->id), 'id', 'id, roleid');
     }
 
     /**
@@ -297,7 +296,7 @@ class autogroup_set extends domain
         $roleassignments = \get_user_roles($context,$userid);
 
         foreach($roleassignments as $role){
-            if(in_array($role->id, $this->roles)){
+            if(in_array($role->roleid, $this->roles)){
                 return true;
             }
         }
