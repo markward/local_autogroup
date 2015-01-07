@@ -17,16 +17,29 @@
 /**
  * autogroup local plugin
  *
- * This plugin automatically assigns users to a group within any course
- * upon which they may be enrolled and which has auto-grouping
- * configured.
+ * A course object relates to a Moodle course and acts as a container
+ * for multiple groups. Initialising a course object will automatically
+ * load each autogroup group for that course into memory.
  *
  * @package    local
  * @subpackage autogroup
  * @author     Mark Ward (me@moodlemark.com)
- * @date       December 2014
+ * @date       January 2015
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname']  = 'Auto Group';
-$string['autogroup:managecourse']  = 'Manage autogroup settings on course';
+defined('MOODLE_INTERNAL') || die();
+
+$capabilities = array(
+    'local/autogroup:managecourse' => array(
+        'riskbitmask'          => RISK_DATALOSS,
+        'captype'              => 'write',
+        'contextlevel'         => CONTEXT_COURSE,
+        'archetypes'           => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager'        => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/course:managegroups'
+    ),
+);
+
