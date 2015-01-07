@@ -119,15 +119,16 @@ class autogroup_set extends domain
     /**
      * @param \stdclass $user
      * @param \moodle_database $db
+     * @param \context_course $context
      * @return bool
      */
-    public function verify_user_group_membership(\stdclass $user, \moodle_database $db)
+    public function verify_user_group_membership(\stdclass $user, \moodle_database $db, \context_course $context)
     {
         $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
         $eligiblegroups = array();
 
         //we only want to check with the sorting module if this user has the correct role assignment
-        if(!$this->user_is_eligible($user->id, $db)) {
+        if(!$this->user_is_eligible_in_context($user->id, $db, $context)) {
             $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
 
             //an array of strings from the sort module
@@ -287,23 +288,16 @@ class autogroup_set extends domain
      * by this autogroup set
      *
      * @param int $userid
-     * @param moodle_database $db
+     * @param \moodle_database $db
+     * @param \context_course $context
      * @return bool
      */
-    private function user_is_eligible($userid, $db)
+    private function user_is_eligible_in_context($userid, \moodle_database $db, \context_course $context)
     {
-        $roleassignments = $db->get_records_menu(
-            'role_assignments',
-            array(
-                'userid'=>$userid,
-                'courseid'=>$this->courseid
-            ),
-            'id',
-            'id, roleid'
-        );
+        $roleassignments = \get_user_roles($context,$userid);
 
-        foreach($roleassignments as $roleid){
-            if(in_array($roleid, $this->roles)){
+        foreach($roleassignments as $role){
+            if(in_array($role->id, $this->roles)){
                 return true;
             }
         }

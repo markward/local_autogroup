@@ -91,7 +91,7 @@ class course extends domain
     {
         $result = true;
         foreach ($this->autogroups as $autogroup){
-            $result &= $autogroup->verify_user_group_membership($user, $db);
+            $result &= $autogroup->verify_user_group_membership($user, $db, $this->context);
         }
         return $result;
     }
