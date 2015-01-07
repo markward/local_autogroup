@@ -33,6 +33,8 @@ namespace local_autogroup\domain;
 use local_autogroup\domain;
 use local_autogroup\exception;
 use local_autogroup\sort_module;
+use moodle_database;
+use stdClass;
 
 require_once(__DIR__ . "/../../../../group/lib.php" );
 
@@ -59,6 +61,8 @@ class autogroup_set extends domain
             //load autogroup groups for this autogroup set
             $this->get_autogroups($db);
         }
+
+        $this->roles = $this->get_applicable_roles($db);
     }
 
     /**
@@ -73,6 +77,10 @@ class autogroup_set extends domain
         return $result;
     }
 
+    /**
+     * @param \moodle_database $db
+     * @return bool
+     */
     public function create(\moodle_database $db)
     {
         if($this->id > 0){
@@ -87,11 +95,17 @@ class autogroup_set extends domain
         $this->id = $db->insert_record('local_autogroup_set', $autogroupset);
     }
 
+    /**
+     * @return bool
+     */
     public function exists()
     {
         return $this->id > 0;
     }
 
+    /**
+     * @param \moodle_database $db
+     */
     public function remove(\moodle_database $db)
     {
         foreach($this->groups as $k => $group){
@@ -110,10 +124,16 @@ class autogroup_set extends domain
     public function verify_user_group_membership(\stdclass $user, \moodle_database $db)
     {
         $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
-        $sortmodule = new $classname($user, $this->courseid,$this->sortconfig);
+        $eligiblegroups = array();
 
-        //an array of strings from the sort module
-        $eligiblegroups = $sortmodule->eligible_groups();
+        //we only want to check with the sorting module if this user has the correct role assignment
+        if(!$this->user_is_eligible($user->id, $db)) {
+            $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
+
+            //an array of strings from the sort module
+            $eligiblegroups = $sortmodule->eligible_groups();
+        }
+
 
         //an array of groupids which will be populated as we ensure membership
         $validgroups = array();
@@ -133,6 +153,16 @@ class autogroup_set extends domain
         }
 
         return true;
+    }
+
+    /**
+     * @param \moodle_database $db
+     * @return array  role ids which should be added to the group
+     */
+    private function get_applicable_roles(\moodle_database $db)
+    {
+        $db->get_records_menu('local_autogroup_roles', array('setid'=>$this->id), 'id', 'id, roleid');
+        return array();
     }
 
     /**
@@ -222,6 +252,10 @@ class autogroup_set extends domain
         return $autogroupset;
     }
 
+    /**
+     * @param \stdclass $autogroupset
+     * @return bool
+     */
     private function validate_object(\stdclass $autogroupset)
     {
         return is_object($autogroupset)
@@ -246,6 +280,34 @@ class autogroup_set extends domain
             )
         );
         return $idnumber;
+    }
+
+    /**
+     * Whether or not the user is eligible to be grouped
+     * by this autogroup set
+     *
+     * @param int $userid
+     * @param moodle_database $db
+     * @return bool
+     */
+    private function user_is_eligible($userid, $db)
+    {
+        $roleassignments = $db->get_records_menu(
+            'role_assignments',
+            array(
+                'userid'=>$userid,
+                'courseid'=>$this->courseid
+            ),
+            'id',
+            'id, roleid'
+        );
+
+        foreach($roleassignments as $roleid){
+            if(in_array($roleid, $this->roles)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -287,5 +349,10 @@ class autogroup_set extends domain
      * @var array
      */
     private $groups = array();
+
+    /**
+     * @var array
+     */
+    private $roles = array();
 
 }
