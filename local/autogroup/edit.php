@@ -32,10 +32,12 @@ namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');
 
+use \local_autogroup\domain;
 use \local_autogroup\form;
 use \local_autogroup_renderer;
 use \moodle_url;
 use \context_course;
+use \stdClass;
 
 $courseid = required_param('courseid', PARAM_INT);
 $context = context_course::instance($courseid);
@@ -45,6 +47,13 @@ require_capability('local/autogroup:managecourse', $context);
 global $PAGE, $DB;
 
 $course = $DB->get_record('course', array('id' => $courseid));
+
+//for now each course has a single autogroup set.
+if(!$autogroup_set = $DB->get_record('local_autogroup_set', array('courseid'=>$courseid))){
+    //TODO: this should be done by a repository object
+    $autogroup_set = new stdClass();
+}
+$autogroup_set = new domain\autogroup_set($autogroup_set, $DB);
 
 $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortname);
 
@@ -61,10 +70,10 @@ $output = $PAGE->get_renderer('local_autogroup');
 
 $returnurl = new moodle_url('/course/view.php', array('id' => $courseid));
 
-$form = new form\autogroup_set_settings();
+$form = new form\autogroup_set_settings($autogroup_set);
 
 echo $output->header();
 
-//page output here
+$form->display();
 
 echo $output->footer();

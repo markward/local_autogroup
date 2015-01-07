@@ -30,6 +30,7 @@
 
 namespace local_autogroup\form;
 
+use local_autogroup\domain;
 use local_autogroup\form;
 
 /**
@@ -41,6 +42,8 @@ class autogroup_set_settings extends form {
      *
      */
     public function definition() {
+
+
         $this->add_text_intro();
         $this->add_action_buttons();
     }
@@ -62,11 +65,15 @@ class autogroup_set_settings extends form {
     }
 
     private function add_text_intro(){
-        return "blah";
+        $mform = & $this->_form;
+
+        $mform->addElement('header', 'intro', get_string('pluginname', 'local_autogroup'));
+        $mform->setExpanded('intro');
+        $mform->addElement('html', get_string('autogroupdescription', 'local_autogroup'));
     }
 
     /**
-     * @type array
+     * @type domain\autogroup_set
      */
     protected $_customdata;
 }
