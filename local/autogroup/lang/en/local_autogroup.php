@@ -29,4 +29,7 @@
  */
 
 $string['pluginname']  = 'Auto Group';
+
+$string['coursesettings']  = 'Auto Groups';
+
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';

@@ -31,3 +31,5 @@
 namespace local_autogroup;
 
 include_once(__DIR__ . '/locallib.php');
+
+add_course_navigation();
