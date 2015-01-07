@@ -80,6 +80,13 @@ abstract class sort_module {
     }
 
     /**
+     * a string which explains how users are being grouped
+     *
+     * @return string
+     */
+    public abstract function grouping_by();
+
+    /**
      * @var
      */
     protected $user;

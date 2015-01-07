@@ -32,6 +32,7 @@ namespace local_autogroup\form;
 
 use local_autogroup\domain;
 use local_autogroup\form;
+use \html_writer;
 
 /**
  * Class course_settings
@@ -42,10 +43,18 @@ class autogroup_set_settings extends form {
      *
      */
     public function definition() {
-
+        $this->autogroup_set = $this->get_submitted_data();
 
         $this->add_text_intro();
         $this->add_action_buttons();
+    }
+
+    /**
+     *
+     */
+    public function extract_data() {
+        $data = array();
+        $this->set_data($data);
     }
 
     /**
@@ -64,12 +73,25 @@ class autogroup_set_settings extends form {
         return parent::get_data();
     }
 
+    /**
+     * @throws \coding_exception
+     */
     private function add_text_intro(){
         $mform = & $this->_form;
 
         $mform->addElement('header', 'intro', get_string('pluginname', 'local_autogroup'));
         $mform->setExpanded('intro');
-        $mform->addElement('html', get_string('autogroupdescription', 'local_autogroup'));
+        $mform->addElement('html', html_writer::tag('p',get_string('autogroupdescription', 'local_autogroup')));
+
+        if(!$this->_customdata->exists()){
+            //this hasn't been configured yet
+            $mform->addElement('html', get_string('newsettingsintro', 'local_autogroup'));
+        }
+        else {
+            $groupedby = $this->_customdata->grouping_by();
+            //this already has a configuration
+            $mform->addElement('html', get_string('updatesettingsintro', 'local_autogroup', $groupedby));
+        }
     }
 
     /**

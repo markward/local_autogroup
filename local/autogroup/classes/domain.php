@@ -85,6 +85,13 @@ abstract class domain {
     }
 
     /**
+     * @return bool
+     */
+    public function exists(){
+        return $this->id > 0;
+    }
+
+    /**
      * @return int
      */
     private function get_id() {

@@ -96,11 +96,17 @@ class autogroup_set extends domain
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function exists()
-    {
-        return $this->id > 0;
+    public function grouping_by(){
+        $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
+
+        //TODO: We need to be able to init sortmodules without a user
+        $user = new stdClass();
+
+        $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
+
+        return $sortmodule->grouping_by();
     }
 
     /**
@@ -129,6 +135,7 @@ class autogroup_set extends domain
 
         //we only want to check with the sorting module if this user has the correct role assignment
         if($this->user_is_eligible_in_context($user->id, $db, $context)) {
+            //TODO: need to try and catch here in case module doesnt exist
             $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
 
             //an array of strings from the sort module

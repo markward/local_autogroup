@@ -66,6 +66,45 @@ class profile_field extends sort_module
     }
 
     /**
+     * @return string
+     */
+    public function grouping_by(){
+        return (string) $this->field;
+    }
+
+    /**
+     * @param \stdclass $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param string $field
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
+
+    /**
+     * @param mixed $courseid
+     */
+    public function setCourseid($courseid)
+    {
+        $this->courseid = $courseid;
+    }
+
+    /**
+     * @param array $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @var \stdclass object
      */
     protected $user;

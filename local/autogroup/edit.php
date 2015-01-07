@@ -52,6 +52,7 @@ $course = $DB->get_record('course', array('id' => $courseid));
 if(!$autogroup_set = $DB->get_record('local_autogroup_set', array('courseid'=>$courseid))){
     //TODO: this should be done by a repository object
     $autogroup_set = new stdClass();
+    $autogroup_set->courseid = $courseid;
 }
 $autogroup_set = new domain\autogroup_set($autogroup_set, $DB);
 
@@ -70,7 +71,7 @@ $output = $PAGE->get_renderer('local_autogroup');
 
 $returnurl = new moodle_url('/course/view.php', array('id' => $courseid));
 
-$form = new form\autogroup_set_settings($autogroup_set);
+$form = new form\autogroup_set_settings($returnurl, $autogroup_set);
 
 echo $output->header();
 
