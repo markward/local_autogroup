@@ -65,7 +65,7 @@ $observers = array(
 
     array(
         'eventname' => '\core\event\group_deleted',
-        'callback' => '\local_autogroup\event_handler::group_deleted',
+        'callback' => '\local_autogroup\event_handler::group_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
@@ -73,7 +73,7 @@ $observers = array(
 
     array(
         'eventname' => '\core\event\group_updated',
-        'callback' => '\local_autogroup\event_handler::group_updated',
+        'callback' => '\local_autogroup\event_handler::group_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
