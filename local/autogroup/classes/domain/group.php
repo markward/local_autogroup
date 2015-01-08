@@ -148,7 +148,9 @@ class group extends domain
     private function load_from_database($groupid, \moodle_database $db)
     {
         $group = $db->get_record('groups',array('id'=>$groupid));
-        $this->load_from_object($group);
+        if($this->validate_object($group)) {
+            $this->load_from_object($group);
+        }
     }
 
     /**
@@ -173,11 +175,14 @@ class group extends domain
 
 
     /**
-     * @param $group
+     * @param stdClass $group
      * @return bool
      */
-    private function validate_object(\stdclass $group)
+    private function validate_object($group)
     {
+        if(!is_object($group)){
+            return false;
+        }
         if(!isset($group->timecreated)){
             $group->timecreated = time();
         }
