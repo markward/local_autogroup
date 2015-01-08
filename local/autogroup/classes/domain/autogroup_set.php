@@ -95,14 +95,36 @@ class autogroup_set extends domain
      * @param \moodle_database $db
      * @return bool
      */
-    public function delete(\moodle_database $db)
+    public function delete(\moodle_database $db, $cleanupgroups = true)
     {
         if(!$this->exists()){
             return false;
         }
+
+        //this has to be done first to prevent event handler getting in the way
         $db->delete_records('local_autogroup_set', array('id'=>$this->id));
         $db->delete_records('local_autogroup_roles', array('id'=>$this->id));
 
+        if($cleanupgroups){
+            foreach($this->groups as $k => $group){
+                $group->remove();
+                unset($this->groups[$k]);
+            }
+        }
+        else {
+            $this->disassociate_groups();
+        }
+    }
+
+    /**
+     * Used to unlink generated groups from an autogroup set
+     */
+    public function disassociate_groups(){
+        foreach($this->groups as $k => $group){
+            $group->idnumber = '';
+            $group->update();
+            unset($this->groups[$k]);
+        }
     }
 
     /**
@@ -120,19 +142,6 @@ class autogroup_set extends domain
      */
     public function grouping_by(){
         return $this->sortmodule->grouping_by();
-    }
-
-    /**
-     * @param \moodle_database $db
-     */
-    public function remove(\moodle_database $db)
-    {
-        foreach($this->groups as $k => $group){
-            $group->remove();
-            unset($this->groups[$k]);
-        }
-        $db->delete_records('local_autogroup_set', array('id'=>$this->id));
-        $this->id = 0;
     }
 
     /**

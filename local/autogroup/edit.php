@@ -87,14 +87,22 @@ if ($data = $form->get_data()) {
     $options = new stdClass();
     $options->field = $data->groupby;
 
+    // a short-hand if statement to handle the possibility the form didn't include the cleanupold option
+    $cleanupold = isset($data->cleanupold) ? (bool) $data->cleanupold : true;
+
     if($options->field === 'dontgroup'){
         // user has selected "dont group"
-        $autogroup_set->delete($DB);
+        $autogroup_set->delete($DB, $cleanupold);
 
         $autogroup_set = new domain\autogroup_set($DB);
         $autogroup_set->set_course($courseid);
+
     }
     else {
+        if(!$cleanupold && $options->field != $autogroup_set->grouping_by()){
+            $autogroup_set->disassociate_groups();
+        }
+
         // user has selected another option
         $autogroup_set->set_options($options);
         $autogroup_set->save($DB);

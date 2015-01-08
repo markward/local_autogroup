@@ -120,6 +120,13 @@ class group extends domain
         }
     }
 
+    public function update() {
+        if(!$this->exists()){
+            return false;
+        }
+        return \groups_update_group($this->as_object());
+    }
+
     /**
      * @param \moodle_database $db
      */

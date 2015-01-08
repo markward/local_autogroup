@@ -84,6 +84,12 @@ class autogroup_set_settings extends form {
 
         $mform->addElement('select', 'groupby', get_string('groupby','local_autogroup'), $options);
         $mform->setDefault('groupby', $this->_customdata->grouping_by());
+
+        if($this->_customdata->exists()) {
+            //offer to preserve existing groups
+            $mform->addElement('selectyesno', 'cleanupold', get_string('cleanupold','local_autogroup'));
+            $mform->setDefault('cleanupold', 1);
+        }
     }
 
     /**
