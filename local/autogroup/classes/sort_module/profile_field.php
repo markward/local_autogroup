@@ -125,7 +125,7 @@ class profile_field extends sort_module
         }
 
         //ensure that the stored option is valid
-        if(array_key_exists($this->get_config_options(),$config->field)){
+        if(array_key_exists($config->field, $this->get_config_options())){
             return true;
         }
 
