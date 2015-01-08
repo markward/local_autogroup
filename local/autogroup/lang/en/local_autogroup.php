@@ -38,6 +38,7 @@ $string['newsettingsintro'] = 'To start grouping your users, simply select a pro
 $string['updatesettingsintro'] = 'This course is already grouping users by "{$a}". You can either change this to a new field or select "Stop Grouping". Remember, doing this will remove any older auto groups unless you select "no" for "Clean up old groups?"';
 
 $string['groupby'] = 'Group by';
+$string['dontgroup'] = "Don't group users";
 $string['cleanupold'] = 'Clean up old groups?';
 
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';

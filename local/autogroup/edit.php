@@ -86,6 +86,13 @@ if ($data = $form->get_data()) {
     $options = new stdClass();
     $options->field = $data->groupby;
 
+    if($options->field === 0){
+        $autogroup_set->delete();
+
+        $autogroup_set = new domain\autogroup_set($DB);
+        $autogroup_set->set_course($courseid);
+    }
+
     $autogroup_set->set_options($options);
 
     $autogroup_set->save($DB);
