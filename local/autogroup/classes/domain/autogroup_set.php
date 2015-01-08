@@ -160,7 +160,7 @@ class autogroup_set extends domain
      *
      * @param moodle_database $db
      */
-    public function save(moodle_database $db)
+    public function save(moodle_database $db, $cleanupold = true)
     {
         $this->update_timestamps();
 
@@ -171,6 +171,11 @@ class autogroup_set extends domain
         }
         else{
             $this->id = $db->insert_record('local_autogroup_set', $data);
+        }
+
+        //if the user wants to preserve old groups we will need to detatch them now
+        if(!$cleanupold){
+            $this->disassociate_groups();
         }
     }
 

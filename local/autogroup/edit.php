@@ -98,19 +98,16 @@ if ($data = $form->get_data()) {
         $autogroup_set->set_course($courseid);
 
     }
-    else {
-        if(!$cleanupold && $options->field != $autogroup_set->grouping_by()){
-            $autogroup_set->disassociate_groups();
-        }
-
+    else if($options->field != $autogroup_set->grouping_by()){
         // user has selected another option
         $autogroup_set->set_options($options);
-        $autogroup_set->save($DB);
+        $autogroup_set->save($DB, $cleanupold);
 
         $usecase = new usecase\verify_course_group_membership($courseid, $DB);
         $usecase();
-
     }
+
+
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
 }
