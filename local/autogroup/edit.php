@@ -34,6 +34,7 @@ require_once(dirname(__FILE__) . '/pageinit.php');
 
 use \local_autogroup\domain;
 use \local_autogroup\form;
+use \local_autogroup\usecase;
 use \local_autogroup_renderer;
 use \moodle_url;
 use \context_course;
@@ -97,6 +98,10 @@ if ($data = $form->get_data()) {
         // user has selected another option
         $autogroup_set->set_options($options);
         $autogroup_set->save($DB);
+
+        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+        $usecase();
+
     }
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
