@@ -103,6 +103,8 @@ class autogroup_set_settings extends form {
             //this already has a configuration
             $mform->addElement('html', get_string('updatesettingsintro', 'local_autogroup', $groupedby));
         }
+
+        $mform->addElement('html', html_writer::empty_tag('hr'));
     }
 
     /**
