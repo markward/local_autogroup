@@ -96,6 +96,16 @@ class autogroup_set extends domain
     }
 
     /**
+     * Returns the options to be displayed on the autgroup_set
+     * editing form. These are defined per-module.
+     *
+     * @return array
+     */
+    public function get_group_by_options(){
+
+    }
+
+    /**
      * @return string
      */
     public function grouping_by(){

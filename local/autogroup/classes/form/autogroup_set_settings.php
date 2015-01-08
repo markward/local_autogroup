@@ -46,6 +46,8 @@ class autogroup_set_settings extends form {
         $this->autogroup_set = $this->get_submitted_data();
 
         $this->add_text_intro();
+        $this->add_group_by_options();
+
         $this->add_action_buttons();
     }
 
@@ -71,6 +73,14 @@ class autogroup_set_settings extends form {
      */
     public function get_data() {
         return parent::get_data();
+    }
+
+    private function add_group_by_options(){
+        $mform = & $this->_form;
+
+        $options = $this->_customdata->get_group_by_options();
+
+        $mform->addElement('select')
     }
 
     /**
