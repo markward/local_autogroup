@@ -243,7 +243,7 @@ class autogroup_set extends domain
         $eligiblegroups = array();
 
         //we only want to check with the sorting module if this user has the correct role assignment
-        if(true || $this->user_is_eligible_in_context($user->id, $db, $context)) {
+        if($this->user_is_eligible_in_context($user->id, $db, $context)) {
             //an array of strings from the sort module
             $eligiblegroups = $this->sortmodule->eligible_groups_for_user($user);
         }
