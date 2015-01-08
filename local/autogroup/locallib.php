@@ -74,4 +74,5 @@ function plugin_is_enabled(){
     if(!$config->enabled){
         return false;
     }
+    return true;
 }
