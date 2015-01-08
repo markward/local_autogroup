@@ -241,6 +241,8 @@ class autogroup_set extends domain
      */
     private function load_from_object(\stdclass $autogroupset)
     {
+        $this->id = (int) $autogroupset->id;
+
         $this->courseid = (int) $autogroupset->courseid;
 
         if(isset($autogroupset->sortmodule)) {
