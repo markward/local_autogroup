@@ -254,9 +254,9 @@ class autogroup_set extends domain
         $this->sortconfig = new stdClass();
 
         if(isset($autogroupset->sortconfig)) {
-            json_decode($autogroupset->sortconfig);
+            $sortconfig = json_decode($autogroupset->sortconfig);
             if(json_last_error() == JSON_ERROR_NONE) {
-                $this->sortconfig = $autogroupset->sortconfig;
+                $this->sortconfig = $sortconfig;
             }
         }
 
