@@ -30,6 +30,8 @@
 
 namespace local_autogroup;
 
+use \stdClass;
+
 /**
  * An object which can return the valid groups for a given user
  * on a course
@@ -38,11 +40,10 @@ namespace local_autogroup;
 abstract class sort_module {
 
     /**
-     * @param \stdclass $user
+     * @param stdClass $config
      * @param int $courseid
-     * @param string $config
      */
-    public abstract function __construct(\stdclass $user, $courseid, $config);
+    public abstract function __construct($config, $courseid);
 
     /**
      * Child classes will probably override this method.
@@ -53,9 +54,10 @@ abstract class sort_module {
     }
 
     /**
+     * @param stdClass $user
      * @return array $result
      */
-    public abstract function eligible_groups();
+    public abstract function eligible_groups_for_user(stdClass $user);
 
     /**
      * Returns the options to be displayed on the autgroup_set

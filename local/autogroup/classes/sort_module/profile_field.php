@@ -32,6 +32,7 @@ namespace local_autogroup\sort_module;
 
 use local_autogroup\sort_module;
 use local_autogroup\exception;
+use \stdClass;
 
 /**
  * Class course
@@ -40,25 +41,26 @@ use local_autogroup\exception;
 class profile_field extends sort_module
 {
     /**
-     * @param \stdclass $user
+     * @param stdClass $config
      * @param int $courseid
-     * @param string $config
      */
-    public function __construct(\stdclass $user, $courseid, $config)
+    public function __construct($config, $courseid)
     {
-        $config = json_decode($config);
-        $this->field = $config->field;
-        $this->user = $user;
+        if($this->config_is_valid($config)){
+            $this->field = $config->field;
+        }
+        $this->courseid = (int) $courseid;
     }
 
     /**
+     * @param stdClass $user
      * @return array $result
      */
-    public function eligible_groups()
+    public function eligible_groups_for_user(stdClass $user)
     {
         $field = $this->field;
-        if (isset($this->user->$field) && !empty($this->user->$field)){
-            return array($this->user->$field);
+        if (isset($user->$field) && !empty($user->$field)){
+            return array($user->$field);
         }
         else {
             return array();
@@ -89,14 +91,6 @@ class profile_field extends sort_module
     }
 
     /**
-     * @param \stdclass $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * @param string $field
      */
     public function setField($field)
@@ -121,9 +115,22 @@ class profile_field extends sort_module
     }
 
     /**
-     * @var \stdclass object
+     * @param stdClass $config
+     * @return bool
      */
-    protected $user;
+    private function config_is_valid(stdClass $config)
+    {
+        if(!isset($config->field)){
+            return false;
+        }
+
+        //ensure that the stored option is valid
+        if(array_key_exists($this->get_config_options(),$config->field)){
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * @var string
