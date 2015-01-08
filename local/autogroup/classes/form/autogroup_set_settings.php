@@ -48,6 +48,8 @@ class autogroup_set_settings extends form {
         $this->add_text_intro();
         $this->add_group_by_options();
 
+        $this->add_role_options();
+
         $this->add_action_buttons();
     }
 
@@ -89,6 +91,20 @@ class autogroup_set_settings extends form {
             //offer to preserve existing groups
             $mform->addElement('selectyesno', 'cleanupold', get_string('cleanupold','local_autogroup'));
             $mform->setDefault('cleanupold', 1);
+        }
+    }
+
+    private function add_role_options(){
+        $mform = & $this->_form;
+
+        $mform->addElement('header', 'roles', get_string('roles', 'local_autogroup'));
+
+        if ($roles = \get_all_roles()) {
+            $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+            $assignableroles = \get_roles_for_contextlevels(CONTEXT_COURSE);
+            foreach ($roles as $role) {
+                $mform->addElement('advcheckbox', 'role_'.$role->id, $role->localname);
+            }
         }
     }
 

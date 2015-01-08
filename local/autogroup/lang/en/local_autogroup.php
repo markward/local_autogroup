@@ -41,6 +41,8 @@ $string['groupby'] = 'Group by';
 $string['dontgroup'] = "Don't group users";
 $string['cleanupold'] = 'Clean up old groups?';
 
+$string['roles'] = 'Eligible Roles';
+
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
 
 // Sort profile field options
