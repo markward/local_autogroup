@@ -92,6 +92,17 @@ abstract class domain {
     }
 
     /**
+     * A helper function to set the timestamps on this item correctly.
+     */
+    protected function update_timestamps()
+    {
+        if( !$this->exists() ){
+            $this->timecreated = time();
+        }
+        $this->timemodified = time();
+    }
+
+    /**
      * @return int
      */
     private function get_id() {
@@ -108,15 +119,20 @@ abstract class domain {
     /**
      * @var array
      */
-    protected $attributes = array('id');
+    protected $attributes = array('id', 'timecreated', 'timemodified');
+
+    /**
+     * @var int
+     */
+    protected $timecreated = 0;
+
+    /**
+     * @var int
+     */
+    protected $timemodified = 0;
 
     /**
      * @type int
      */
     private $id = 0;
-
-    /**
-     * @var int
-     */
-    private $timemodified = 0;
 }

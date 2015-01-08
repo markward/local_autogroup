@@ -78,7 +78,7 @@ class autogroup_set_settings extends form {
     private function add_group_by_options(){
         $mform = & $this->_form;
 
-        $options = array(0=>get_string('dontgroup', 'local_autogroup'));
+        $options = array('dontgroup'=>get_string('dontgroup', 'local_autogroup'));
 
         $options = $options + $this->_customdata->get_group_by_options();
 

@@ -86,16 +86,18 @@ if ($data = $form->get_data()) {
     $options = new stdClass();
     $options->field = $data->groupby;
 
-    if($options->field === 0){
-        $autogroup_set->delete();
+    if($options->field === 'dontgroup'){
+        // user has selected "dont group"
+        $autogroup_set->delete($DB);
 
         $autogroup_set = new domain\autogroup_set($DB);
         $autogroup_set->set_course($courseid);
     }
-
-    $autogroup_set->set_options($options);
-
-    $autogroup_set->save($DB);
+    else {
+        // user has selected another option
+        $autogroup_set->set_options($options);
+        $autogroup_set->save($DB);
+    }
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
 }

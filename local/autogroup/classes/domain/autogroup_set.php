@@ -88,16 +88,21 @@ class autogroup_set extends domain
      */
     public function create(\moodle_database $db)
     {
-        if($this->id > 0){
+        return $this->save($db);
+    }
+
+    /**
+     * @param \moodle_database $db
+     * @return bool
+     */
+    public function delete(\moodle_database $db)
+    {
+        if(!$this->exists()){
             return false;
         }
+        $db->delete_records('local_autogroup_set', array('id'=>$this->id));
+        $db->delete_records('local_autogroup_roles', array('id'=>$this->id));
 
-        $autogroupset = $this->as_object();
-
-        //the DB needs to give us a proper id
-        unset($autogroupset->id);
-
-        $this->id = $db->insert_record('local_autogroup_set', $autogroupset);
     }
 
     /**
@@ -137,8 +142,9 @@ class autogroup_set extends domain
      */
     public function save(moodle_database $db)
     {
+        $this->update_timestamps();
+
         $data = $this->as_object();
-        $data->timemodified = time();
         $data->sortconfig = json_encode($data->sortconfig);
         if($this->exists()){
             $db->update_record('local_autogroup_set', $data);
