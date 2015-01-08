@@ -119,7 +119,8 @@ class autogroup_set extends domain
     /**
      * Used to unlink generated groups from an autogroup set
      */
-    public function disassociate_groups(){
+    public function disassociate_groups()
+    {
         foreach($this->groups as $k => $group){
             $group->idnumber = '';
             $group->update();
@@ -128,19 +129,29 @@ class autogroup_set extends domain
     }
 
     /**
+     * @return array
+     */
+    public function get_eligible_roles()
+    {
+        return $this->roles;
+    }
+
+    /**
      * Returns the options to be displayed on the autgroup_set
      * editing form. These are defined per-module.
      *
      * @return array
      */
-    public function get_group_by_options(){
+    public function get_group_by_options()
+    {
         return $this->sortmodule->get_config_options();
     }
 
     /**
      * @return string
      */
-    public function grouping_by(){
+    public function grouping_by()
+    {
         return $this->sortmodule->grouping_by();
     }
 

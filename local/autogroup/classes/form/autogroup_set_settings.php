@@ -97,6 +97,8 @@ class autogroup_set_settings extends form {
     private function add_role_options(){
         $mform = & $this->_form;
 
+        $currentroles = $this->_customdata->get_eligible_roles();
+
         $mform->addElement('header', 'roles', get_string('roles', 'local_autogroup'));
 
         if ($roles = \get_all_roles()) {
@@ -104,6 +106,9 @@ class autogroup_set_settings extends form {
             $assignableroles = \get_roles_for_contextlevels(CONTEXT_COURSE);
             foreach ($roles as $role) {
                 $mform->addElement('advcheckbox', 'role_'.$role->id, $role->localname);
+                if(in_array($role->id, $currentroles)){
+                    $mform->setDefault('role_'.$role->id, 1);
+                }
             }
         }
     }
