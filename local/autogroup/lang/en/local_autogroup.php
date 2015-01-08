@@ -41,3 +41,9 @@ $string['groupby'] = 'Group by';
 $string['cleanupold'] = 'Clean up old groups?';
 
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
+
+// Sort profile field options
+$string['authmethod'] = "Authentication Method";
+$string['department'] = "Department";
+$string['institution'] = "Institution";
+$string['language'] = "Preferred Language";

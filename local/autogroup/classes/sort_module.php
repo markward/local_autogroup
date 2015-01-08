@@ -58,6 +58,14 @@ abstract class sort_module {
     public abstract function eligible_groups();
 
     /**
+     * Returns the options to be displayed on the autgroup_set
+     * editing form. These are defined per-module.
+     *
+     * @return array
+     */
+    public abstract function get_config_options();
+
+    /**
      * @param string $attribute
      * @return array|null
      */
