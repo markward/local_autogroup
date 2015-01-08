@@ -50,12 +50,17 @@ class autogroup_set extends domain
      * @param bool $lazyload
      * @throws exception\invalid_course_argument
      */
-    public function __construct (\stdclass $autogroupset, \moodle_database $db)
+    public function __construct (\moodle_database $db, $autogroupset = null)
     {
+        //set the sortconfig as empty
+        $this->sortconfig = new stdClass();
+
         //get the id for this course
         if( $this->validate_object($autogroupset) ){
             $this->load_from_object($autogroupset);
         }
+
+        $this->initialise();
 
         if( $this->exists() ) {
             //load autogroup groups for this autogroup set
@@ -236,6 +241,10 @@ class autogroup_set extends domain
         return $this->groups[$newgroup->id];
     }
 
+    private function initialise(){
+        $this->sortmodule = new $this->sortmodulename($this->sortconfig, $this->courseid);
+    }
+
     /**
      * @param \stdclass $autogroupset
      */
@@ -252,17 +261,12 @@ class autogroup_set extends domain
             }
         }
 
-        //set sortconfig as a stdClass just incase we have no config.
-        $this->sortconfig = new stdClass();
-
         if(isset($autogroupset->sortconfig)) {
             $sortconfig = json_decode($autogroupset->sortconfig);
             if(json_last_error() == JSON_ERROR_NONE) {
                 $this->sortconfig = $sortconfig;
             }
         }
-
-        $this->sortmodule = new $this->sortmodulename($this->sortconfig, $this->courseid);
 
         if(isset($autogroupset->timecreated)){
             $this->timecreated = $autogroupset->timecreated;
@@ -288,7 +292,7 @@ class autogroup_set extends domain
      * @param \stdclass $autogroupset
      * @return bool
      */
-    private function validate_object(\stdclass $autogroupset)
+    private function validate_object($autogroupset)
     {
         return is_object($autogroupset)
         && isset($autogroupset->id)
