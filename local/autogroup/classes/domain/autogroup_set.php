@@ -52,9 +52,6 @@ class autogroup_set extends domain
      */
     public function __construct (\stdclass $autogroupset, \moodle_database $db)
     {
-        //prevents any problems later on
-        $this->sortconfig = new stdClass();
-
         //get the id for this course
         if( $this->validate_object($autogroupset) ){
             $this->load_from_object($autogroupset);
@@ -105,20 +102,14 @@ class autogroup_set extends domain
      * @return array
      */
     public function get_group_by_options(){
-
+        return $this->sortmodule->get_config_options();
     }
 
     /**
      * @return string
      */
     public function grouping_by(){
-        //TODO: We need to be able to init sortmodules without a user
-        $user = new stdClass();
-
-        //TODO handle sortmodule creation better
-        $sortmodule = new $this->sortmodulename($user, $this->courseid, $this->sortconfig);
-
-        return $sortmodule->grouping_by();
+        return $this->sortmodule->grouping_by();
     }
 
     /**
@@ -146,11 +137,8 @@ class autogroup_set extends domain
 
         //we only want to check with the sorting module if this user has the correct role assignment
         if($this->user_is_eligible_in_context($user->id, $db, $context)) {
-            //TODO handle sortmodule creation better
-            $sortmodule = new $this->sortmodulename($user, $this->courseid, $this->sortconfig);
-
             //an array of strings from the sort module
-            $eligiblegroups = $sortmodule->eligible_groups();
+            $eligiblegroups = $this->sortmodule->eligible_groups();
         }
 
 
@@ -262,12 +250,17 @@ class autogroup_set extends domain
             }
         }
 
+        //set sortconfig as a stdClass just incase we have no config.
+        $this->sortconfig = new stdClass();
+
         if(isset($autogroupset->sortconfig)) {
             json_decode($autogroupset->sortconfig);
             if(json_last_error() == JSON_ERROR_NONE) {
                 $this->sortconfig = $autogroupset->sortconfig;
             }
         }
+
+        $this->sortmodule = new $this->sortmodulename($this->sortconfig, $this->courseid);
 
         if(isset($autogroupset->timecreated)){
             $this->timecreated = $autogroupset->timecreated;
