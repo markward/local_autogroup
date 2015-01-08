@@ -84,9 +84,12 @@ class profile_field extends sort_module
     }
 
     /**
-     * @return string
+     * @return bool|string
      */
     public function grouping_by(){
+        if(empty ($this->field)){
+            return false;
+        }
         return (string) $this->field;
     }
 
