@@ -52,6 +52,9 @@ class autogroup_set extends domain
      */
     public function __construct (\stdclass $autogroupset, \moodle_database $db)
     {
+        //prevents any problems later on
+        $this->sortconfig = new stdClass();
+
         //get the id for this course
         if( $this->validate_object($autogroupset) ){
             $this->load_from_object($autogroupset);
@@ -109,12 +112,11 @@ class autogroup_set extends domain
      * @return string
      */
     public function grouping_by(){
-        $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
-
         //TODO: We need to be able to init sortmodules without a user
         $user = new stdClass();
 
-        $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
+        //TODO handle sortmodule creation better
+        $sortmodule = new $this->sortmodulename($user, $this->courseid, $this->sortconfig);
 
         return $sortmodule->grouping_by();
     }
@@ -140,13 +142,12 @@ class autogroup_set extends domain
      */
     public function verify_user_group_membership(\stdclass $user, \moodle_database $db, \context_course $context)
     {
-        $classname = 'local_autogroup\\sort_module\\' . $this->sortmodule;
         $eligiblegroups = array();
 
         //we only want to check with the sorting module if this user has the correct role assignment
         if($this->user_is_eligible_in_context($user->id, $db, $context)) {
-            //TODO: need to try and catch here in case module doesnt exist
-            $sortmodule = new $classname($user, $this->courseid, $this->sortconfig);
+            //TODO handle sortmodule creation better
+            $sortmodule = new $this->sortmodulename($user, $this->courseid, $this->sortconfig);
 
             //an array of strings from the sort module
             $eligiblegroups = $sortmodule->eligible_groups();
@@ -252,8 +253,27 @@ class autogroup_set extends domain
      */
     private function load_from_object(\stdclass $autogroupset)
     {
-        foreach($this->attributes as $attribute){
-            $this->$attribute = $autogroupset->$attribute;
+        $this->courseid = (int) $autogroupset->courseid;
+
+        if(isset($autogroupset->sortmodule)) {
+            $sortmodulename = 'local_autogroup\\sort_module\\' . $autogroupset->sortmodule;
+            if (class_exists($sortmodulename)){
+                $this->sortmodulename = $sortmodulename;
+            }
+        }
+
+        if(isset($autogroupset->sortconfig)) {
+            json_decode($autogroupset->sortconfig);
+            if(json_last_error() == JSON_ERROR_NONE) {
+                $this->sortconfig = $autogroupset->sortconfig;
+            }
+        }
+
+        if(isset($autogroupset->timecreated)){
+            $this->timecreated = $autogroupset->timecreated;
+        }
+        if(isset($autogroupset->timemodified)){
+            $this->timemodified = $autogroupset->timemodified;
         }
     }
 
@@ -336,14 +356,19 @@ class autogroup_set extends domain
     protected $courseid = 0;
 
     /**
-     * @var string
+     * @var sort_module
      */
-    protected $sortmodule = 'profile_field';
+    protected $sortmodule;
 
     /**
      * @var string
      */
-    protected $sortconfig = '';
+    protected $sortmodulename = 'local_autogroup\\sort_module\\profile_field';
+
+    /**
+     * @var stdClass
+     */
+    protected $sortconfig;
 
     /**
      * @var int
