@@ -28,10 +28,44 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_autogroup\usecase;
 
-$plugin->version = 2015010801;
-$plugin->requires = 2013111800.00;      // Requires this Moodle version (2.7).
-$plugin->release = '0.1';               // Plugin release.
-$plugin->component = 'local_autogroup'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_ALPHA;     // Only just getting started.
+use local_autogroup\usecase;
+use local_autogroup\domain;
+
+require_once($CFG->dirroot . '/local/autogroup/lib.php');
+
+/**
+ * Class add_default_to_course
+ * @package local_autogroup\usecase
+ */
+class add_default_to_course extends usecase
+{
+    /**
+     * @param int $courseid
+     * @param \moodle_database $db
+     */
+    public function __construct($courseid, \moodle_database $db)
+    {
+        $this->courseid = (int) $courseid;
+
+        $config = get_config('local_autogroup');
+        $this->addtonewcourses = $config->addtonewcourses;
+    }
+
+    /**
+     * @return void
+     */
+    public function __invoke()
+    {
+        if($this->addtonewcourses){
+        }
+    }
+
+    /**
+     * @var domain\group
+     */
+    private $courseid;
+
+    private $addtonewcourses = false;
+}

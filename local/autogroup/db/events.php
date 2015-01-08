@@ -94,4 +94,12 @@ $observers = array(
         'internal'    => true,
         'priority'    => 0,
     ),
+
+    array(
+        'eventname' => '\core\event\course_created',
+        'callback' => '\local_autogroup\event_handler::course_created',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
 );

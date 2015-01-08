@@ -106,4 +106,12 @@ class event_handler
         return $usecase();
     }
 
+    public static function course_created(event\course_created $event) {
+        global $DB;
+        $courseid = (int) $event->courseid;
+
+        $usecase = new usecase\add_default_to_course($courseid, $DB);
+        return $usecase();
+    }
+
 }
