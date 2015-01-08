@@ -33,13 +33,53 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__) . '/lib.php');
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_autogroup', get_string('pluginname', 'local_autogroup'));
+    $settings = new admin_settingpage(
+        'local_autogroup',
+        get_string('pluginname', 'local_autogroup')
+    );
 
-    $settings->add(new admin_setting_heading('local_autogroup/general', get_string('general', 'local_autogroup'), ''));
-    $settings->add(new admin_setting_configcheckbox('local_autogroup/enabled', get_string('enabled', 'local_autogroup'), '', true));
+    // general settings
+    $settings->add(
+        new admin_setting_heading(
+            'local_autogroup/general',
+            get_string('general', 'local_autogroup'),
+            ''
+        )
+    );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/enabled',
+            get_string('enabled', 'local_autogroup'),
+            '',
+            true
+        )
+    );
 
-    //default roles
-    $settings->add(new admin_setting_heading('local_autogroup/roleconfig', get_string('roles', 'local_autogroup'), ''));
+    // TODO: rework this for dynamic sort modules
+    $choices = array(
+        'auth' => get_string('auth', 'local_autogroup'),
+        'department' => get_string('department', 'local_autogroup'),
+        'institution' => get_string('institution', 'local_autogroup'),
+        'lang' => get_string('lang', 'local_autogroup')
+    );
+    $settings->add(
+        new admin_setting_configselect(
+            'local_autogroup/filter',
+            get_string('groupby', 'local_autogroup'),
+            '',
+            'department',
+            $choices
+        )
+    );
+
+    // default roles
+    $settings->add(
+        new admin_setting_heading(
+            'local_autogroup/roleconfig',
+            get_string('roles', 'local_autogroup'),
+            ''
+        )
+    );
 
     if ($roles = \get_all_roles()) {
         $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
