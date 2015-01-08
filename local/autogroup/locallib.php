@@ -36,6 +36,10 @@ use \pix_icon;
 
 function add_course_navigation()
 {
+    if(!plugin_is_enabled()){
+        return false;
+    }
+
     global $PAGE, $SITE;
 
     $course = $PAGE->course;
@@ -62,5 +66,12 @@ function add_course_navigation()
             }
         }
 
+    }
+}
+
+function plugin_is_enabled(){
+    $config = get_config('local_autogroup');
+    if(!$config->enabled){
+        return false;
     }
 }

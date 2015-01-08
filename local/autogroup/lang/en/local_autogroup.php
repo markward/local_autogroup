@@ -30,6 +30,7 @@
 
 $string['pluginname']  = 'Auto Group';
 
+// Course Settings
 $string['coursesettings']  = 'Auto Groups';
 $string['coursesettingstitle']  = 'Auto Groups: {$a}';
 
@@ -43,6 +44,10 @@ $string['cleanupold'] = 'Clean up old groups?';
 
 $string['roles'] = 'Eligible Roles';
 
+// Admin Settings
+$string['enabled'] = 'Enabled';
+
+// Capabilities
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
 
 // Sort profile field options

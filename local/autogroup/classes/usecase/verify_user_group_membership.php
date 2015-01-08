@@ -33,6 +33,8 @@ namespace local_autogroup\usecase;
 use local_autogroup\usecase;
 use local_autogroup\domain;
 
+require_once($CFG->dirroot . '/local/autogroup/lib.php');
+
 /**
  * Class verify_user_group_membership
  * @package local_autogroup\usecase
@@ -56,6 +58,9 @@ class verify_user_group_membership extends usecase
      */
     public function __invoke()
     {
+        if(!\local_autogroup\plugin_is_enabled()){
+            return;
+        }
         return $this->user->verify_user_group_membership($this->db);
     }
 

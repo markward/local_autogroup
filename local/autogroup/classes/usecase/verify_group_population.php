@@ -33,6 +33,8 @@ namespace local_autogroup\usecase;
 use local_autogroup\usecase;
 use local_autogroup\domain;
 
+require_once($CFG->dirroot . '/local/autogroup/lib.php');
+
 /**
  * Class verify_group_population
  * @package local_autogroup\usecase
@@ -58,6 +60,10 @@ class verify_group_population extends usecase
      */
     public function __invoke()
     {
+        if(!\local_autogroup\plugin_is_enabled()){
+            return;
+        }
+
         $removed = false;
         if($this->group->membership_count() == 0){
             $removed = $this->group->remove();
