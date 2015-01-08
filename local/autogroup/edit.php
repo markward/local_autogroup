@@ -87,6 +87,8 @@ if ($data = $form->get_data()) {
     $options = new stdClass();
     $options->field = $data->groupby;
 
+    $updategroupmembership = false;
+
     // a short-hand if statement to handle the possibility the form didn't include the cleanupold option
     $cleanupold = isset($data->cleanupold) ? (bool) $data->cleanupold : true;
 
@@ -103,8 +105,7 @@ if ($data = $form->get_data()) {
         $autogroup_set->set_options($options);
         $autogroup_set->save($DB, $cleanupold);
 
-        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
-        $usecase();
+        $updategroupmembership = true;
     }
 
     //check for role settings
@@ -118,9 +119,15 @@ if ($data = $form->get_data()) {
             }
         }
 
-        $autogroup_set->set_eligible_roles($newroles, $DB);
+        if($autogroup_set->set_eligible_roles($newroles, $DB)){
+            $updategroupmembership = true;
+        }
     }
 
+    if($updategroupmembership){
+        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+        $usecase();
+    }
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
 }

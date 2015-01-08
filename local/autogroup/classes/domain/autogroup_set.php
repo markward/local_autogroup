@@ -162,9 +162,15 @@ class autogroup_set extends domain
             }
         }
 
-        $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
+        if ( count($rolestoremove) || count($rolestoadd) ) {
+            //if there are changes to make do them and return true
+            $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
 
-        $db->insert_records('local_autogroup_roles', $rolestoadd);
+            $db->insert_records('local_autogroup_roles', $rolestoadd);
+
+            return true;
+        }
+        return false;
     }
 
     /**
