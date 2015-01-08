@@ -48,7 +48,7 @@ class autogroup_set extends domain
      * @param \stdclass $autogroupset
      * @param \moodle_database $db
      * @param bool $lazyload
-     * @throws exception\invalid_course_argument
+     * @throws exception\invalid_autogroup_set_argument
      */
     public function __construct (\moodle_database $db, $autogroupset = null)
     {
@@ -128,6 +128,34 @@ class autogroup_set extends domain
         }
         $db->delete_records('local_autogroup_set', array('id'=>$this->id));
         $this->id = 0;
+    }
+
+    /**
+     * Save or create this autogroup set to the database
+     *
+     * @param moodle_database $db
+     */
+    public function save(moodle_database $db)
+    {
+        $data = $this->as_object();
+        $data->timemodified = time();
+        $data->sortconfig = json_encode($data->sortconfig);
+        if($this->exists()){
+            $db->update_record('local_autogroup_set', $data);
+        }
+        else{
+            $this->id = $db->insert_record('local_autogroup_set', $data);
+        }
+    }
+
+    /**
+     * @param int $courseid
+     */
+    public function set_course($courseid)
+    {
+        if(is_numeric($courseid) && (int) $courseid > 0){
+            $this->courseid = $courseid;
+        }
     }
 
     /**
@@ -273,6 +301,7 @@ class autogroup_set extends domain
             $sortmodulename = 'local_autogroup\\sort_module\\' . $autogroupset->sortmodule;
             if (class_exists($sortmodulename)){
                 $this->sortmodulename = $sortmodulename;
+                $this->sortmoduleshortname = $autogroupset->sortmodule;
             }
         }
 
@@ -300,6 +329,11 @@ class autogroup_set extends domain
         foreach($this->attributes as $attribute){
             $autogroupset->$attribute = $this->$attribute;
         }
+
+        // this is a special case because we dont want
+        // to export the sort module, just the name of the module
+        $autogroupset->sortmodule = $this->sortmoduleshortname;
+
         return $autogroupset;
     }
 
@@ -378,6 +412,11 @@ class autogroup_set extends domain
      * @var string
      */
     protected $sortmodulename = 'local_autogroup\\sort_module\\profile_field';
+
+    /**
+     * @var string
+     */
+    protected $sortmoduleshortname = 'profile_field';
 
     /**
      * @var stdClass

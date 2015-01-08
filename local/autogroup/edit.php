@@ -56,6 +56,8 @@ $course = $DB->get_record('course', array('id' => $courseid));
 //for now each course has a single autogroup set.
 $autogroup_set = $DB->get_record('local_autogroup_set', array('courseid'=>$courseid));
 $autogroup_set = new domain\autogroup_set($DB, $autogroup_set);
+//since it may be a new one we need to tell it what course this is for
+$autogroup_set->set_course($courseid);
 
 $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortname);
 
@@ -79,12 +81,16 @@ if ($form->is_cancelled()) {
     redirect($aborturl);
 }
 if ($data = $form->get_data()) {
-    //TODO: This will eventually need reworking to allow for more dynamic sort modules
+    //TODO: This will eventually need reworking to allow for properly dynamic sort modules
 
     $options = new stdClass();
     $options->field = $data->groupby;
 
     $autogroup_set->set_options($options);
+
+    $autogroup_set->save($DB);
+
+    $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
 }
 
 echo $output->header();
