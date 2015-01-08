@@ -44,17 +44,18 @@ $context = context_course::instance($courseid);
 
 require_capability('local/autogroup:managecourse', $context);
 
-global $PAGE, $DB;
+global $PAGE, $DB, $SITE;
+
+if($courseid == $SITE->id){
+    //do not allow editing for front page.
+    die();
+}
 
 $course = $DB->get_record('course', array('id' => $courseid));
 
 //for now each course has a single autogroup set.
-if(!$autogroup_set = $DB->get_record('local_autogroup_set', array('courseid'=>$courseid))){
-    //TODO: this should be done by a repository object
-    $autogroup_set = new stdClass();
-    $autogroup_set->courseid = $courseid;
-}
-$autogroup_set = new domain\autogroup_set($autogroup_set, $DB);
+$autogroup_set = $DB->get_record('local_autogroup_set', array('courseid'=>$courseid));
+$autogroup_set = new domain\autogroup_set($DB, $autogroup_set);
 
 $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortname);
 
