@@ -55,6 +55,7 @@ class verify_course_group_membership extends usecase
      */
     public function __invoke()
     {
+        set_time_limit(500);
         return $this->course->verify_all_group_membership($this->db);
     }
 
