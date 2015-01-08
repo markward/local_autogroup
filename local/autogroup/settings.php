@@ -34,7 +34,30 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 if ($hassiteconfig) {
     $settings = new admin_settingpage('local_autogroup', get_string('pluginname', 'local_autogroup'));
+
+    $settings->add(new admin_setting_heading('local_autogroup/general', get_string('general', 'local_autogroup'), ''));
     $settings->add(new admin_setting_configcheckbox('local_autogroup/enabled', get_string('enabled', 'local_autogroup'), '', true));
+
+    //default roles
+    $settings->add(new admin_setting_heading('local_autogroup/roleconfig', get_string('roles', 'local_autogroup'), ''));
+
+    if ($roles = \get_all_roles()) {
+        $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+        $assignableroles = \get_roles_for_contextlevels(CONTEXT_COURSE);
+        foreach ($roles as $role) {
+            //default should be true for students
+            $default = ($role->id == 5);
+
+            $settings->add(
+                new admin_setting_configcheckbox(
+                    'local_autogroup/eligiblerole_'.$role->id,
+                    $role->localname,
+                    '',
+                    $default
+                )
+            );
+        }
+    }
 
     $ADMIN->add('localplugins', $settings);
 }

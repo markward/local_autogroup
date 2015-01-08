@@ -46,6 +46,7 @@ $string['roles'] = 'Eligible Roles';
 
 // Admin Settings
 $string['enabled'] = 'Enabled';
+$string['general'] = 'General Configuration';
 
 // Capabilities
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
