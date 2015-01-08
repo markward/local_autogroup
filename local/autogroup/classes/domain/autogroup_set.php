@@ -208,6 +208,8 @@ class autogroup_set extends domain
         }
         else{
             $this->id = $db->insert_record('local_autogroup_set', $data);
+            $db->insert_records('local_autogroup_roles', $this->roles);
+            $this->roles = $this->retrieve_applicable_roles($db);
         }
 
         //if the user wants to preserve old groups we will need to detatch them now
@@ -399,15 +401,18 @@ class autogroup_set extends domain
     private function retrieve_default_roles()
     {
         $config = \get_config('local_autogroup');
-        $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
-        $newroles = array();
-        foreach ($roles as $role){
-            $attributename = 'eligiblerole_'.$role->id;
-            if (isset($config->$attributename) && $config->$attributename){
-                $newroles[] = $role->id;
+        if ($roles = \get_all_roles()) {
+            $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+            $newroles = array();
+            foreach ($roles as $role) {
+                $attributename = 'eligiblerole_' . $role->id;
+                if (isset($config->$attributename) && $config->$attributename) {
+                    $newroles[] = $role->id;
+                }
             }
+            return $newroles;
         }
-        return $newroles;
+        return false;
     }
 
     /**
