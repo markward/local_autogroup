@@ -70,9 +70,22 @@ $PAGE->set_course($course);
 
 $output = $PAGE->get_renderer('local_autogroup');
 
-$returnurl = new moodle_url('/course/view.php', array('id' => $courseid));
+$returnurl = new moodle_url(local_autogroup_renderer::URL_COURSE_SETTINGS, array('courseid'=>$courseid));
+$aborturl = new moodle_url('/course/view.php', array('id' => $courseid));
 
 $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
+
+if ($form->is_cancelled()) {
+    redirect($aborturl);
+}
+if ($data = $form->get_data()) {
+    //TODO: This will eventually need reworking to allow for more dynamic sort modules
+
+    $options = new stdClass();
+    $options->field = $data->groupby;
+
+    $autogroup_set->set_options($options);
+}
 
 echo $output->header();
 

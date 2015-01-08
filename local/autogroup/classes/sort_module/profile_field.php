@@ -53,6 +53,24 @@ class profile_field extends sort_module
     }
 
     /**
+     * @param stdClass $config
+     * @return bool
+     */
+    public function config_is_valid(stdClass $config)
+    {
+        if(!isset($config->field)){
+            return false;
+        }
+
+        //ensure that the stored option is valid
+        if(array_key_exists($config->field, $this->get_config_options())){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param stdClass $user
      * @return array $result
      */
@@ -91,24 +109,6 @@ class profile_field extends sort_module
             return false;
         }
         return (string) $this->field;
-    }
-
-    /**
-     * @param stdClass $config
-     * @return bool
-     */
-    private function config_is_valid(stdClass $config)
-    {
-        if(!isset($config->field)){
-            return false;
-        }
-
-        //ensure that the stored option is valid
-        if(array_key_exists($config->field, $this->get_config_options())){
-            return true;
-        }
-
-        return false;
     }
 
     /**

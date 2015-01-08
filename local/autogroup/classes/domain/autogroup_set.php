@@ -131,6 +131,18 @@ class autogroup_set extends domain
     }
 
     /**
+     * @param stdClass $options
+     */
+    public function set_options(stdClass $config){
+        if($this->sortmodule->config_is_valid($config)){
+            $this->sortconfig = $config;
+
+            //reinit since the old sortmodule may be out of date
+            $this->initialise();
+        }
+    }
+
+    /**
      * @param \stdclass $user
      * @param \moodle_database $db
      * @param \context_course $context
@@ -241,6 +253,9 @@ class autogroup_set extends domain
         return $this->groups[$newgroup->id];
     }
 
+    /**
+     *
+     */
     private function initialise(){
         $this->sortmodule = new $this->sortmodulename($this->sortconfig, $this->courseid);
     }
