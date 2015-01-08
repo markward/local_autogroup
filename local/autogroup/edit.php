@@ -107,6 +107,19 @@ if ($data = $form->get_data()) {
         $usecase();
     }
 
+    //check for role settings
+    if ($autogroup_set->exists() && $roles = \get_all_roles()) {
+        $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+        $newroles = array();
+        foreach ($roles as $role){
+            $attributename = 'role_'.$role->id;
+            if (isset($data->$attributename)){
+                $newroles[] = $role->id;
+            }
+        }
+
+        $autogroup_set->set_eligible_roles($newroles, $DB);
+    }
 
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);

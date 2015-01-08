@@ -136,6 +136,37 @@ class autogroup_set extends domain
         return $this->roles;
     }
 
+
+    /**
+     * This function builds a list of roles to add and a list of roles to
+     * remove, before carrying out the action on the database
+     *
+     * @param array $roles
+     */
+    public function set_eligible_roles($newroles, moodle_database $db)
+    {
+        $rolestoremove = $this->roles;
+        $rolestoadd = array();
+
+        foreach ($newroles as $role){
+            if ($key = array_search($role, $rolestoremove)){
+                //we don't want to remove this from the db
+                unset($rolestoremove[$key]);
+            }
+            else {
+                //we want to add this to the db
+                $newrow = new stdClass();
+                $newrow->setid = $this->id;
+                $newrow->roleid = $role;
+                $rolestoadd[] = $newrow;
+            }
+        }
+
+        $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
+
+        $db->insert_records('local_autogroup_roles', $rolestoadd);
+    }
+
     /**
      * Returns the options to be displayed on the autgroup_set
      * editing form. These are defined per-module.

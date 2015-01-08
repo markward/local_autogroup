@@ -77,6 +77,9 @@ class autogroup_set_settings extends form {
         return parent::get_data();
     }
 
+    /**
+     * @throws \coding_exception
+     */
     private function add_group_by_options(){
         $mform = & $this->_form;
 
@@ -94,6 +97,9 @@ class autogroup_set_settings extends form {
         }
     }
 
+    /**
+     * @throws \coding_exception
+     */
     private function add_role_options(){
         $mform = & $this->_form;
 
@@ -105,7 +111,7 @@ class autogroup_set_settings extends form {
             $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
             $assignableroles = \get_roles_for_contextlevels(CONTEXT_COURSE);
             foreach ($roles as $role) {
-                $mform->addElement('advcheckbox', 'role_'.$role->id, $role->localname);
+                $mform->addElement('checkbox', 'role_'.$role->id, $role->localname);
                 if(in_array($role->id, $currentroles)){
                     $mform->setDefault('role_'.$role->id, 1);
                 }
