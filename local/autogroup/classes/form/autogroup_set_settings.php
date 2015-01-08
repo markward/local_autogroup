@@ -99,7 +99,7 @@ class autogroup_set_settings extends form {
             $mform->addElement('html', get_string('newsettingsintro', 'local_autogroup'));
         }
         else {
-            $groupedby = $this->_customdata->grouping_by();
+            $groupedby = get_string($this->_customdata->grouping_by(), 'local_autogroup');
             //this already has a configuration
             $mform->addElement('html', get_string('updatesettingsintro', 'local_autogroup', $groupedby));
         }

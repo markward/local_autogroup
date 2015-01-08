@@ -43,7 +43,7 @@ $string['cleanupold'] = 'Clean up old groups?';
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
 
 // Sort profile field options
-$string['authmethod'] = "Authentication Method";
+$string['auth'] = "Authentication Method";
 $string['department'] = "Department";
 $string['institution'] = "Institution";
-$string['language'] = "Preferred Language";
+$string['lang'] = "Preferred Language";

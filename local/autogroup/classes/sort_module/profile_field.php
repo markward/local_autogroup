@@ -75,10 +75,10 @@ class profile_field extends sort_module
      */
     public function get_config_options(){
         $options = array(
-            'auth' => get_string('authmethod', 'local_autogroup'),
+            'auth' => get_string('auth', 'local_autogroup'),
             'department' => get_string('department', 'local_autogroup'),
             'institution' => get_string('institution', 'local_autogroup'),
-            'lang' => get_string('language', 'local_autogroup'),
+            'lang' => get_string('lang', 'local_autogroup'),
         );
         return $options;
     }
