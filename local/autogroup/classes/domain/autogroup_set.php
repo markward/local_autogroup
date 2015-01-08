@@ -67,7 +67,7 @@ class autogroup_set extends domain
             $this->get_autogroups($db);
         }
 
-        $this->roles = $this->get_applicable_roles($db);
+        $this->roles = $this->retrieve_applicable_roles($db);
     }
 
     /**
@@ -276,15 +276,6 @@ class autogroup_set extends domain
 
     /**
      * @param \moodle_database $db
-     * @return array  role ids which should be added to the group
-     */
-    private function get_applicable_roles(\moodle_database $db)
-    {
-        return $db->get_records_menu('local_autogroup_roles', array('setid'=>$this->id), 'id', 'id, roleid');
-    }
-
-    /**
-     * @param \moodle_database $db
      */
     private function get_autogroups(\moodle_database $db)
     {
@@ -385,6 +376,38 @@ class autogroup_set extends domain
         if(isset($autogroupset->timemodified)){
             $this->timemodified = $autogroupset->timemodified;
         }
+    }
+
+    /**
+     * @param \moodle_database $db
+     * @return array  role ids which should be added to the group
+     */
+    private function retrieve_applicable_roles(\moodle_database $db)
+    {
+        $roles = $db->get_records_menu('local_autogroup_roles', array('setid'=>$this->id), 'id', 'id, roleid');
+
+        if (empty($roles) && !$this->exists()){
+            $roles = $this->retrieve_default_roles();
+        }
+
+        return $roles;
+    }
+
+    /**
+     * @return array  default eligible roleids
+     */
+    private function retrieve_default_roles()
+    {
+        $config = \get_config('local_autogroup');
+        $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+        $newroles = array();
+        foreach ($roles as $role){
+            $attributename = 'eligiblerole_'.$role->id;
+            if (isset($config->$attributename) && $config->$attributename){
+                $newroles[] = $role->id;
+            }
+        }
+        return $newroles;
     }
 
     /**
