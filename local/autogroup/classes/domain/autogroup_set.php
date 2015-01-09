@@ -138,39 +138,31 @@ class autogroup_set extends domain
 
 
     /**
-     * This function builds a list of roles to add and a list of roles to
-     * remove, before carrying out the action on the database
+     * This function updates cached roles and returns true
+     * if a change has been made.
      *
-     * @param array $roles
+     * @param $newroles
+     * @return bool
      */
-    public function set_eligible_roles($newroles, moodle_database $db)
+    public function set_eligible_roles($newroles)
     {
-        $rolestoremove = $this->roles;
-        $rolestoadd = array();
+        $oldroles = $this->roles;
 
-        foreach ($newroles as $role){
-            if ($key = array_search($role, $rolestoremove)){
-                //we don't want to remove this from the db
-                unset($rolestoremove[$key]);
+        $this->roles = $newroles;
+
+        //detect changes and report back true or false.
+        foreach ($this->roles as $role){
+            if ($key = array_search($role, $oldroles)){
+                //this will remail unchanges
+                unset($oldroles[$key]);
             }
             else {
-                //we want to add this to the db
-                $newrow = new stdClass();
-                $newrow->setid = $this->id;
-                $newrow->roleid = $role;
-                $rolestoadd[] = $newrow;
+                return true;
             }
         }
 
-        if ( count($rolestoremove) || count($rolestoadd) ) {
-            //if there are changes to make do them and return true
-            $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
-
-            $db->insert_records('local_autogroup_roles', $rolestoadd);
-
-            return true;
-        }
-        return false;
+        //will return true if a role has been removed
+        return (bool) count($oldroles);
     }
 
     /**
@@ -200,7 +192,7 @@ class autogroup_set extends domain
     public function save(moodle_database $db, $cleanupold = true)
     {
         $this->update_timestamps();
-
+        debugging('test');
         $data = $this->as_object();
         $data->sortconfig = json_encode($data->sortconfig);
         if($this->exists()){
@@ -210,6 +202,9 @@ class autogroup_set extends domain
             $this->id = $db->insert_record('local_autogroup_set', $data);
             $this->roles = $this->retrieve_applicable_roles($db);
         }
+
+
+        $this->save_roles($db);
 
         //if the user wants to preserve old groups we will need to detatch them now
         if(!$cleanupold){
@@ -412,6 +407,57 @@ class autogroup_set extends domain
             return $newroles;
         }
         return false;
+    }
+
+    /**
+     * This function builds a list of roles to add and a list of roles to
+     * remove, before carrying out the action on the database. It will only
+     * run if the autogroup_set exists since roles must be keyed against
+     * the autogroup_set id.
+     *
+     * @param moodle_database $db
+     * @return bool
+     * @throws \coding_exception
+     */
+    private function save_roles(moodle_database $db)
+    {
+        debugging('test');
+
+        if(!$this->exists()){
+            return false;
+        }
+
+        $rolestoremove = $db->get_records('local_autogroup_roles',array('setid'=>$this->id));
+        $rolestoadd = array();
+
+        foreach ($this->roles as $role){
+            if ($key = array_search($role, $rolestoremove)){
+                //we don't want to remove this from the db
+                unset($rolestoremove[$key]);
+            }
+            else {
+                //we want to add this to the db
+                $newrow = new stdClass();
+                $newrow->setid = $this->id;
+                $newrow->roleid = $role;
+                $rolestoadd[] = $newrow;
+            }
+        }
+
+        $result = false;
+
+        if (count($rolestoremove)) {
+            //if there are changes to make do them and return true
+            $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
+            $result = true;
+        }
+
+        if(count($rolestoadd)){
+            $db->insert_records('local_autogroup_roles', $rolestoadd);
+            $result = true;
+        }
+
+        return $result;
     }
 
     /**

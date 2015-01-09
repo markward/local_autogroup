@@ -78,9 +78,6 @@ class add_default_to_course extends usecase
             $options->field = $this->pluginconfig->filter;
             $autogroup_set->set_options($options);
 
-            // save to db
-            $autogroup_set->save($this->db);
-
             // now we can set the eligible roles to global default
             if ($roles = \get_all_roles()) {
                 $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
@@ -98,6 +95,9 @@ class add_default_to_course extends usecase
 
                 $autogroup_set->set_eligible_roles($newroles, $this->db);
             }
+
+            // save all that to db
+            $autogroup_set->save($this->db);
 
             $usecase = new usecase\verify_course_group_membership($this->courseid, $this->db);
             $usecase();
