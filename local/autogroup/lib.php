@@ -78,4 +78,6 @@ function local_autogroup_extends_settings_navigation(settings_navigation $settin
         }
 
     }
+
+    return true;
 }

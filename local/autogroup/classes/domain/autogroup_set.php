@@ -109,6 +109,8 @@ class autogroup_set extends domain
         else {
             $this->disassociate_groups();
         }
+
+        return true;
     }
 
     /**

@@ -31,6 +31,8 @@ namespace local_autogroup\domain;
 
 use local_autogroup\domain;
 use local_autogroup\exception;
+use stdClass;
+use moodle_database;
 
 require_once(__DIR__ . "/../../../../group/lib.php" );
 
@@ -48,7 +50,7 @@ require_once(__DIR__ . "/../../../../group/lib.php" );
 class group extends domain
 {
     /**
-     * @param $group
+     * @param stdClass $group
      * @param \moodle_database $db
      * @throws exception\invalid_group_argument
      */

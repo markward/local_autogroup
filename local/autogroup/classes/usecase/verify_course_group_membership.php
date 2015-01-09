@@ -58,7 +58,7 @@ class verify_course_group_membership extends usecase
     public function __invoke()
     {
         if(!\local_autogroup\plugin_is_enabled()){
-            return;
+            return false;
         }
 
         set_time_limit(500);
