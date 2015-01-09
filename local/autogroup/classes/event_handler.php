@@ -166,6 +166,11 @@ class event_handler
      * @return mixed
      */
     public static function course_created(event\course_created $event) {
+        $config = get_config('local_autogroup');
+        if(!$config->addtonewcourses){
+            return false;
+        }
+
         global $DB;
         $courseid = (int) $event->courseid;
 
@@ -173,4 +178,20 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\course_restored $event
+     * @return mixed
+     */
+    public static function course_restored(event\course_restored $event) {
+        $config = get_config('local_autogroup');
+        if(!$config->addtorestoredcourses){
+            return false;
+        }
+
+        global $DB;
+        $courseid = (int) $event->courseid;
+
+        $usecase = new usecase\add_default_to_course($courseid, $DB);
+        return $usecase();
+    }
 }

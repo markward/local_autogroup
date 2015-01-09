@@ -54,7 +54,7 @@ class add_default_to_course extends usecase
 
         $this->pluginconfig = get_config('local_autogroup');
 
-        $this->addtonewcourse = $this->pluginconfig->addtonewcourses;
+        $this->addtonewcourse = true;
 
         if($db->record_exists('local_autogroup_set', array('courseid'=>$courseid))){
             //this shouldn't happen, but we want to ensure we avoid duplicates.
