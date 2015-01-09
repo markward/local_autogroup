@@ -6,6 +6,7 @@ dependant upon information within their user profile
 
 Changelog
 **********
+v1.01  - Added event handler for course_restored and related setting
 v1.0   - Stable release. Tested for compatability with Moodle 2.7 and 2.8
 
 Install
