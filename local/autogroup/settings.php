@@ -75,6 +75,14 @@ if ($hassiteconfig) {
             false
         )
     );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/addtorestoredcourses',
+            get_string('addtorestoredcourses', 'local_autogroup'),
+            '',
+            false
+        )
+    );
 
     // default settings
     $settings->add(

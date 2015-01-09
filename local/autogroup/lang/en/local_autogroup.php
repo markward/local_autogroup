@@ -46,6 +46,7 @@ $string['roles'] = 'Eligible Roles';
 
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
+$string['addtorestoredcourses'] = 'Add to restored courses';
 $string['defaults'] = 'Default Settings';
 $string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
