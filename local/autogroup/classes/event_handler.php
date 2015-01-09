@@ -48,6 +48,11 @@ class event_handler
 
     public static function group_member_added(event\group_member_added $event)
     {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->strict){
+            return false;
+        }
+
         global $DB;
 
         $courseid = (int) $event->courseid;
@@ -59,6 +64,11 @@ class event_handler
 
     public static function group_member_removed(event\group_member_removed $event)
     {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->strict){
+            return false;
+        }
+
         global $DB, $PAGE;
 
         $groupid = (int) $event->objectid;
@@ -86,8 +96,12 @@ class event_handler
 
     public static function group_change(event\base $event)
     {
-        //TODO: ensure this is not executed after verify_group_population deletes a group
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->strict){
+            return false;
+        }
 
+        //TODO: find way to prevent this being executed after verify_group_population deletes a group
         global $DB;
 
         $courseid = (int) $event->courseid;
