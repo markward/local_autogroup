@@ -93,7 +93,7 @@ class add_default_to_course extends usecase
                     }
                 }
 
-                $autogroup_set->set_eligible_roles($newroles, $this->db);
+                $autogroup_set->set_eligible_roles($newroles);
             }
 
             // save all that to db

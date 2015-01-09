@@ -153,7 +153,7 @@ class autogroup_set extends domain
         //detect changes and report back true or false.
         foreach ($this->roles as $role){
             if ($key = array_search($role, $oldroles)){
-                //this will remail unchanges
+                //this will remain unchanged
                 unset($oldroles[$key]);
             }
             else {
@@ -200,7 +200,6 @@ class autogroup_set extends domain
         }
         else{
             $this->id = $db->insert_record('local_autogroup_set', $data);
-            $this->roles = $this->retrieve_applicable_roles($db);
         }
 
         $this->save_roles($db);
@@ -446,20 +445,24 @@ class autogroup_set extends domain
             }
         }
 
-        $result = false;
+        $changed = false;
 
         if (count($rolestoremove)) {
             //if there are changes to make do them and return true
             $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
-            $result = true;
+            $changed = true;
         }
 
         if(count($rolestoadd)){
             $db->insert_records('local_autogroup_roles', $rolestoadd);
-            $result = true;
+            $changed = true;
         }
 
-        return $result;
+        if($changed){
+            $this->roles = $this->retrieve_applicable_roles($db);
+        }
+
+        return $changed;
     }
 
     /**
