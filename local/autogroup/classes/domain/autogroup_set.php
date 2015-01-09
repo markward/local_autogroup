@@ -17,9 +17,16 @@
 /**
  * autogroup local plugin
  *
- * A course object relates to a Moodle course and acts as a container
- * for multiple groups. Initialising a course object will automatically
- * load each autogroup group for that course into memory.
+ * Autogroup sets are currently restricted to a one-to-one relationship
+ * with courses, however this class exists in order to facilitate any
+ * future efforts to allow for multiple autogroup rules to be defined
+ * per course.
+ *
+ * In theory a course could have multiple rules assigning users in
+ * different roles to different groups.
+ *
+ * Each autogroup set links to a single sort module to determine which
+ * groups a user should exist in.
  *
  * @package    local
  * @subpackage autogroup

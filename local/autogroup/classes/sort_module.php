@@ -33,8 +33,13 @@ namespace local_autogroup;
 use \stdClass;
 
 /**
- * An object which can return the valid groups for a given user
- * on a course
+ * Sort modules are currently only partially functional. They offer a
+ * mechanism through which the logic of how we sort users can be switched.
+ *
+ * Eventually this would allow for groups to be created by various
+ * rules, such as organising users by their cohorts, or by the badges they
+ * have been awarded.
+ *
  * @package local_autogroup
  */
 abstract class sort_module {

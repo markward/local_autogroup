@@ -39,6 +39,12 @@ use local_autogroup\exception;
 
 /**
  * Class user
+ *
+ * Wraps a standard moodle user with additional helper functions, linking
+ * to the users courses and on to their autogroups.
+ *
+ * TODO: Some of the functionality here belongs in a repository class
+ *
  * @package local_autogroup\domain
  */
 class user extends domain

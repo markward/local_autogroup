@@ -35,6 +35,14 @@ use local_autogroup\exception;
 
 /**
  * Class course
+ *
+ * A course object relates to a Moodle course and acts as a container
+ * for multiple groups. Initialising a course object will automatically
+ * load each autogroup group for that course into memory.
+ *
+ * Courses currently link to a single autogroup_set, however in the
+ * future this could be extended to support multiple sets.
+ *
  * @package local_autogroup\domain
  */
 class course extends domain

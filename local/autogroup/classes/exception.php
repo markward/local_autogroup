@@ -32,7 +32,23 @@ namespace local_autogroup;
 
 use moodle_exception;
 
+/**
+ * Exceptions allow us to handle specific situations which are unique
+ * to local_autogroup in a way which we see best.
+ *
+ * This is particularly useful when we aren't 100% sure something is
+ * going to work, as it means we can catch the problem and do something
+ * differently to deal with it silently.
+ *
+ * @package local_autogroup
+ */
 abstract class exception extends moodle_exception {
+    /**
+     * @param string $errorcode
+     * @param string $link
+     * @param null $a
+     * @param null $debuginfo
+     */
     public function __construct($errorcode, $link = '', $a = null, $debuginfo = null) {
         $module = 'local_autogroup';
         parent::__construct($errorcode, $module, $link, $a, $debuginfo);

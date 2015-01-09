@@ -32,6 +32,18 @@ namespace local_autogroup;
 
 /**
  * Class usecase
+ *
+ * Usecases offer a mechanism through which the plugin can execute
+ * commonly repeated processes. This class is extended by the files
+ * in classes/usecase.
+ *
+ * All usecases are triggered through the invoke magic method, which
+ * effectively means instantiating the class and then using it like
+ * a function:
+ *
+ * $usecase = new usecase($a, $b, $c);
+ * $usecase();
+ *
  * @package local_autogroup
  */
 abstract class usecase {

@@ -37,6 +37,11 @@ require_once($CFG->libdir . '/formslib.php');
 
 /**
  * Class form
+ *
+ * Blindly extends Moodle's form class for now. This stub is here as
+ * a convenient way for us to extend that class for all local_autogroup
+ * forms at some point in the future.
+ *
  * @package local_autogroup
  */
 abstract class form extends moodleform

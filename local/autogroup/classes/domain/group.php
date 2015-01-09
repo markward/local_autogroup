@@ -36,6 +36,13 @@ require_once(__DIR__ . "/../../../../group/lib.php" );
 
 /**
  * Class group
+ *
+ * Wraps the standard Moodle group object with additional
+ * helper functions.
+ *
+ * Save / create / update functions here refer to the core
+ * Moodle functions in order to maintain event calls etc.
+ *
  * @package local_autogroup\domain
  */
 class group extends domain
