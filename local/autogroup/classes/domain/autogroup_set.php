@@ -78,18 +78,6 @@ class autogroup_set extends domain
     }
 
     /**
-     * @return array
-     */
-    public function get_membership_counts()
-    {
-        $result = array();
-        foreach($this->groups as $groupid => $group){
-            $result[$groupid] = $group->membership_count();
-        }
-        return $result;
-    }
-
-    /**
      * @param \moodle_database $db
      * @return bool
      */
@@ -143,7 +131,6 @@ class autogroup_set extends domain
         return $this->roles;
     }
 
-
     /**
      * This function updates cached roles and returns true
      * if a change has been made.
@@ -172,6 +159,7 @@ class autogroup_set extends domain
         return (bool) count($oldroles);
     }
 
+
     /**
      * Returns the options to be displayed on the autgroup_set
      * editing form. These are defined per-module.
@@ -184,6 +172,21 @@ class autogroup_set extends domain
     }
 
     /**
+     * @return array
+     */
+    public function get_membership_counts()
+    {
+        $result = array();
+        foreach($this->groups as $groupid => $group){
+            $result[$groupid] = $group->membership_count();
+        }
+        return $result;
+    }
+
+    /**
+     * returns the name of the field this is currently
+     * grouping by.
+     *
      * @return string
      */
     public function grouping_by()
@@ -276,6 +279,23 @@ class autogroup_set extends domain
     }
 
     /**
+     * @return \stdclass $autogroupset
+     */
+    private function as_object()
+    {
+        $autogroupset = new \stdclass();
+        foreach($this->attributes as $attribute){
+            $autogroupset->$attribute = $this->$attribute;
+        }
+
+        // this is a special case because we dont want
+        // to export the sort module, just the name of the module
+        $autogroupset->sortmodule = $this->sortmoduleshortname;
+
+        return $autogroupset;
+    }
+
+    /**
      * @param \moodle_database $db
      */
     private function get_autogroups(\moodle_database $db)
@@ -338,6 +358,23 @@ class autogroup_set extends domain
         }
 
         return $this->groups[$newgroup->id];
+    }
+
+    /**
+     * @param string $groupname
+     * @return string
+     */
+    private function generate_group_idnumber($groupname)
+    {
+        //generate the idnumber for this group
+        $idnumber = implode('|',
+            array(
+                'autogroup',
+                $this->id,
+                $groupname
+            )
+        );
+        return $idnumber;
     }
 
     /**
@@ -473,53 +510,6 @@ class autogroup_set extends domain
     }
 
     /**
-     * @return \stdclass $autogroupset
-     */
-    private function as_object()
-    {
-        $autogroupset = new \stdclass();
-        foreach($this->attributes as $attribute){
-            $autogroupset->$attribute = $this->$attribute;
-        }
-
-        // this is a special case because we dont want
-        // to export the sort module, just the name of the module
-        $autogroupset->sortmodule = $this->sortmoduleshortname;
-
-        return $autogroupset;
-    }
-
-    /**
-     * @param \stdclass $autogroupset
-     * @return bool
-     */
-    private function validate_object($autogroupset)
-    {
-        return is_object($autogroupset)
-        && isset($autogroupset->id)
-        && $autogroupset->id >= 0
-        && isset($autogroupset->courseid)
-        && $autogroupset->courseid > 0;
-    }
-
-    /**
-     * @param string $groupname
-     * @return string
-     */
-    private function generate_group_idnumber($groupname)
-    {
-        //generate the idnumber for this group
-        $idnumber = implode('|',
-            array(
-                'autogroup',
-                $this->id,
-                $groupname
-            )
-        );
-        return $idnumber;
-    }
-
-    /**
      * Whether or not the user is eligible to be grouped
      * by this autogroup set
      *
@@ -538,6 +528,19 @@ class autogroup_set extends domain
             }
         }
         return false;
+    }
+
+    /**
+     * @param \stdclass $autogroupset
+     * @return bool
+     */
+    private function validate_object($autogroupset)
+    {
+        return is_object($autogroupset)
+        && isset($autogroupset->id)
+        && $autogroupset->id >= 0
+        && isset($autogroupset->courseid)
+        && $autogroupset->courseid > 0;
     }
 
     /**
