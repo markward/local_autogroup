@@ -22,7 +22,7 @@ The plugin has been written and is being maintained by Mark Ward (me@moodlemark.
 Thanks to
 **********
 
-Development of the plugin was funded by East Central BOCES (http://www.ecboces.org/)
+Development for v1 of the plugin was funded by East Central BOCES (http://www.ecboces.org/)
 
 Many ideas and suggestions for the functionality of the plugin were contributed
 by Emma Richardson at East Central BOCES.
