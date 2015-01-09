@@ -192,7 +192,7 @@ class autogroup_set extends domain
     public function save(moodle_database $db, $cleanupold = true)
     {
         $this->update_timestamps();
-        debugging('test');
+
         $data = $this->as_object();
         $data->sortconfig = json_encode($data->sortconfig);
         if($this->exists()){
@@ -202,7 +202,6 @@ class autogroup_set extends domain
             $this->id = $db->insert_record('local_autogroup_set', $data);
             $this->roles = $this->retrieve_applicable_roles($db);
         }
-
 
         $this->save_roles($db);
 
@@ -421,13 +420,16 @@ class autogroup_set extends domain
      */
     private function save_roles(moodle_database $db)
     {
-        debugging('test');
-
         if(!$this->exists()){
             return false;
         }
 
-        $rolestoremove = $db->get_records('local_autogroup_roles',array('setid'=>$this->id));
+        $rolestoremove = $db->get_records_menu(
+            'local_autogroup_roles',
+            array('setid'=>$this->id),
+            'id',
+            'id, roleid'
+        );
         $rolestoadd = array();
 
         foreach ($this->roles as $role){

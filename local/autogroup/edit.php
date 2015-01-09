@@ -120,13 +120,11 @@ if ($data = $form->get_data()) {
         }
 
         if($autogroup_set->set_eligible_roles($newroles, $DB)){
-            $updategroupmembership = true;
-        }
-    }
+            $autogroup_set->save($DB, $cleanupold);
 
-    if($updategroupmembership){
-        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
-        $usecase();
+            $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+            $usecase();
+        }
     }
 
     $form = new form\autogroup_set_settings($returnurl, $autogroup_set);
