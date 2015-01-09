@@ -65,9 +65,7 @@ class event_handler
     public static function group_member_removed(event\group_member_removed $event)
     {
         $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->strict){
-            return false;
-        }
+
 
         global $DB, $PAGE;
 
@@ -75,8 +73,10 @@ class event_handler
         $courseid = (int) $event->courseid;
         $userid = (int) $event->relateduserid;
 
-        $usecase1 = new usecase\verify_user_group_membership($userid, $DB, $courseid);
-        $usecase1();
+        if($pluginconfig->strict) {
+            $usecase1 = new usecase\verify_user_group_membership($userid, $DB, $courseid);
+            $usecase1();
+        }
 
 
         $usecase2 = new usecase\verify_group_population($groupid, $DB, $PAGE);
