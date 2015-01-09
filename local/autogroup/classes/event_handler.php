@@ -33,8 +33,23 @@ namespace local_autogroup;
 use \core\event;
 use \local_autogroup\usecase;
 
+/**
+ * Class event_handler
+ *
+ * Functions which are triggered by Moodles events and carry out
+ * the necessary logic to maintain membership.
+ *
+ * These functions almost entirely rely on the usecase classes to
+ * carry out work. (see classes/usecase)
+ *
+ * @package local_autogroup
+ */
 class event_handler
 {
+    /**
+     * @param event\user_enrolment_created $event
+     * @return mixed
+     */
     public static function user_enrolment_created(event\user_enrolment_created $event)
     {
         global $DB;
@@ -46,6 +61,12 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\group_member_added $event
+     * @return bool
+     * @throws \Exception
+     * @throws \dml_exception
+     */
     public static function group_member_added(event\group_member_added $event)
     {
         $pluginconfig = get_config('local_autogroup');
@@ -62,6 +83,12 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\group_member_removed $event
+     * @return bool
+     * @throws \Exception
+     * @throws \dml_exception
+     */
     public static function group_member_removed(event\group_member_removed $event)
     {
         $pluginconfig = get_config('local_autogroup');
@@ -84,6 +111,10 @@ class event_handler
         return true;
     }
 
+    /**
+     * @param event\user_updated $event
+     * @return mixed
+     */
     public static function user_updated(event\user_updated $event)
     {
         global $DB;
@@ -94,6 +125,12 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\base $event
+     * @return bool
+     * @throws \Exception
+     * @throws \dml_exception
+     */
     public static function group_change(event\base $event)
     {
         $pluginconfig = get_config('local_autogroup');
@@ -110,6 +147,10 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\base $event
+     * @return mixed
+     */
     public static function role_change(event\base $event)
     {
         global $DB;
@@ -120,6 +161,10 @@ class event_handler
         return $usecase();
     }
 
+    /**
+     * @param event\course_created $event
+     * @return mixed
+     */
     public static function course_created(event\course_created $event) {
         global $DB;
         $courseid = (int) $event->courseid;
