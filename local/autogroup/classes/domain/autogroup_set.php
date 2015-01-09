@@ -208,7 +208,6 @@ class autogroup_set extends domain
         }
         else{
             $this->id = $db->insert_record('local_autogroup_set', $data);
-            $db->insert_records('local_autogroup_roles', $this->roles);
             $this->roles = $this->retrieve_applicable_roles($db);
         }
 

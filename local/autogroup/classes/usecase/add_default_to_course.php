@@ -32,6 +32,8 @@ namespace local_autogroup\usecase;
 
 use local_autogroup\usecase;
 use local_autogroup\domain;
+use moodle_database;
+use stdClass;
 
 require_once($CFG->dirroot . '/local/autogroup/lib.php');
 
@@ -43,14 +45,21 @@ class add_default_to_course extends usecase
 {
     /**
      * @param int $courseid
-     * @param \moodle_database $db
+     * @param moodle_database $db
      */
-    public function __construct($courseid, \moodle_database $db)
+    public function __construct($courseid, moodle_database $db)
     {
         $this->courseid = (int) $courseid;
+        $this->db = $db;
 
-        $config = get_config('local_autogroup');
-        $this->addtonewcourses = $config->addtonewcourses;
+        $this->pluginconfig = get_config('local_autogroup');
+
+        $this->addtonewcourse = $this->pluginconfig->addtonewcourses;
+
+        if($db->record_exists('local_autogroup_set', array('courseid'=>$courseid))){
+            //this shouldn't happen, but we want to ensure we avoid duplicates.
+            $this->addtonewcourse = false;
+        }
     }
 
     /**
@@ -58,14 +67,59 @@ class add_default_to_course extends usecase
      */
     public function __invoke()
     {
-        if($this->addtonewcourses){
+        if($this->addtonewcourse){
+
+            // first generate a new autogroup_set object
+            $autogroup_set = new domain\autogroup_set($this->db);
+            $autogroup_set->set_course($this->courseid);
+
+            // set the sorting options to global default
+            $options = new stdClass();
+            $options->field = $this->pluginconfig->filter;
+            $autogroup_set->set_options($options);
+
+            // save to db
+            $autogroup_set->save($this->db);
+
+            // now we can set the eligible roles to global default
+            if ($roles = \get_all_roles()) {
+                $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
+                $newroles = array();
+                foreach ($roles as $role){
+                    $attributename = 'eligiblerole_'.$role->id;
+
+                    if (isset($this->pluginconfig->$attributename) &&
+                        $this->pluginconfig->$attributename){
+
+                        $newroles[] = $role->id;
+
+                    }
+                }
+
+                if($autogroup_set->set_eligible_roles($newroles, $this->db)){
+                    $updategroupmembership = true;
+                }
+            }
         }
     }
+
+    /**
+     * @var bool
+     */
+    private $addtonewcourse = false;
 
     /**
      * @var domain\group
      */
     private $courseid;
 
-    private $addtonewcourses = false;
+    /**
+     * @var moodle_database
+     */
+    private $db;
+
+    /**
+     * @var stdClass
+     */
+    private $pluginconfig;
 }
