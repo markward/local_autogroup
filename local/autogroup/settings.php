@@ -62,15 +62,6 @@ if ($hassiteconfig) {
             false
         )
     );
-
-    // default settings
-    $settings->add(
-        new admin_setting_heading(
-            'local_autogroup/defaults',
-            get_string('defaults', 'local_autogroup'),
-            ''
-        )
-    );
     $settings->add(
         new admin_setting_configcheckbox(
             'local_autogroup/addtonewcourses',
@@ -80,6 +71,14 @@ if ($hassiteconfig) {
         )
     );
 
+    // default settings
+    $settings->add(
+        new admin_setting_heading(
+            'local_autogroup/defaults',
+            get_string('defaults', 'local_autogroup'),
+            ''
+        )
+    );
     //TODO: This will eventually need reworking to allow for properly dynamic sort modules
     $choices = array(
         'auth' => get_string('auth', 'local_autogroup'),
