@@ -35,7 +35,7 @@ $string['coursesettings']  = 'Auto Groups';
 $string['coursesettingstitle']  = 'Auto Groups: {$a}';
 
 $string['autogroupdescription'] = '"Autogroups" will automatically assign your users to groups within a course based upon information within their user profile.';
-$string['newsettingsintro'] = 'To start grouping your users, simply select a profile field from the "Group by" option below and click "OK".';
+$string['newsettingsintro'] = 'To start grouping your users, simply select a profile field from the "Group by" option below and click "Save Changes".';
 $string['updatesettingsintro'] = 'This course is already grouping users by "{$a}". You can either change this to a new field or select "Don\'t group users". Remember, doing this will remove any older auto groups unless you select "no" for "Clean up old groups?"';
 
 $string['groupby'] = 'Group by';
