@@ -32,8 +32,5 @@ namespace local_autogroup;
 
 function plugin_is_enabled(){
     $config = get_config('local_autogroup');
-    if(!$config->enabled){
-        return false;
-    }
-    return true;
+    return isset($config->enabled) && $config->enabled;
 }
