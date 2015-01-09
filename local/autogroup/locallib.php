@@ -30,45 +30,6 @@
 
 namespace local_autogroup;
 
-use \navigation_node;
-use \moodle_url;
-use \pix_icon;
-
-function add_course_navigation()
-{
-    if(!plugin_is_enabled()){
-        return false;
-    }
-
-    global $PAGE, $SITE;
-
-    $course = $PAGE->course;
-    $context = $PAGE->context;
-
-    if($course->id != $SITE->id && ($course->groupmode || !$course->groupmodeforce)) {
-
-        if(has_capability('local/autogroup:managecourse', $context)) {
-            $groupnode = $PAGE->settingsnav->find('groups', navigation_node::TYPE_SETTING);
-            $url = new moodle_url('/local/autogroup/edit.php', array('courseid' => $course->id));
-
-            $linknode = $groupnode->add(
-                get_string('coursesettings', 'local_autogroup'),
-                $url,
-                navigation_node::TYPE_SETTING,
-                null,
-                'groups',
-                new pix_icon('i/group', '')
-            );
-
-
-            if(strstr($PAGE->url, 'local/autogroup/')) {
-                $linknode->make_active();
-            }
-        }
-
-    }
-}
-
 function plugin_is_enabled(){
     $config = get_config('local_autogroup');
     if(!$config->enabled){

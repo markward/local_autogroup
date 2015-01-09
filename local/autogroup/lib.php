@@ -28,8 +28,46 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_autogroup;
-
 include_once(__DIR__ . '/locallib.php');
 
-add_course_navigation();
+/**
+ * Generates the course settings navigation
+ *
+ * @param settings_navigation $settingsnav
+ * @param context $context
+ * @return bool
+ * @throws coding_exception
+ */
+function local_autogroup_extends_settings_navigation(settings_navigation $settingsnav, context $context){
+    if(!local_autogroup\plugin_is_enabled()){
+        return false;
+    }
+
+    global $PAGE, $SITE;
+
+    $course = $PAGE->course;
+
+    if($course->id != $SITE->id && ($course->groupmode || !$course->groupmodeforce)) {
+
+        if(has_capability('local/autogroup:managecourse', $context)) {
+            if($groupnode = $settingsnav->find('groups', navigation_node::TYPE_SETTING)) {
+                $url = new moodle_url('/local/autogroup/edit.php', array('courseid' => $course->id));
+
+                $linknode = $groupnode->add(
+                    get_string('coursesettings', 'local_autogroup'),
+                    $url,
+                    navigation_node::TYPE_SETTING,
+                    null,
+                    'groups',
+                    new pix_icon('i/group', '')
+                );
+
+
+                if (strstr($PAGE->url, 'local/autogroup/')) {
+                    $linknode->make_active();
+                }
+            }
+        }
+
+    }
+}
