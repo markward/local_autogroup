@@ -17,9 +17,9 @@
 /**
  * autogroup local plugin
  *
- * This plugin automatically assigns users to a group within any course
- * upon which they may be enrolled and which has auto-grouping
- * configured.
+ * These strings are used throughout the user interface and can
+ * be overridden by the user through the language customisation
+ * tool.
  *
  * @package    local
  * @subpackage autogroup

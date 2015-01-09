@@ -28,6 +28,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/*
+ * This file generates the site admin settings page using Moodles
+ * standard admin_settingpage class.
+ */
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__) . '/lib.php');

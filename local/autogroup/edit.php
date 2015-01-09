@@ -28,6 +28,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * This file allows users with the correct capability to manage
+ * settings for autogroup within a course.
+ *
+ * The code instantiates a form which is autoloaded from the file
+ * classes/form/autogroup_set_settings.php
+ */
+
 namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');

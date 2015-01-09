@@ -28,8 +28,24 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/*
+ * This file contains functions which are specific to local_autogroup
+ * and do not follow any standard moodle convensions.
+ *
+ * All functions here exist within the local_autogroup namespace which
+ * prevents compatability issues with other plugins.
+ */
+
 namespace local_autogroup;
 
+/**
+ * Checks the plugin config and returns the current status for
+ * the "enabled" option
+ *
+ * @return bool
+ * @throws \Exception
+ * @throws \dml_exception
+ */
 function plugin_is_enabled(){
     $config = get_config('local_autogroup');
     return isset($config->enabled) && $config->enabled;

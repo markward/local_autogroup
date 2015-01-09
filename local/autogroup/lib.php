@@ -28,6 +28,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * Functions within this file all conform to Moodle standard function names
+ * and are referred to by core Moodle code.
+ *
+ * Each of these functions are under the global namespace, so each
+ * function name should being with "local_autogroup" to prevent conflicts
+ */
+
 include_once(__DIR__ . '/locallib.php');
 
 /**
