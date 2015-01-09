@@ -96,10 +96,11 @@ class add_default_to_course extends usecase
                     }
                 }
 
-                if($autogroup_set->set_eligible_roles($newroles, $this->db)){
-                    $updategroupmembership = true;
-                }
+                $autogroup_set->set_eligible_roles($newroles, $this->db);
             }
+
+            $usecase = new usecase\verify_course_group_membership($this->courseid, $this->db);
+            $usecase();
         }
     }
 
