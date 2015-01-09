@@ -32,6 +32,13 @@ namespace local_autogroup;
 
 /**
  * Class domain
+ *
+ * Domain objects hold the logical behaviour of different elements
+ * within the plugin.
+ *
+ * This base class is extended by specific classes within the domain
+ * directory.
+ *
  * @package local_autogroup
  */
 abstract class domain {
