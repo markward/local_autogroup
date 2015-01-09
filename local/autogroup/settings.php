@@ -54,6 +54,14 @@ if ($hassiteconfig) {
             true
         )
     );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/strict',
+            get_string('strict', 'local_autogroup'),
+            get_string('strict_info', 'local_autogroup'),
+            false
+        )
+    );
 
     // default settings
     $settings->add(

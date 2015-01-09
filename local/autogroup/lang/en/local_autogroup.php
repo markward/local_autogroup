@@ -50,6 +50,8 @@ $string['defaults'] = 'Default Settings';
 $string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
 $string['general'] = 'General Configuration';
+$string['strict'] = 'Strict Enforcement';
+$string['strict_info'] = 'Monitor additional events such as "group member removed" to ensure that users are always in their correct groups.';
 
 // Capabilities
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
