@@ -55,6 +55,14 @@ if ($hassiteconfig) {
         )
     );
 
+    // default settings
+    $settings->add(
+        new admin_setting_heading(
+            'local_autogroup/defaults',
+            get_string('defaults', 'local_autogroup'),
+            ''
+        )
+    );
     $settings->add(
         new admin_setting_configcheckbox(
             'local_autogroup/addtonewcourses',
@@ -64,7 +72,7 @@ if ($hassiteconfig) {
         )
     );
 
-    // TODO: rework this for dynamic sort modules
+    //TODO: This will eventually need reworking to allow for properly dynamic sort modules
     $choices = array(
         'auth' => get_string('auth', 'local_autogroup'),
         'department' => get_string('department', 'local_autogroup'),
@@ -85,7 +93,7 @@ if ($hassiteconfig) {
     $settings->add(
         new admin_setting_heading(
             'local_autogroup/roleconfig',
-            get_string('roles', 'local_autogroup'),
+            get_string('defaultroles', 'local_autogroup'),
             ''
         )
     );

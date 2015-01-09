@@ -45,9 +45,11 @@ $string['cleanupold'] = 'Clean up old groups?';
 $string['roles'] = 'Eligible Roles';
 
 // Admin Settings
+$string['addtonewcourses'] = 'Add to new courses';
+$string['defaults'] = 'Default Settings';
+$string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
 $string['general'] = 'General Configuration';
-$string['addtonewcourses'] = 'Add to new courses';
 
 // Capabilities
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
