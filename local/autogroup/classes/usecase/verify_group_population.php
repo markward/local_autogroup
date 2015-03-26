@@ -50,7 +50,7 @@ class verify_group_population extends usecase
         $this->group = new domain\group($groupid, $db);
 
         //if we are viewing the group members we should redirect to safety
-        if(strstr($page->url, 'group/members.php?group=' . $groupid)) {
+        if($page->has_set_url() && strstr($page->url, 'group/members.php?group=' . $groupid)) {
             $this->redirect = true;
         }
     }

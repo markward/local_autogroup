@@ -70,8 +70,8 @@ function local_autogroup_extends_settings_navigation(settings_navigation $settin
                     new pix_icon('i/group', '')
                 );
 
-
-                if (strstr($PAGE->url, 'local/autogroup/')) {
+                // make the node active if we are viewing its page
+                if ($PAGE->has_set_url() && strstr($PAGE->url, 'local/autogroup/')) {
                     $linknode->make_active();
                 }
             }
