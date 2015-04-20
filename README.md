@@ -1,14 +1,21 @@
 # AutoGroup Local Plugin
 
-Automatically assigned enrolled users on a course into groups
-dependant upon information within their user profile
+Automatically assigns enrolled users on a course into groups
+dependant upon information within their user profile.
+
+This plugin will create, update, and delete groups automatically
+to match the users on your course. All behaviour is event-driven
+and so will occur within page loads.
+
+The system can also monitor manual group setting changes and
+moderate them to ensure that groups are kept neat and tidy.
 
 ## Changelog
 
 * v1.01
   * Added event handler for course_restored and related setting
 * v1.0
-  * Stable release. Tested for compatability with Moodle 2.7 and 2.8
+  * Stable release. Tested for compatibility with Moodle 2.7 and 2.8
 
 ## Install
 
