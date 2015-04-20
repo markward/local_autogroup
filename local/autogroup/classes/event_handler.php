@@ -160,12 +160,18 @@ class event_handler
         }
 
         //TODO: find way to prevent this being executed after verify_group_population deletes a group
-        global $DB;
+        global $DB, $PAGE;
 
         $courseid = (int) $event->courseid;
+        $groupid = (int) $event->objectid;
 
-        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
-        return $usecase();
+        $usecase1 = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);
+        $usecase2 = new usecase\verify_course_group_membership($courseid, $DB);
+
+        if($usecase1()){
+            return $usecase2();
+        }
+        return false;
     }
 
     /**
