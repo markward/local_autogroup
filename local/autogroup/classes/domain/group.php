@@ -117,6 +117,28 @@ class group extends domain
     }
 
     /**
+     * @param moodle_database $db
+     * @return bool   whether this group is an autogroup or not
+     */
+    public function is_valid_autogroup(\moodle_database $db){
+        if(!$this->is_autogroup()) {
+            return false;
+        }
+
+        $idparts = explode('|', $this->idnumber);
+        if(!isset($idparts[1])) {
+            return false;
+        }
+
+        $groupsetid = (int) $idparts[1];
+        if($groupsetid < 1) {
+            return false;
+        }
+
+        return $db->record_exists('local_autogroup_set', array('id'=>$groupsetid, 'courseid'=>$this->courseid));
+    }
+
+    /**
      * delete this group from the application
      * @return bool
      */

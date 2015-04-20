@@ -131,6 +131,27 @@ class event_handler
      * @throws \Exception
      * @throws \dml_exception
      */
+    public static function group_created(event\base $event)
+    {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->strict){
+            return false;
+        }
+
+        global $DB, $PAGE;
+
+        $groupid = (int) $event->objectid;
+
+        $usecase = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);
+        return $usecase();
+    }
+
+    /**
+     * @param event\base $event
+     * @return bool
+     * @throws \Exception
+     * @throws \dml_exception
+     */
     public static function group_change(event\base $event)
     {
         $pluginconfig = get_config('local_autogroup');
