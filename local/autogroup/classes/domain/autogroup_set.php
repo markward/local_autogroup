@@ -377,6 +377,12 @@ class autogroup_set extends domain
         //firstly run through existing groups and check for matches
         foreach($this->groups as $group){
             if($group->idnumber == $idnumber){
+
+                if($group->name != $groupname){
+                    $group->name = $groupname;
+                    $group->update();
+                }
+
                 return $group;
             }
         }
