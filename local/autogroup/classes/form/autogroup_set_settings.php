@@ -83,9 +83,7 @@ class autogroup_set_settings extends form {
     private function add_group_by_options(){
         $mform = & $this->_form;
 
-        $options = array('dontgroup'=>get_string('dontgroup', 'local_autogroup'));
-
-        $options = $options + $this->_customdata->get_group_by_options();
+        $options = $this->_customdata->get_group_by_options();
 
         $mform->addElement('select', 'groupby', get_string('set_groupby','local_autogroup'), $options);
         $mform->setDefault('groupby', $this->_customdata->grouping_by());
