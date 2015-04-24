@@ -507,7 +507,16 @@ class autogroup_set extends domain
 
         if (count($rolestoremove)) {
             //if there are changes to make do them and return true
-            $db->delete_records_list('local_autogroup_roles', 'roleid', $rolestoremove);
+            list($in, $params) = $db->get_in_or_equal($rolestoremove);
+            $params[] = $this->id;
+
+            //if there are changes to make do them and return true
+            $sql = "DELETE FROM {local_autogroup_roles}".PHP_EOL
+                . "WHERE roleid " . $in . PHP_EOL
+                . "AND setid = ?";
+
+            $db->execute($sql, $params);
+
             $changed = true;
         }
 
