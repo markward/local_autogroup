@@ -61,15 +61,54 @@ class local_autogroup_renderer extends plugin_renderer_base
             return null;
         }
 
+        $data = array();
+
+        foreach($groupsets as $groupset){
+            $data[] = $this->groupsets_table_group($groupset);
+        }
+
         $table = new html_table();
         $table->head = array(
             get_string('set_type', 'local_autogroup'),
+            get_string('set_groupby', 'local_autogroup'),
             get_string('set_groups', 'local_autogroup'),
             get_string('set_roles', 'local_autogroup'),
             get_string('actions', 'local_autogroup')
         );
+        $table->data = $data;
 
         return html_writer::table($table);
+    }
+
+    private function groupsets_table_group(local_autogroup\domain\autogroup_set $groupset) {
+        $row = array();
+
+        // get the groupset type
+        $sortmodule = explode('\\',$groupset->sortmodule);
+        $sortmodule = array_pop($sortmodule);
+        $sortmodule = str_replace('_', ' ', $sortmodule);
+        $row [] = ucfirst($sortmodule);
+
+        // get the grouping by text
+        $row [] = ucfirst($groupset->grouping_by());
+
+        // get the count of groups
+        $row [] = $groupset->get_group_count();
+
+        // get the eligible roles
+        $roles = $groupset->get_eligible_roles();
+        $roles = role_fix_names($roles, null, ROLENAME_ORIGINAL);
+        $roletext = implode(', ',$roles);
+        $row [] = $roletext;
+
+        // get the actions
+        $editurl = new moodle_url('/local/autogroup/edit.php', array('id' => $groupset->id));
+        $deleteurl = new moodle_url('/local/autogroup/delete.php', array('id' => $groupset->id));
+        $row[] =
+            $this->action_icon($editurl, new pix_icon('t/edit', get_string('edit'))) .
+            $this->action_icon($deleteurl, new pix_icon('t/delete', get_string('delete')));
+
+        return $row;
     }
 
 }

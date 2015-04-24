@@ -45,7 +45,7 @@ class autogroup_set_settings extends form {
     public function definition() {
         $this->autogroup_set = $this->get_submitted_data();
 
-        $this->add_text_intro();
+        // $this->add_text_intro();
         $this->add_group_by_options();
 
         $this->add_role_options();
@@ -87,7 +87,7 @@ class autogroup_set_settings extends form {
 
         $options = $options + $this->_customdata->get_group_by_options();
 
-        $mform->addElement('select', 'groupby', get_string('groupby','local_autogroup'), $options);
+        $mform->addElement('select', 'groupby', get_string('set_groupby','local_autogroup'), $options);
         $mform->setDefault('groupby', $this->_customdata->grouping_by());
 
         if($this->_customdata->exists()) {

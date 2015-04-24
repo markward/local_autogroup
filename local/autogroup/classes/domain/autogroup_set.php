@@ -130,7 +130,11 @@ class autogroup_set extends domain
      */
     public function get_eligible_roles()
     {
-        return $this->roles;
+        $cleanroles = array();
+        foreach($this->roles as $role){
+            $cleanroles[$role] = $role;
+        }
+        return $cleanroles;
     }
 
     /**
@@ -171,6 +175,14 @@ class autogroup_set extends domain
     public function get_group_by_options()
     {
         return $this->sortmodule->get_config_options();
+    }
+
+    /**
+     * @return int  the count of groups linked to this groupset
+     */
+    public function get_group_count()
+    {
+        return count($this->groups);
     }
 
     /**

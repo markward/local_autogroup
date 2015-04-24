@@ -40,14 +40,13 @@ $string['autogroupdescription'] = '"Auto Groups" will automatically assign your 
 $string['newsettingsintro'] = 'To start grouping your users, simply select a profile field from the "Group by" option below and click "Save Changes".';
 $string['updatesettingsintro'] = 'This course is already grouping users with {$a} rule set(s). You can either edit or remove these existing rule sets, or add a new one to the course. ';
 
-$string['groupby'] = 'Group by';
 $string['dontgroup'] = "Don't group users";
 $string['cleanupold'] = 'Clean up old groups?';
 
 $string['set_type'] = 'Group set type';
 $string['set_groups'] = 'Number of groups';
 $string['set_roles'] = 'Eligible Roles';
-
+$string['set_groupby'] = 'Group by';
 
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
