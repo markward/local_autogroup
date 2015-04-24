@@ -56,4 +56,20 @@ class local_autogroup_renderer extends plugin_renderer_base
         return $output;
     }
 
+    public function groupsets_table($groupsets) {
+        if(!is_array($groupsets) || !count($groupsets)){
+            return null;
+        }
+
+        $table = new html_table();
+        $table->head = array(
+            get_string('set_type', 'local_autogroup'),
+            get_string('set_groups', 'local_autogroup'),
+            get_string('set_roles', 'local_autogroup'),
+            get_string('actions', 'local_autogroup')
+        );
+
+        return html_writer::table($table);
+    }
+
 }

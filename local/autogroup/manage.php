@@ -82,4 +82,6 @@ echo $output->header();
 
 echo $output->intro_text(count($groupsets));
 
+echo $output->groupsets_table($groupsets);
+
 echo $output->footer();

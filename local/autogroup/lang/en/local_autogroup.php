@@ -31,6 +31,8 @@
 $string['pluginname']  = 'Auto Group';
 
 // Course Settings
+$string['actions'] = 'Actions';
+
 $string['coursesettings']  = 'Auto Groups';
 $string['coursesettingstitle']  = 'Auto Groups: {$a}';
 
@@ -42,7 +44,10 @@ $string['groupby'] = 'Group by';
 $string['dontgroup'] = "Don't group users";
 $string['cleanupold'] = 'Clean up old groups?';
 
-$string['roles'] = 'Eligible Roles';
+$string['set_type'] = 'Group set type';
+$string['set_groups'] = 'Number of groups';
+$string['set_roles'] = 'Eligible Roles';
+
 
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';

@@ -105,7 +105,7 @@ class autogroup_set_settings extends form {
 
         $currentroles = $this->_customdata->get_eligible_roles();
 
-        $mform->addElement('header', 'roles', get_string('roles', 'local_autogroup'));
+        $mform->addElement('header', 'roles', get_string('set_roles', 'local_autogroup'));
 
         if ($roles = \get_all_roles()) {
             $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
