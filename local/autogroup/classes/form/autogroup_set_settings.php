@@ -120,29 +120,6 @@ class autogroup_set_settings extends form {
     }
 
     /**
-     * @throws \coding_exception
-     */
-    private function add_text_intro(){
-        $mform = & $this->_form;
-
-        $mform->addElement('header', 'intro', get_string('pluginname', 'local_autogroup'));
-        $mform->setExpanded('intro');
-        $mform->addElement('html', html_writer::tag('p',get_string('autogroupdescription', 'local_autogroup')));
-
-        if(!$this->_customdata->exists()){
-            //this hasn't been configured yet
-            $mform->addElement('html', get_string('newsettingsintro', 'local_autogroup'));
-        }
-        else {
-            $groupedby = get_string($this->_customdata->grouping_by(), 'local_autogroup');
-            //this already has a configuration
-            $mform->addElement('html', get_string('updatesettingsintro', 'local_autogroup', $groupedby));
-        }
-
-        $mform->addElement('html', html_writer::empty_tag('hr'));
-    }
-
-    /**
      * @type domain\autogroup_set
      */
     protected $_customdata;

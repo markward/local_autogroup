@@ -80,5 +80,6 @@ $output = $PAGE->get_renderer('local_autogroup');
 
 echo $output->header();
 
+echo $output->intro_text(count($groupsets));
 
 echo $output->footer();

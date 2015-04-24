@@ -37,4 +37,23 @@ class local_autogroup_renderer extends plugin_renderer_base
 {
     const URL_COURSE_SETTINGS = '/local/autogroup/edit.php';
     const URL_COURSE_MANAGE = '/local/autogroup/manage.php';
+
+    public function intro_text($count = 0) {
+        $output = '';
+
+        $text = html_writer::tag('p', get_string('autogroupdescription', 'local_autogroup'));
+
+        if (!$count) {
+            $text .= html_writer::tag('p', get_string('newsettingsintro', 'local_autogroup'));
+        }
+        else {
+            $text .= html_writer::tag('p', get_string('updatesettingsintro', 'local_autogroup', $count));
+        }
+
+        $output .= $this->heading(get_string('pluginname', 'local_autogroup'), 2);
+        $output .= $this->box($text);
+
+        return $output;
+    }
+
 }
