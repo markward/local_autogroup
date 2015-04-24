@@ -41,6 +41,7 @@ namespace local_autogroup;
 require_once(dirname(__FILE__) . '/pageinit.php');
 
 use \local_autogroup\domain;
+use \local_autogroup\sort_module;
 use \local_autogroup\form;
 use \local_autogroup\usecase;
 use \local_autogroup_renderer;
@@ -56,6 +57,7 @@ if(!plugin_is_enabled()){
 $courseid = optional_param('courseid', -1, PARAM_INT);
 $groupsetid = optional_param('gsid', -1, PARAM_INT);
 $action = optional_param('action', 'add', PARAM_TEXT);
+$sortmodule = optional_param('sortmodule', null, PARAM_TEXT);
 
 global $PAGE, $DB, $SITE;
 
@@ -83,6 +85,11 @@ switch($action) {
         die();
 }
 
+// set the sort module if it doesn't match
+if($sortmodule && $groupset->sortmoduleshortname != $sortmodule){
+    $groupset->set_sort_module($sortmodule);
+}
+
 $context = context_course::instance($courseid);
 
 require_capability('local/autogroup:managecourse', $context);
@@ -102,13 +109,13 @@ $PAGE->set_course($course);
 
 $output = $PAGE->get_renderer('local_autogroup');
 
+$returnparams = array('action' => $action, 'sortmodule' => $sortmodule);
 if($groupset->exists()){
-    $returnparams = array('gsid' => $groupset->id);
+    $returnparams['gsid'] = $groupset->id;
 }
 else {
-    $returnparams = array('courseid' => $courseid);
+    $returnparams['courseid'] = $courseid;
 }
-$returnparams['action'] = $action;
 
 $returnurl = new moodle_url(local_autogroup_renderer::URL_COURSE_SETTINGS, $returnparams);
 $aborturl = new moodle_url(local_autogroup_renderer::URL_COURSE_MANAGE, array('courseid' => $courseid));
