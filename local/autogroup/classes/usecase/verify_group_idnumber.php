@@ -71,7 +71,13 @@ class verify_group_idnumber extends usecase
 
             // double check this is a valid autogroup
             if(!$this->group->is_valid_autogroup($this->db)) {
-                $removed = $this->group->remove();
+                if(!$this->group_has_members()){
+                    $removed = $this->group->remove();
+                }
+                else {
+                    $this->group->idnumber =  '';
+                    $this->group->update();
+                }
             }
         }
 
@@ -79,6 +85,13 @@ class verify_group_idnumber extends usecase
             $url = new \moodle_url('/group/index.php',array('id'=>$this->group->courseid));
             \redirect($url);
         }
+    }
+
+    private function group_has_members() {
+
+        $groupid = $this->group->id;
+        return $this->db->count_records('groups_members', array('groupid'=>$groupid));
+
     }
 
     /**
