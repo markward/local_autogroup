@@ -48,6 +48,8 @@ $string['set_groups'] = 'Number of groups';
 $string['set_roles'] = 'Eligible Roles';
 $string['set_groupby'] = 'Group by';
 
+$string['confirmdelete'] = 'Are you sure you wish to remove this auto group set?';
+
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
 $string['addtorestoredcourses'] = 'Add to restored courses';

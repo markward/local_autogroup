@@ -102,8 +102,8 @@ class local_autogroup_renderer extends plugin_renderer_base
         $row [] = $roletext;
 
         // get the actions
-        $editurl = new moodle_url('/local/autogroup/edit.php', array('id' => $groupset->id));
-        $deleteurl = new moodle_url('/local/autogroup/delete.php', array('id' => $groupset->id));
+        $editurl = new moodle_url('/local/autogroup/edit.php', array('gsid' => $groupset->id, 'action'=>'edit'));
+        $deleteurl = new moodle_url('/local/autogroup/edit.php', array('gsid' => $groupset->id, 'action'=>'delete'));
         $row[] =
             $this->action_icon($editurl, new pix_icon('t/edit', get_string('edit'))) .
             $this->action_icon($deleteurl, new pix_icon('t/delete', get_string('delete')));
