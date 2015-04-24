@@ -50,6 +50,8 @@ $string['set_groupby'] = 'Group by';
 
 $string['confirmdelete'] = 'Are you sure you wish to remove this auto group set?';
 
+$string['create'] = 'Create new group set:';
+
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
 $string['addtorestoredcourses'] = 'Add to restored courses';
