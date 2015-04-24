@@ -84,4 +84,6 @@ echo $output->intro_text(count($groupsets));
 
 echo $output->groupsets_table($groupsets);
 
+echo $output->add_new_groupset($courseid);
+
 echo $output->footer();

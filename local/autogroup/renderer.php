@@ -38,6 +38,15 @@ class local_autogroup_renderer extends plugin_renderer_base
     const URL_COURSE_SETTINGS = '/local/autogroup/edit.php';
     const URL_COURSE_MANAGE = '/local/autogroup/manage.php';
 
+    public function add_new_groupset($courseid) {
+        $output = '';
+
+        $newurl = new moodle_url(self::URL_COURSE_SETTINGS, array('action'=>'add', 'courseid'=> (int) $courseid));
+        $output .= $this->single_button($newurl, get_string('create'));
+
+        return $output;
+    }
+
     public function intro_text($count = 0) {
         $output = '';
 

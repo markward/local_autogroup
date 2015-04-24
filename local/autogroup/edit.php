@@ -106,7 +106,7 @@ if($groupset->exists()){
     $returnparams = array('gsid' => $groupset->id);
 }
 else {
-    $returnparams = array('gsid' => $courseid);
+    $returnparams = array('courseid' => $courseid);
 }
 $returnparams['action'] = $action;
 
@@ -126,8 +126,7 @@ if ($form->is_cancelled()) {
 if ($data = $form->get_data()) {
 
     // data relevant to both form types
-
-    // a short-hand if statement to handle the possibility the form didn't include the cleanupold option
+    $updategroupmembership = false;
     $cleanupold = isset($data->cleanupold) ? (bool)$data->cleanupold : true;
 
     if($action == 'delete') {
@@ -136,13 +135,13 @@ if ($data = $form->get_data()) {
 
         $groupset = new domain\autogroup_set($DB);
         $groupset->set_course($courseid);
+
+        $updategroupmembership = true;
     }
     else {
 
         $options = new stdClass();
         $options->field = $data->groupby;
-
-        $updategroupmembership = false;
 
         if ($options->field != $groupset->grouping_by()) {
             // user has selected another option
@@ -170,11 +169,11 @@ if ($data = $form->get_data()) {
             }
         }
 
-        if ($updategroupmembership) {
-            $usecase = new usecase\verify_course_group_membership($courseid, $DB);
-            $usecase();
-        }
+    }
 
+    if ($updategroupmembership) {
+        $usecase = new usecase\verify_course_group_membership($courseid, $DB);
+        $usecase();
     }
 
     redirect($aborturl);
