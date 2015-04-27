@@ -165,13 +165,13 @@ class event_handler
         $courseid = (int) $event->courseid;
         $groupid = (int) $event->objectid;
 
-        $usecase1 = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);
-        $usecase2 = new usecase\verify_course_group_membership($courseid, $DB);
-
-        if($usecase1()){
-            return $usecase2();
+        if($DB->record_exists('groups', array('id'=>$groupid))) {
+            $verifygroupidnumber = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);
+            $verifygroupidnumber();
         }
-        return false;
+
+        $verifycoursegroupmembership = new usecase\verify_course_group_membership($courseid, $DB);
+        return $verifycoursegroupmembership();
     }
 
     /**

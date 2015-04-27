@@ -62,7 +62,7 @@ class verify_group_idnumber extends usecase
     public function __invoke()
     {
 
-        if(!\local_autogroup\plugin_is_enabled()){
+        if(!\local_autogroup\plugin_is_enabled() || !$this->group->exists()){
             return;
         }
 
