@@ -14,6 +14,7 @@ moderate them to ensure that groups are kept neat and tidy.
 
 * v1.1
   * Fixed a bug which would have resulted in roles being removed from all groupsets across a site
+  * Changed default permissions for plugin files 
 * v1.01
   * Added event handler for course_restored and related setting
 * v1.0
