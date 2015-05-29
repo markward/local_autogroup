@@ -42,6 +42,7 @@ use local_autogroup\exception;
 use local_autogroup\sort_module;
 use moodle_database;
 use stdClass;
+use totara_reportbuilder\rb\display\ucfirst;
 
 require_once(__DIR__ . "/../../../../group/lib.php" );
 
@@ -130,7 +131,11 @@ class autogroup_set extends domain
      */
     public function get_eligible_roles()
     {
-        return $this->roles;
+        $cleanroles = array();
+        foreach($this->roles as $role){
+            $cleanroles[$role] = $role;
+        }
+        return $cleanroles;
     }
 
     /**
@@ -171,6 +176,14 @@ class autogroup_set extends domain
     public function get_group_by_options()
     {
         return $this->sortmodule->get_config_options();
+    }
+
+    /**
+     * @return int  the count of groups linked to this groupset
+     */
+    public function get_group_count()
+    {
+        return count($this->groups);
     }
 
     /**
@@ -230,6 +243,26 @@ class autogroup_set extends domain
         if(is_numeric($courseid) && (int) $courseid > 0){
             $this->courseid = $courseid;
         }
+    }
+
+    /**
+     * configured the sort module for this groupset
+     *
+     * @param string $sort_module
+     */
+    public function set_sort_module($sortmodule = 'profile_field')
+    {
+        if($this->sortmoduleshortname == $sortmodule){
+            return;
+        }
+
+
+        $this->sortmodulename = 'local_autogroup\\sort_module\\' . $sortmodule;
+        $this->sortmoduleshortname = $sortmodule;
+
+        $this->sortconfig = new stdClass();
+
+        $this->sortmodule = new $this->sortmodulename($this->sortconfig, $this->courseid);
     }
 
     /**
@@ -327,14 +360,29 @@ class autogroup_set extends domain
      * @param \moodle_database $db
      * @return bool|domain/group
      */
-    private function get_or_create_group_by_idnumber($groupname, \moodle_database $db)
+    private function get_or_create_group_by_idnumber($group, \moodle_database $db)
     {
-        $idnumber = $this->generate_group_idnumber($groupname);
+        if(is_object($group) && isset($group->idnumber) && isset($group->friendlyname)){
+            $groupname = $group->friendlyname;
+            $groupidnumber = $group->idnumber;
+        }
+        else {
+            $groupidnumber = (string) $group;
+            $groupname = ucfirst((string) $group);
+        }
+
+        $idnumber = $this->generate_group_idnumber($groupidnumber);
         $result = null;
 
         //firstly run through existing groups and check for matches
         foreach($this->groups as $group){
             if($group->idnumber == $idnumber){
+
+                if($group->name != $groupname){
+                    $group->name = $groupname;
+                    $group->update();
+                }
+
                 return $group;
             }
         }

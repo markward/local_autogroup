@@ -36,4 +36,91 @@ require_once($CFG->libdir . '/outputrenderers.php');
 class local_autogroup_renderer extends plugin_renderer_base
 {
     const URL_COURSE_SETTINGS = '/local/autogroup/edit.php';
+    const URL_COURSE_MANAGE = '/local/autogroup/manage.php';
+
+    public function add_new_groupset($courseid) {
+        $output = '';
+
+        $urlparams = array('action'=>'add', 'courseid'=> (int) $courseid);
+        $newurl = new moodle_url(self::URL_COURSE_SETTINGS, $urlparams);
+
+        $modules = \local_autogroup\get_sort_module_list();
+
+        $select = new single_select($newurl, 'sortmodule', $modules);
+        $select->set_label(get_string('create','local_autogroup'));
+        $output .= $this->render($select);
+
+        return $output;
+    }
+
+    public function intro_text($count = 0) {
+        $output = '';
+
+        $text = html_writer::tag('p', get_string('autogroupdescription', 'local_autogroup'));
+
+        if (!$count) {
+            $text .= html_writer::tag('p', get_string('newsettingsintro', 'local_autogroup'));
+        }
+        else {
+            $text .= html_writer::tag('p', get_string('updatesettingsintro', 'local_autogroup', $count));
+        }
+
+        $output .= $this->heading(get_string('pluginname', 'local_autogroup'), 2);
+        $output .= $this->box($text);
+
+        return $output;
+    }
+
+    public function groupsets_table($groupsets) {
+        if(!is_array($groupsets) || !count($groupsets)){
+            return null;
+        }
+
+        $data = array();
+
+        foreach($groupsets as $groupset){
+            $data[] = $this->groupsets_table_group($groupset);
+        }
+
+        $table = new html_table();
+        $table->head = array(
+            get_string('set_type', 'local_autogroup'),
+            get_string('set_groupby', 'local_autogroup'),
+            get_string('set_groups', 'local_autogroup'),
+            get_string('set_roles', 'local_autogroup'),
+            get_string('actions', 'local_autogroup')
+        );
+        $table->data = $data;
+
+        return html_writer::table($table);
+    }
+
+    private function groupsets_table_group(local_autogroup\domain\autogroup_set $groupset) {
+        $row = array();
+
+        // get the groupset type
+        $row [] = ucfirst( \local_autogroup\sanitise_sort_module_name($groupset->sortmodule));
+
+        // get the grouping by text
+        $row [] = ucfirst($groupset->grouping_by());
+
+        // get the count of groups
+        $row [] = $groupset->get_group_count();
+
+        // get the eligible roles
+        $roles = $groupset->get_eligible_roles();
+        $roles = role_fix_names($roles, null, ROLENAME_ORIGINAL);
+        $roletext = implode(', ',$roles);
+        $row [] = $roletext;
+
+        // get the actions
+        $editurl = new moodle_url('/local/autogroup/edit.php', array('gsid' => $groupset->id, 'action'=>'edit'));
+        $deleteurl = new moodle_url('/local/autogroup/edit.php', array('gsid' => $groupset->id, 'action'=>'delete'));
+        $row[] =
+            $this->action_icon($editurl, new pix_icon('t/edit', get_string('edit'))) .
+            $this->action_icon($deleteurl, new pix_icon('t/delete', get_string('delete')));
+
+        return $row;
+    }
+
 }

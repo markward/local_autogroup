@@ -38,19 +38,16 @@ use \html_writer;
  * Class course_settings
  * @package local_autogroup\form
  */
-class autogroup_set_settings extends form {
+class autogroup_set_delete extends form {
     /**
      *
      */
     public function definition() {
-        $this->autogroup_set = $this->get_submitted_data();
+        $this->groupsetdata = $this->get_submitted_data();
 
-        // $this->add_text_intro();
-        $this->add_group_by_options();
+        $this->add_dialogue();
 
-        $this->add_role_options();
-
-        $this->add_action_buttons();
+        $this->add_action_buttons(true, get_string('delete'));
     }
 
     /**
@@ -77,44 +74,20 @@ class autogroup_set_settings extends form {
         return parent::get_data();
     }
 
-    /**
-     * @throws \coding_exception
-     */
-    private function add_group_by_options(){
-        $mform = & $this->_form;
+    private function add_dialogue(){
+        $mform = $this->_form;
 
-        $options = $this->_customdata->get_group_by_options();
+        $mform->addElement('header', 'delete', get_string('delete'));
 
-        $mform->addElement('select', 'groupby', get_string('set_groupby','local_autogroup'), $options);
-        $mform->setDefault('groupby', $this->_customdata->grouping_by());
+        $html = html_writer::tag('p', get_string('confirmdelete', 'local_autogroup'));
+        $mform->addElement('html',$html);
 
         if($this->_customdata->exists()) {
             //offer to preserve existing groups
             $mform->addElement('selectyesno', 'cleanupold', get_string('cleanupold','local_autogroup'));
             $mform->setDefault('cleanupold', 1);
         }
-    }
 
-    /**
-     * @throws \coding_exception
-     */
-    private function add_role_options(){
-        $mform = & $this->_form;
-
-        $currentroles = $this->_customdata->get_eligible_roles();
-
-        $mform->addElement('header', 'roles', get_string('set_roles', 'local_autogroup'));
-
-        if ($roles = \get_all_roles()) {
-            $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
-            $assignableroles = \get_roles_for_contextlevels(CONTEXT_COURSE);
-            foreach ($roles as $role) {
-                $mform->addElement('checkbox', 'role_'.$role->id, $role->localname);
-                if(in_array($role->id, $currentroles)){
-                    $mform->setDefault('role_'.$role->id, 1);
-                }
-            }
-        }
     }
 
     /**

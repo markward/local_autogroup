@@ -59,7 +59,7 @@ function local_autogroup_extends_settings_navigation(settings_navigation $settin
 
         if(has_capability('local/autogroup:managecourse', $context)) {
             if($groupnode = $settingsnav->find('groups', navigation_node::TYPE_SETTING)) {
-                $url = new moodle_url('/local/autogroup/edit.php', array('courseid' => $course->id));
+                $url = new moodle_url('/local/autogroup/manage.php', array('courseid' => $course->id));
 
                 $linknode = $groupnode->add(
                     get_string('coursesettings', 'local_autogroup'),

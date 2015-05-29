@@ -38,6 +38,8 @@
 
 namespace local_autogroup;
 
+define('SORT_MODULE_DIR', $CFG->dirroot.'/local/autogroup/classes/sort_module/');
+
 /**
  * Checks the plugin config and returns the current status for
  * the "enabled" option
@@ -49,4 +51,43 @@ namespace local_autogroup;
 function plugin_is_enabled(){
     $config = get_config('local_autogroup');
     return isset($config->enabled) && $config->enabled;
+}
+
+/**
+ * generates an array list of sort modules
+ *
+ * @return array
+ */
+function get_sort_module_list(){
+    global $CFG;
+
+    $list = array();
+
+    $files = scandir(SORT_MODULE_DIR);
+
+    foreach($files as $file){
+        if(strstr($file, '.php')){
+            include_once(SORT_MODULE_DIR . $file);
+
+            $classname = str_replace('.php','',$file);
+            $fullname = 'local_autogroup\\sort_module\\'.$classname;
+
+            if(class_exists($fullname)){
+                $list[$classname] = sanitise_sort_module_name($classname);
+            }
+        }
+    }
+
+    return $list;
+}
+
+function sanitise_sort_module_name($name = ''){
+
+    // for when we are passed the full name
+    $name = explode('\\',$name);
+    $name = array_pop($name);
+
+    $name = str_replace('_', ' ', $name);
+    $name = ucfirst($name);
+    return $name;
 }

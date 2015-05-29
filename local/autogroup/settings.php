@@ -102,7 +102,7 @@ if ($hassiteconfig) {
     $settings->add(
         new admin_setting_configselect(
             'local_autogroup/filter',
-            get_string('groupby', 'local_autogroup'),
+            get_string('set_groupby', 'local_autogroup'),
             '',
             'department',
             $choices
