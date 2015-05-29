@@ -12,6 +12,10 @@ moderate them to ensure that groups are kept neat and tidy.
 
 ## Changelog
 
+* v2.0
+  * Added support for defining multiple grouping sets on one course
+  * Sort modules are now fully modular
+  * Added new sort module for Totara positional assignments
 * v1.1
   * Fixed a bug which would have resulted in roles being removed from all groupsets across a site
   * Changed default permissions for plugin files 
