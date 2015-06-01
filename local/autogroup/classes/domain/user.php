@@ -86,6 +86,8 @@ class user extends domain
     }
 
     /**
+     * Get courses for this user where an autogroup set has been added
+     *
      * @param \moodle_database $db
      */
     private function get_courses(\moodle_database $db, $onlyload = 0)
@@ -95,7 +97,10 @@ class user extends domain
                 . "FROM {enrol} e" . PHP_EOL
                 . "LEFT JOIN {user_enrolments} ue" . PHP_EOL
                 . "ON ue.enrolid = e.id" . PHP_EOL
-                . "WHERE ue.userid = :userid";
+                . "LEFT JOIN {local_autogroup_set} gs" . PHP_EOL
+                . "ON gs.courseid = e.courseid" . PHP_EOL
+                . "WHERE ue.userid = :userid" . PHP_EOL
+                . "AND gs.id IS NOT NULL";
             $param = array('userid' => $this->id);
 
             $this->courses = $db->get_fieldset_sql($sql, $param);
