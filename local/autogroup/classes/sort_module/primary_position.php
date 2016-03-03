@@ -78,6 +78,9 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
          */
         public function eligible_groups_for_user(stdClass $user)
         {
+            global $CFG;
+            require_once("{$CFG->dirroot}/totara/hierarchy/prefix/position/lib.php");
+
             $field = $this->field . 'id';
 
             // Attempt to load the assignment
