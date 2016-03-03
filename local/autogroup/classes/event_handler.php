@@ -221,4 +221,17 @@ class event_handler
         $usecase = new usecase\add_default_to_course($courseid, $DB);
         return $usecase();
     }
+
+    /**
+     * @param \totara_core\event\position_updated $event
+     * @return bool
+     */
+    public static function position_updated(\totara_core\event\position_updated $event) {
+        global $DB;
+
+        $userid = (int) $event->relateduserid;
+        
+        $usecase = new usecase\verify_user_group_membership($userid, $DB);
+        return $usecase();
+    }
 }

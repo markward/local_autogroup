@@ -30,7 +30,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2015010901;
+$plugin->version = 2016030300;
 $plugin->requires = 2013111800.00;       // Requires this Moodle version (2.7).
 $plugin->release = '2.0';                // Plugin release.
 $plugin->component = 'local_autogroup';  // Full name of the plugin (used for diagnostics).
