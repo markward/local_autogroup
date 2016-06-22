@@ -59,8 +59,18 @@ $string['defaults'] = 'Default Settings';
 $string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
 $string['general'] = 'General Configuration';
-$string['strict'] = 'Strict Enforcement';
-$string['strict_info'] = 'Monitor additional events such as "group member removed" to ensure that users are always in their correct groups. Enabling this option has a performance impact.';
+$string['events'] = 'Event triggers';
+$string['events_help'] = 'Customise the events listened for by AutoGroup to improve site performance and tailor behaviour to your site\'s usage';
+$string['listenforrolechanges'] = 'Role Assignment';
+$string['listenforrolechanges_help'] = 'Listen for new role assignments or changes to role assignments on a course.';
+$string['listenforuserprofilechanges'] = 'User Profiles';
+$string['listenforuserprofilechanges_help'] = 'Listen for the changes to a user\'s profile which may impact group membership.';
+$string['listenforuserpositionchanges'] = 'User Position';
+$string['listenforuserpositionchanges_help'] = 'Listen for changes to a learners position, such as a new organisation or position assignment.';
+$string['listenforgroupchanges'] = 'Groups';
+$string['listenforgroupchanges_help'] = 'Listen for modifications to groups on a course. This can prevent issues caused by manual changes but will also slow down AutoGroup as it double checks its own actions. Previously configured as "Strict Enforcement".';
+$string['listenforgroupmembership'] = 'Group Membership';
+$string['listenforgroupmembership_help'] = 'Listen for changes to group membership. This can prevent issues caused by manual changes but will also slow down AutoGroup as it double checks its own actions. Previously configured as "Strict Enforcement".';
 
 // Capabilities
 $string['autogroup:managecourse']  = 'Manage autogroup settings on course';

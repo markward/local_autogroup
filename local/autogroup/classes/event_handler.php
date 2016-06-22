@@ -52,6 +52,11 @@ class event_handler
      */
     public static function user_enrolment_created(event\user_enrolment_created $event)
     {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforrolechanges){
+            return false;
+        }
+
         global $DB;
 
         $courseid = (int) $event->courseid;
@@ -70,7 +75,7 @@ class event_handler
     public static function group_member_added(event\group_member_added $event)
     {
         $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->strict){
+        if(!$pluginconfig->listenforgroupmembership){
             return false;
         }
 
@@ -100,7 +105,7 @@ class event_handler
         $courseid = (int) $event->courseid;
         $userid = (int) $event->relateduserid;
 
-        if($pluginconfig->strict) {
+        if($pluginconfig->listenforgroupmembership) {
             $usecase1 = new usecase\verify_user_group_membership($userid, $DB, $courseid);
             $usecase1();
         }
@@ -117,6 +122,11 @@ class event_handler
      */
     public static function user_updated(event\user_updated $event)
     {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforuserprofilechanges){
+            return false;
+        }
+
         global $DB;
 
         $userid = (int) $event->relateduserid;
@@ -134,7 +144,7 @@ class event_handler
     public static function group_created(event\base $event)
     {
         $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->strict){
+        if(!$pluginconfig->listenforgroupchanges){
             return false;
         }
 
@@ -155,7 +165,7 @@ class event_handler
     public static function group_change(event\base $event)
     {
         $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->strict){
+        if(!$pluginconfig->listenforgroupchanges){
             return false;
         }
 
@@ -180,6 +190,11 @@ class event_handler
      */
     public static function role_change(event\base $event)
     {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforrolechanges){
+            return false;
+        }
+
         global $DB;
 
         $userid = (int) $event->relateduserid;
@@ -227,6 +242,11 @@ class event_handler
      * @return bool
      */
     public static function position_updated(\totara_core\event\position_updated $event) {
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforuserpositionchanges){
+            return false;
+        }
+
         global $DB;
 
         $userid = (int) $event->relateduserid;

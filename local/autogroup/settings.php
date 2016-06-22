@@ -61,14 +61,6 @@ if ($hassiteconfig) {
     );
     $settings->add(
         new admin_setting_configcheckbox(
-            'local_autogroup/strict',
-            get_string('strict', 'local_autogroup'),
-            get_string('strict_info', 'local_autogroup'),
-            false
-        )
-    );
-    $settings->add(
-        new admin_setting_configcheckbox(
             'local_autogroup/addtonewcourses',
             get_string('addtonewcourses', 'local_autogroup'),
             '',
@@ -135,6 +127,58 @@ if ($hassiteconfig) {
             );
         }
     }
+
+    // Event listeners
+    $settings->add(
+        new admin_setting_heading(
+            'local_autogroup/events',
+            get_string('events', 'local_autogroup'),
+            get_string('events_help', 'local_autogroup')
+        )
+    );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/listenforrolechanges',
+            get_string('listenforrolechanges', 'local_autogroup'),
+            get_string('listenforrolechanges_help', 'local_autogroup'),
+            true
+        )
+    );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/listenforuserprofilechanges',
+            get_string('listenforuserprofilechanges', 'local_autogroup'),
+            get_string('listenforuserprofilechanges_help', 'local_autogroup'),
+            true
+        )
+    );
+    if( isset($CFG->totara_build) ) // Only for Totara
+    {
+        $settings->add(
+            new admin_setting_configcheckbox(
+                'local_autogroup/listenforuserpositionchanges',
+                get_string('listenforuserpositionchanges', 'local_autogroup'),
+                get_string('listenforuserpositionchanges_help', 'local_autogroup'),
+                true
+            )
+        );
+    }
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/listenforgroupchanges',
+            get_string('listenforgroupchanges', 'local_autogroup'),
+            get_string('listenforgroupchanges_help', 'local_autogroup'),
+            false
+        )
+    );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/listenforgroupmembership',
+            get_string('listenforgroupmembership', 'local_autogroup'),
+            get_string('listenforgroupmembership_help', 'local_autogroup'),
+            false
+        )
+    );
 
     $ADMIN->add('localplugins', $settings);
 }
