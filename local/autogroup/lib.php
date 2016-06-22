@@ -38,46 +38,44 @@
 
 include_once(__DIR__ . '/locallib.php');
 
-/**
- * Generates the course settings navigation
- *
- * @param settings_navigation $settingsnav
- * @param context $context
- * @return bool
- * @throws coding_exception
- */
-function local_autogroup_extends_settings_navigation(settings_navigation $settingsnav, context $context){
-    if(!local_autogroup\plugin_is_enabled()){
-        return false;
-    }
-
-    global $PAGE, $SITE;
-
-    $course = $PAGE->course;
-
-    if($course->id != $SITE->id && ($course->groupmode || !$course->groupmodeforce)) {
-
-        if(has_capability('local/autogroup:managecourse', $context)) {
-            if($groupnode = $settingsnav->find('groups', navigation_node::TYPE_SETTING)) {
-                $url = new moodle_url('/local/autogroup/manage.php', array('courseid' => $course->id));
-
-                $linknode = $groupnode->add(
-                    get_string('coursesettings', 'local_autogroup'),
-                    $url,
-                    navigation_node::TYPE_SETTING,
-                    null,
-                    'groups',
-                    new pix_icon('i/group', '')
-                );
-
-                // make the node active if we are viewing its page
-                if ($PAGE->has_set_url() && strstr($PAGE->url, 'local/autogroup/')) {
-                    $linknode->make_active();
-                }
-            }
+if($CFG->branch == '27') {
+    /**
+     * Generates the course settings navigation for Moodle 27
+     *
+     * @param settings_navigation $settingsnav
+     * @param context $context
+     * @return bool
+     * @throws coding_exception
+     */
+    function local_autogroup_extends_settings_navigation(settings_navigation $settingsnav, context $context)
+    {
+        if (!local_autogroup\plugin_is_enabled()) {
+            return false;
         }
 
-    }
+        local_autogroup\amend_settings_structure($settingsnav, $context);
 
-    return true;
+        return true;
+    }
+}
+
+else {
+    /**
+     * Generates the course settings navigation for Moodle 28 and higher
+     *
+     * @param settings_navigation $settingsnav
+     * @param context $context
+     * @return bool
+     * @throws coding_exception
+     */
+    function local_autogroup_extend_settings_navigation(settings_navigation $settingsnav, context $context)
+    {
+        if (!local_autogroup\plugin_is_enabled()) {
+            return false;
+        }
+
+        local_autogroup\amend_settings_structure($settingsnav, $context);
+
+        return true;
+    }
 }

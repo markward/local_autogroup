@@ -37,6 +37,11 @@
  */
 
 namespace local_autogroup;
+use settings_navigation;
+use context;
+use navigation_node;
+use moodle_url;
+use pix_icon;
 
 define('SORT_MODULE_DIR', $CFG->dirroot.'/local/autogroup/classes/sort_module/');
 
@@ -90,4 +95,56 @@ function sanitise_sort_module_name($name = ''){
     $name = str_replace('_', ' ', $name);
     $name = ucfirst($name);
     return $name;
+}
+
+function amend_settings_structure(settings_navigation $settingsnav, context $context)
+{
+    global $PAGE, $SITE;
+
+    $course = $PAGE->course;
+
+    if ($course->id != $SITE->id && ($course->groupmode || !$course->groupmodeforce)) {
+
+        if (has_capability('local/autogroup:managecourse', $context)) {
+
+            $usersnode = $settingsnav->find('users', navigation_node::TYPE_UNKNOWN);
+            $groupparentnode = $settingsnav->find('groups', navigation_node::TYPE_SETTING);
+
+            if ($groupparentnode && $usersnode) {
+
+                $groupnode = navigation_node::create(
+                    $groupparentnode->text,
+                    $groupparentnode->action,
+                    $groupparentnode->type,
+                    $groupparentnode->shorttext,
+                    $groupparentnode->key,
+                    $groupparentnode->icon
+                );
+
+                $groupparentnode->type = navigation_node::TYPE_UNKNOWN;
+                $groupparentnode->url = NULL;
+                $groupparentnode->key = 'groupsparent';
+
+                $groupparentnode->add_node($groupnode);
+
+                // now add new link for autogroups
+                $url = new moodle_url('/local/autogroup/manage.php', array('courseid' => $course->id));
+
+                $linknode = $groupparentnode->add(
+                    get_string('coursesettings', 'local_autogroup'),
+                    $url,
+                    navigation_node::TYPE_SETTING,
+                    null,
+                    'autogroups',
+                    new pix_icon('i/withsubcat', '')
+                );
+
+                // make the node active if we are viewing its page
+                if ($PAGE->has_set_url() && strstr($PAGE->url, 'local/autogroup/')) {
+                    $linknode->make_active();
+                }
+            }
+        }
+
+    }
 }
