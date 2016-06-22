@@ -123,6 +123,7 @@ function amend_settings_structure(settings_navigation $settingsnav, context $con
 
                 $groupparentnode->type = navigation_node::TYPE_UNKNOWN;
                 $groupparentnode->url = NULL;
+                $groupparentnode->action = NULL;
                 $groupparentnode->key = 'groupsparent';
 
                 $groupparentnode->add_node($groupnode);
