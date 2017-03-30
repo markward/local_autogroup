@@ -11,7 +11,8 @@ The system can also monitor manual group setting changes and
 moderate them to ensure that groups are kept neat and tidy.
 
 ## Changelog
-
+* v2.2
+  * Performance enhancement: Event listeners now check to see whether triggered by AutoGroup
 * v2.1
   * Switched to individual toggles for event listeners
   * Minor change to settings structure for improved usability

@@ -50,8 +50,7 @@ class event_handler
      * @param event\user_enrolment_created $event
      * @return mixed
      */
-    public static function user_enrolment_created(event\user_enrolment_created $event)
-    {
+    public static function user_enrolment_created(event\user_enrolment_created $event) {
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforrolechanges){
             return false;
@@ -72,8 +71,11 @@ class event_handler
      * @throws \Exception
      * @throws \dml_exception
      */
-    public static function group_member_added(event\group_member_added $event)
-    {
+    public static function group_member_added(event\group_member_added $event) {
+        if(self::triggered_by_autogroup($event)){
+            return false;
+        }
+
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforgroupmembership){
             return false;
@@ -94,8 +96,11 @@ class event_handler
      * @throws \Exception
      * @throws \dml_exception
      */
-    public static function group_member_removed(event\group_member_removed $event)
-    {
+    public static function group_member_removed(event\group_member_removed $event) {
+        if(self::triggered_by_autogroup($event)){
+            return false;
+        }
+
         $pluginconfig = get_config('local_autogroup');
 
 
@@ -120,8 +125,7 @@ class event_handler
      * @param event\user_updated $event
      * @return mixed
      */
-    public static function user_updated(event\user_updated $event)
-    {
+    public static function user_updated(event\user_updated $event) {
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforuserprofilechanges){
             return false;
@@ -141,8 +145,11 @@ class event_handler
      * @throws \Exception
      * @throws \dml_exception
      */
-    public static function group_created(event\base $event)
-    {
+    public static function group_created(event\base $event) {
+        if(self::triggered_by_autogroup($event)){
+            return false;
+        }
+
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforgroupchanges){
             return false;
@@ -162,14 +169,16 @@ class event_handler
      * @throws \Exception
      * @throws \dml_exception
      */
-    public static function group_change(event\base $event)
-    {
+    public static function group_change(event\base $event) {
+        if(self::triggered_by_autogroup($event)){
+            return false;
+        }
+
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforgroupchanges){
             return false;
         }
 
-        //TODO: find way to prevent this being executed after verify_group_population deletes a group
         global $DB, $PAGE;
 
         $courseid = (int) $event->courseid;
@@ -188,8 +197,7 @@ class event_handler
      * @param event\base $event
      * @return mixed
      */
-    public static function role_change(event\base $event)
-    {
+    public static function role_change(event\base $event) {
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforrolechanges){
             return false;
@@ -253,5 +261,27 @@ class event_handler
         
         $usecase = new usecase\verify_user_group_membership($userid, $DB);
         return $usecase();
+    }
+
+    /**
+     * Checks the data of an event to see whether it was initiated
+     * by the local_autogroup component
+     *
+     * @param event\base $event
+     * @return bool
+     */
+    private static function triggered_by_autogroup(\core\event\base $event) {
+        $data = $event->get_data();
+        if(
+            isset($data['other']) &&
+            is_array($data['other']) &&
+            isset($data['other']['component']) &&
+            is_string($data['other']['component']) &&
+            strstr($data['other']['component'],'autogroup')
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
