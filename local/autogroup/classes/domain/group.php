@@ -108,7 +108,12 @@ class group extends domain {
      */
     public function create() {
         if ($this->id == 0) {
-            $this->id = (int)\groups_create_group($this->as_object());
+            $attributes = $this->as_object();
+            if (!groups_get_group_by_idnumber($attributes->courseid, $attributes->idnumber) &&
+                !groups_get_group_by_name($attributes->courseid, $attributes->name)) {
+                // The group name & idnumber have not been used in this course yet so its ok to create the group.
+                $this->id = (int)\groups_create_group($attributes);
+            }
         }
     }
 
