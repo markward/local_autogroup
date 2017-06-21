@@ -42,6 +42,27 @@ require_once($CFG->dirroot . '/local/autogroup/lib.php');
  * @package local_autogroup\usecase
  */
 class add_default_to_course extends usecase {
+
+    /**
+     * @var bool
+     */
+    private $addtonewcourse = false;
+
+    /**
+     * @var group
+     */
+    private $courseid;
+
+    /**
+     * @var moodle_database
+     */
+    private $db;
+
+    /**
+     * @var stdClass
+     */
+    private $pluginconfig;
+
     /**
      * @param int             $courseid
      * @param moodle_database $db
@@ -101,24 +122,4 @@ class add_default_to_course extends usecase {
             $usecase();
         }
     }
-
-    /**
-     * @var bool
-     */
-    private $addtonewcourse = false;
-
-    /**
-     * @var domain\group
-     */
-    private $courseid;
-
-    /**
-     * @var moodle_database
-     */
-    private $db;
-
-    /**
-     * @var stdClass
-     */
-    private $pluginconfig;
 }

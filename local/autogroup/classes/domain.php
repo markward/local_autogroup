@@ -42,6 +42,27 @@ namespace local_autogroup;
  * @package local_autogroup
  */
 abstract class domain {
+
+    /**
+     * @var array
+     */
+    protected $attributes = array('id', 'timecreated', 'timemodified');
+
+    /**
+     * @var int
+     */
+    protected $timecreated = 0;
+
+    /**
+     * @var int
+     */
+    protected $timemodified = 0;
+
+    /**
+     * @type int
+     */
+    private $id = 0;
+
     /**
      * Child classes will probably override this method.
      * @return string
@@ -121,23 +142,4 @@ abstract class domain {
         $this->id = (int)$id;
     }
 
-    /**
-     * @var array
-     */
-    protected $attributes = array('id', 'timecreated', 'timemodified');
-
-    /**
-     * @var int
-     */
-    protected $timecreated = 0;
-
-    /**
-     * @var int
-     */
-    protected $timemodified = 0;
-
-    /**
-     * @type int
-     */
-    private $id = 0;
 }

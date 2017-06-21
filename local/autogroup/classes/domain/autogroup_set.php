@@ -50,6 +50,62 @@ require_once(__DIR__ . "/../../../../group/lib.php");
  * @package local_autogroup\domain
  */
 class autogroup_set extends domain {
+
+    /**
+     * An array of DB level attributes for an autogroup set
+     * used for handling stdclass object conversion.
+     *
+     * @var array
+     */
+    protected $attributes = array(
+        'id', 'courseid', 'sortmodule', 'sortconfig', 'timecreated', 'timemodified'
+    );
+
+    /**
+     * @var int
+     */
+    protected $courseid = 0;
+
+    /**
+     * @var sort_module
+     */
+    protected $sortmodule;
+
+    /**
+     * @var string
+     */
+    protected $sortmodulename = 'local_autogroup\\sort_module\\profile_field';
+
+    /**
+     * @var string
+     */
+    protected $sortmoduleshortname = 'profile_field';
+
+    /**
+     * @var stdClass
+     */
+    protected $sortconfig;
+
+    /**
+     * @var int
+     */
+    protected $timecreated = 0;
+
+    /**
+     * @var int
+     */
+    protected $timemodified = 0;
+
+    /**
+     * @var array
+     */
+    private $groups = array();
+
+    /**
+     * @var array
+     */
+    private $roles = array();
+
     /**
      * @param \stdclass        $autogroupset
      * @param \moodle_database $db
@@ -585,60 +641,5 @@ class autogroup_set extends domain {
         && isset($autogroupset->courseid)
         && $autogroupset->courseid > 0;
     }
-
-    /**
-     * An array of DB level attributes for an autogroup set
-     * used for handling stdclass object conversion.
-     *
-     * @var array
-     */
-    protected $attributes = array(
-        'id', 'courseid', 'sortmodule', 'sortconfig', 'timecreated', 'timemodified'
-    );
-
-    /**
-     * @var int
-     */
-    protected $courseid = 0;
-
-    /**
-     * @var sort_module
-     */
-    protected $sortmodule;
-
-    /**
-     * @var string
-     */
-    protected $sortmodulename = 'local_autogroup\\sort_module\\profile_field';
-
-    /**
-     * @var string
-     */
-    protected $sortmoduleshortname = 'profile_field';
-
-    /**
-     * @var stdClass
-     */
-    protected $sortconfig;
-
-    /**
-     * @var int
-     */
-    protected $timecreated = 0;
-
-    /**
-     * @var int
-     */
-    protected $timemodified = 0;
-
-    /**
-     * @var array
-     */
-    private $groups = array();
-
-    /**
-     * @var array
-     */
-    private $roles = array();
 
 }

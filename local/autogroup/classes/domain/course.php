@@ -30,6 +30,7 @@
 
 namespace local_autogroup\domain;
 
+use local_autogroup\domain;
 use local_autogroup\domain\autogroup_set;
 use local_autogroup\exception;
 
@@ -46,6 +47,22 @@ use local_autogroup\exception;
  * @package local_autogroup\domain
  */
 class course extends domain {
+
+    /**
+     * @var array
+     */
+    private $autogroups = array();
+
+    /**
+     * @var \context_course
+     */
+    private $context;
+
+    /**
+     * @var array
+     */
+    private $enrolledusers = array();
+
     /**
      * @param                  $course
      * @param \moodle_database $db
@@ -143,20 +160,5 @@ class course extends domain {
             }
         }
     }
-
-    /**
-     * @var array
-     */
-    private $autogroups = array();
-
-    /**
-     * @var \context_course
-     */
-    private $context;
-
-    /**
-     * @var array
-     */
-    private $enrolledusers = array();
 
 }

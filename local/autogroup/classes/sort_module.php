@@ -45,6 +45,21 @@ use stdClass;
 abstract class sort_module {
 
     /**
+     * @var
+     */
+    protected $user;
+
+    /**
+     * @var
+     */
+    protected $courseid;
+
+    /**
+     * @var array
+     */
+    protected $config = array();
+
+    /**
      * @param stdClass $config
      * @param int      $courseid
      */
@@ -102,20 +117,5 @@ abstract class sort_module {
      * @return string
      */
     public abstract function grouping_by();
-
-    /**
-     * @var
-     */
-    protected $user;
-
-    /**
-     * @var
-     */
-    protected $courseid;
-
-    /**
-     * @var array
-     */
-    protected $config = array();
 
 }

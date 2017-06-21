@@ -148,6 +148,5 @@ function amend_settings_structure(settings_navigation $settingsnav, context $con
                 }
             }
         }
-
     }
 }

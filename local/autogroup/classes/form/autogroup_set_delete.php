@@ -39,6 +39,12 @@ use local_autogroup\form;
  * @package local_autogroup\form
  */
 class autogroup_set_delete extends form {
+
+    /**
+     * @type domain\autogroup_set
+     */
+    protected $_customdata;
+
     /**
      *
      */
@@ -91,8 +97,4 @@ class autogroup_set_delete extends form {
 
     }
 
-    /**
-     * @type domain\autogroup_set
-     */
-    protected $_customdata;
 }

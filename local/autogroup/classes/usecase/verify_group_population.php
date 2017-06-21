@@ -40,6 +40,17 @@ require_once($CFG->dirroot . '/local/autogroup/lib.php');
  * @package local_autogroup\usecase
  */
 class verify_group_population extends usecase {
+
+    /**
+     * @var group
+     */
+    private $group;
+
+    /**
+     * @var bool $redirect
+     */
+    private $redirect = false;
+
     /**
      * @param int              $groupid
      * @param \moodle_database $db
@@ -72,13 +83,4 @@ class verify_group_population extends usecase {
         }
     }
 
-    /**
-     * @var group
-     */
-    private $group;
-
-    /**
-     * @var bool $redirect
-     */
-    private $redirect = false;
 }

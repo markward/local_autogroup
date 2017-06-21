@@ -39,6 +39,12 @@ use stdClass;
  * @package local_autogroup\domain
  */
 class profile_field extends sort_module {
+
+    /**
+     * @var string
+     */
+    private $field = '';
+
     /**
      * @param stdClass $config
      * @param int      $courseid
@@ -109,10 +115,5 @@ class profile_field extends sort_module {
 
         return (string)$this->field;
     }
-
-    /**
-     * @var string
-     */
-    private $field = '';
 
 }

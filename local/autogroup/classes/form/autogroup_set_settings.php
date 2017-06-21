@@ -38,6 +38,12 @@ use local_autogroup\form;
  * @package local_autogroup\form
  */
 class autogroup_set_settings extends form {
+
+    /**
+     * @type domain\autogroup_set
+     */
+    protected $_customdata;
+
     /**
      *
      */
@@ -117,8 +123,4 @@ class autogroup_set_settings extends form {
         }
     }
 
-    /**
-     * @type domain\autogroup_set
-     */
-    protected $_customdata;
 }

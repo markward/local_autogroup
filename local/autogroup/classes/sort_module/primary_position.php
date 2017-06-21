@@ -43,6 +43,11 @@ if (isset($CFG->totara_build) && (int)$CFG->totara_build > 20150302) {
      */
     class primary_position extends sort_module {
         /**
+         * @var string
+         */
+        private $field = '';
+
+        /**
          * @param stdClass $config
          * @param int      $courseid
          */
@@ -157,11 +162,6 @@ if (isset($CFG->totara_build) && (int)$CFG->totara_build > 20150302) {
 
             return $DB->get_field('pos', 'fullname', array('id' => $id));
         }
-
-        /**
-         * @var string
-         */
-        private $field = '';
 
     }
 

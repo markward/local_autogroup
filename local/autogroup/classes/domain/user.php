@@ -48,6 +48,22 @@ use local_autogroup\exception;
  * @package local_autogroup\domain
  */
 class user extends domain {
+
+    /**
+     * @var array
+     */
+    private $membership = array();
+
+    /**
+     * @var array
+     */
+    private $courses = array();
+
+    /**
+     * @var /stdclass
+     */
+    private $object;
+
     /**
      * @param object|int       $user
      * @param \moodle_database $db
@@ -160,18 +176,4 @@ class user extends domain {
         throw new exception\invalid_user_argument($user);
     }
 
-    /**
-     * @var array
-     */
-    private $membership = array();
-
-    /**
-     * @var array
-     */
-    private $courses = array();
-
-    /**
-     * @var /stdclass
-     */
-    private $object;
 }

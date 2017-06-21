@@ -43,6 +43,16 @@ require_once($CFG->dirroot . '/local/autogroup/lib.php');
 class verify_user_group_membership extends usecase {
 
     /**
+     * @var domain\user
+     */
+    protected $user;
+
+    /**
+     * @var \moodle_database
+     */
+    private $db;
+
+    /**
      * @param int              $userid
      * @param \moodle_database $db
      * @param int              $courseid
@@ -63,13 +73,4 @@ class verify_user_group_membership extends usecase {
         return $this->user->verify_user_group_membership($this->db);
     }
 
-    /**
-     * @var domain\user
-     */
-    protected $user;
-
-    /**
-     * @var \moodle_database
-     */
-    private $db;
 }

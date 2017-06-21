@@ -31,8 +31,8 @@ namespace local_autogroup\domain;
 
 use local_autogroup\domain;
 use local_autogroup\exception;
-use stdClass;
 use moodle_database;
+use stdClass;
 
 require_once(__DIR__ . "/../../../../group/lib.php");
 
@@ -48,6 +48,73 @@ require_once(__DIR__ . "/../../../../group/lib.php");
  * @package local_autogroup\domain
  */
 class group extends domain {
+    /**
+     * An array of DB level attributes for a group
+     * used for handling stdclass object conversion.
+     *
+     * @var array
+     */
+    protected $attributes = array(
+        'id', 'courseid', 'idnumber', 'name', 'description', 'descriptionformat',
+        'enrolmentkey', 'picture', 'hidepicture', 'timecreated', 'timemodified'
+    );
+
+    /**
+     * @var int
+     */
+    protected $courseid = 0;
+
+    /**
+     * @var string
+     */
+    protected $idnumber = '';
+
+    /**
+     * @var string
+     */
+    protected $name = '';
+
+    /**
+     * @var string
+     */
+    protected $description = '';
+
+    /**
+     * @var int
+     */
+    protected $descriptionformat = 1;
+
+    /**
+     * @var string
+     */
+    protected $enrolmentkey = '';
+
+    /**
+     * @var int
+     */
+    protected $picture = 0;
+    /**
+     * @var int
+     */
+    protected $hidepicture = 0;
+
+    /**
+     * @var int
+     */
+    protected $timecreated = 0;
+
+    /**
+     * @var int
+     */
+    protected $timemodified = 0;
+
+    /**
+     * List of members for this group
+     *
+     * @var array
+     */
+    private $members;
+
     /**
      * @param stdClass         $group
      * @param \moodle_database $db
@@ -198,7 +265,7 @@ class group extends domain {
      * @return \stdclass $group
      */
     private function as_object() {
-        $group = new \stdclass();
+        $group = new stdClass();
         foreach ($this->attributes as $attribute) {
             $group->$attribute = $this->$attribute;
         }
@@ -227,72 +294,5 @@ class group extends domain {
         && strlen($group->name) > 0
         && strstr($group->idnumber, 'autogroup|');
     }
-
-    /**
-     * An array of DB level attributes for a group
-     * used for handling stdclass object conversion.
-     *
-     * @var array
-     */
-    protected $attributes = array(
-        'id', 'courseid', 'idnumber', 'name', 'description', 'descriptionformat',
-        'enrolmentkey', 'picture', 'hidepicture', 'timecreated', 'timemodified'
-    );
-
-    /**
-     * @var int
-     */
-    protected $courseid = 0;
-
-    /**
-     * @var string
-     */
-    protected $idnumber = '';
-
-    /**
-     * @var string
-     */
-    protected $name = '';
-
-    /**
-     * @var string
-     */
-    protected $description = '';
-
-    /**
-     * @var int
-     */
-    protected $descriptionformat = 1;
-
-    /**
-     * @var string
-     */
-    protected $enrolmentkey = '';
-
-    /**
-     * @var int
-     */
-    protected $picture = 0;
-    /**
-     * @var int
-     */
-    protected $hidepicture = 0;
-
-    /**
-     * @var int
-     */
-    protected $timecreated = 0;
-
-    /**
-     * @var int
-     */
-    protected $timemodified = 0;
-
-    /**
-     * List of members for this group
-     *
-     * @var array
-     */
-    private $members;
 
 }
