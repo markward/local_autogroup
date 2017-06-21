@@ -52,18 +52,17 @@ abstract class domain {
 
     /**
      * @param $attribute
+     *
      * @return int|null
      */
-    public function __get($attribute)
-    {
-        if(!\in_array($attribute, $this->attributes)) {
+    public function __get($attribute) {
+        if (!\in_array($attribute, $this->attributes)) {
             return null;
         }
 
-        if($attribute == 'id'){
+        if ($attribute == 'id') {
             return $this->get_id();
-        }
-        else {
+        } else {
             return $this->$attribute;
         }
     }
@@ -71,39 +70,38 @@ abstract class domain {
     /**
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
-    public function __set($attribute,$value)
-    {
-        if(!in_array($attribute, $this->attributes)) {
+    public function __set($attribute, $value) {
+        if (!in_array($attribute, $this->attributes)) {
             return false;
         }
 
-        if($attribute == 'id'){
+        if ($attribute == 'id') {
             $this->set_id($value);
-        }
-        else {
+        } else {
             $this->$attribute = $value;
         }
 
         //timemodified will always reflect the last change
         $this->timemodified = time();
+
         return true;
     }
 
     /**
      * @return bool
      */
-    public function exists(){
+    public function exists() {
         return $this->id > 0;
     }
 
     /**
      * A helper function to set the timestamps on this item correctly.
      */
-    protected function update_timestamps()
-    {
-        if( !$this->exists() ){
+    protected function update_timestamps() {
+        if (!$this->exists()) {
             $this->timecreated = time();
         }
         $this->timemodified = time();
@@ -120,7 +118,7 @@ abstract class domain {
      * @param int $id
      */
     private function set_id($id) {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
     }
 
     /**

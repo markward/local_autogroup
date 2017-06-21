@@ -46,8 +46,8 @@ abstract class exception extends moodle_exception {
     /**
      * @param string $errorcode
      * @param string $link
-     * @param null $a
-     * @param null $debuginfo
+     * @param null   $a
+     * @param null   $debuginfo
      */
     public function __construct($errorcode, $link = '', $a = null, $debuginfo = null) {
         $module = 'local_autogroup';

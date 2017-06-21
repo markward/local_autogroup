@@ -37,13 +37,11 @@ namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');
 
-use \local_autogroup\domain\autogroup_set;
-use \local_autogroup\form;
-use \local_autogroup\usecase;
-use \local_autogroup_renderer;
-use \moodle_url;
-use \context_course;
-use \stdClass;
+use context_course;
+use local_autogroup\domain\autogroup_set;
+use local_autogroup\form;
+use local_autogroup\usecase;
+use local_autogroup_renderer;
 
 $courseid = required_param('courseid', PARAM_INT);
 $context = context_course::instance($courseid);
@@ -52,15 +50,15 @@ require_capability('local/autogroup:managecourse', $context);
 
 global $PAGE, $DB, $SITE;
 
-if($courseid == $SITE->id || !plugin_is_enabled()){
+if ($courseid == $SITE->id || !plugin_is_enabled()) {
     //do not allow editing for front page.
     die();
 }
 
 $course = $DB->get_record('course', array('id' => $courseid));
-$groupsets = $DB->get_records('local_autogroup_set', array('courseid'=>$courseid));
+$groupsets = $DB->get_records('local_autogroup_set', array('courseid' => $courseid));
 
-foreach($groupsets as $k => $groupset) {
+foreach ($groupsets as $k => $groupset) {
     $groupsets[$k] = new autogroup_set($DB, $groupset);
 }
 
@@ -69,14 +67,13 @@ $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortn
 global $PAGE;
 
 $PAGE->set_context($context);
-$PAGE->set_url(local_autogroup_renderer::URL_COURSE_MANAGE, array('courseid'=>$courseid));
+$PAGE->set_url(local_autogroup_renderer::URL_COURSE_MANAGE, array('courseid' => $courseid));
 $PAGE->set_title($heading);
 $PAGE->set_heading($heading);
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_course($course);
 
 $output = $PAGE->get_renderer('local_autogroup');
-
 
 echo $output->header();
 

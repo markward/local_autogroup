@@ -2,16 +2,19 @@
 <XMLDB PATH="local/autogroup/db" VERSION="20141228" COMMENT="XMLDB file for Moodle local/autogroup"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
-        >
+>
     <TABLES>
         <TABLE NAME="local_autogroup_set" COMMENT="Config for autogroups on courses">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="What course does this link to?"/>
-                <FIELD NAME="sortmodule" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="What module should be used for sorting users into groups?" />
-                <FIELD NAME="sortconfig" TYPE="char" LENGTH="1000" NOTNULL="false" SEQUENCE="false" COMMENT="JSON encoded module configuration" />
-                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="What course does this link to?"/>
+                <FIELD NAME="sortmodule" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="What module should be used for sorting users into groups?"/>
+                <FIELD NAME="sortconfig" TYPE="char" LENGTH="1000" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="JSON encoded module configuration"/>
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -21,8 +24,10 @@
         <TABLE NAME="local_autogroup_roles" COMMENT="Config for autogroups on courses">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="setid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="What autogroup set does this link to?"/>
-                <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="What role should be included in the autogroup rules?" />
+                <FIELD NAME="setid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="What autogroup set does this link to?"/>
+                <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="What role should be included in the autogroup rules?"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -37,13 +37,14 @@
  */
 
 namespace local_autogroup;
+
 use settings_navigation;
 use context;
 use navigation_node;
 use moodle_url;
 use pix_icon;
 
-define('SORT_MODULE_DIR', $CFG->dirroot.'/local/autogroup/classes/sort_module/');
+define('SORT_MODULE_DIR', $CFG->dirroot . '/local/autogroup/classes/sort_module/');
 
 /**
  * Checks the plugin config and returns the current status for
@@ -53,8 +54,9 @@ define('SORT_MODULE_DIR', $CFG->dirroot.'/local/autogroup/classes/sort_module/')
  * @throws \Exception
  * @throws \dml_exception
  */
-function plugin_is_enabled(){
+function plugin_is_enabled() {
     $config = get_config('local_autogroup');
+
     return isset($config->enabled) && $config->enabled;
 }
 
@@ -63,21 +65,21 @@ function plugin_is_enabled(){
  *
  * @return array
  */
-function get_sort_module_list(){
+function get_sort_module_list() {
     global $CFG;
 
     $list = array();
 
     $files = scandir(SORT_MODULE_DIR);
 
-    foreach($files as $file){
-        if(strstr($file, '.php')){
+    foreach ($files as $file) {
+        if (strstr($file, '.php')) {
             include_once(SORT_MODULE_DIR . $file);
 
-            $classname = str_replace('.php','',$file);
-            $fullname = 'local_autogroup\\sort_module\\'.$classname;
+            $classname = str_replace('.php', '', $file);
+            $fullname = 'local_autogroup\\sort_module\\' . $classname;
 
-            if(class_exists($fullname)){
+            if (class_exists($fullname)) {
                 $list[$classname] = sanitise_sort_module_name($classname);
             }
         }
@@ -86,19 +88,19 @@ function get_sort_module_list(){
     return $list;
 }
 
-function sanitise_sort_module_name($name = ''){
+function sanitise_sort_module_name($name = '') {
 
     // for when we are passed the full name
-    $name = explode('\\',$name);
+    $name = explode('\\', $name);
     $name = array_pop($name);
 
     $name = str_replace('_', ' ', $name);
     $name = ucfirst($name);
+
     return $name;
 }
 
-function amend_settings_structure(settings_navigation $settingsnav, context $context)
-{
+function amend_settings_structure(settings_navigation $settingsnav, context $context) {
     global $PAGE, $SITE;
 
     $course = $PAGE->course;
@@ -122,8 +124,8 @@ function amend_settings_structure(settings_navigation $settingsnav, context $con
                 );
 
                 $groupparentnode->type = navigation_node::TYPE_UNKNOWN;
-                $groupparentnode->url = NULL;
-                $groupparentnode->action = NULL;
+                $groupparentnode->url = null;
+                $groupparentnode->action = null;
                 $groupparentnode->key = 'groupsparent';
 
                 $groupparentnode->add_node($groupnode);

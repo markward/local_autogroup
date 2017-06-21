@@ -34,7 +34,7 @@ use local_autogroup\exception;
 use stdClass;
 use moodle_database;
 
-require_once(__DIR__ . "/../../../../group/lib.php" );
+require_once(__DIR__ . "/../../../../group/lib.php");
 
 /**
  * Class group
@@ -47,24 +47,19 @@ require_once(__DIR__ . "/../../../../group/lib.php" );
  *
  * @package local_autogroup\domain
  */
-class group extends domain
-{
+class group extends domain {
     /**
-     * @param stdClass $group
+     * @param stdClass         $group
      * @param \moodle_database $db
+     *
      * @throws exception\invalid_group_argument
      */
-    public function __construct ($group, \moodle_database $db)
-    {
-        if(is_int($group) && $group > 0){
-            $this->load_from_database($group,$db);
-        }
-
-        else if($this->validate_object($group)){
+    public function __construct($group, \moodle_database $db) {
+        if (is_int($group) && $group > 0) {
+            $this->load_from_database($group, $db);
+        } else if ($this->validate_object($group)) {
             $this->load_from_object($group);
-        }
-
-        else {
+        } else {
             throw new exception\invalid_group_argument($group);
         }
 
@@ -74,8 +69,8 @@ class group extends domain
     /**
      * @param int $userid
      */
-    public function ensure_user_is_member($userid){
-        foreach($this->members as $member){
+    public function ensure_user_is_member($userid) {
+        foreach ($this->members as $member) {
             if ($member == $userid) {
                 return;
             }
@@ -83,14 +78,15 @@ class group extends domain
 
         //user was not found as a member so will now make member a user
         \groups_add_member($this->as_object(), $userid, 'local_autogroup');
+
         return;
     }
 
     /**
      * @param int $userid
      */
-    public function ensure_user_is_not_member($userid){
-        foreach($this->members as $member){
+    public function ensure_user_is_not_member($userid) {
+        foreach ($this->members as $member) {
             if ($member == $userid) {
                 \groups_remove_member($this->as_object(), $userid);
             }
@@ -100,7 +96,7 @@ class group extends domain
     /**
      * @return int
      */
-    public function membership_count(){
+    public function membership_count() {
         return count($this->members);
     }
 
@@ -110,76 +106,76 @@ class group extends domain
      *
      * @return void
      */
-    public function create(){
-        if($this->id == 0){
-            $this->id = (int) \groups_create_group($this->as_object());
+    public function create() {
+        if ($this->id == 0) {
+            $this->id = (int)\groups_create_group($this->as_object());
         }
     }
 
     /**
      * @param moodle_database $db
+     *
      * @return bool   whether this group is an autogroup or not
      */
-    public function is_valid_autogroup(\moodle_database $db){
-        if(!$this->is_autogroup()) {
+    public function is_valid_autogroup(\moodle_database $db) {
+        if (!$this->is_autogroup()) {
             return false;
         }
 
         $idparts = explode('|', $this->idnumber);
-        if(!isset($idparts[1])) {
+        if (!isset($idparts[1])) {
             return false;
         }
 
-        $groupsetid = (int) $idparts[1];
-        if($groupsetid < 1) {
+        $groupsetid = (int)$idparts[1];
+        if ($groupsetid < 1) {
             return false;
         }
 
-        return $db->record_exists('local_autogroup_set', array('id'=>$groupsetid, 'courseid'=>$this->courseid));
+        return $db->record_exists('local_autogroup_set', array('id' => $groupsetid, 'courseid' => $this->courseid));
     }
 
     /**
      * delete this group from the application
      * @return bool
      */
-    public function remove(){
-        if($this->is_autogroup()) {
+    public function remove() {
+        if ($this->is_autogroup()) {
             return \groups_delete_group($this->id);
-        }
-        else{
+        } else {
             return false;
         }
     }
 
     public function update() {
-        if(!$this->exists()){
+        if (!$this->exists()) {
             return false;
         }
+
         return \groups_update_group($this->as_object());
     }
 
     /**
      * @param \moodle_database $db
      */
-    private function get_members(\moodle_database $db){
-        $this->members =  $db->get_records_menu('groups_members', array('groupid' => $this->id),'id','id,userid');
+    private function get_members(\moodle_database $db) {
+        $this->members = $db->get_records_menu('groups_members', array('groupid' => $this->id), 'id', 'id,userid');
     }
 
     /**
      * @return bool   whether this group is an autogroup or not
      */
-    private function is_autogroup(){
-        return strstr($this->idnumber,'autogroup|');
+    private function is_autogroup() {
+        return strstr($this->idnumber, 'autogroup|');
     }
 
     /**
-     * @param $groupid
+     * @param                  $groupid
      * @param \moodle_database $db
      */
-    private function load_from_database($groupid, \moodle_database $db)
-    {
-        $group = $db->get_record('groups',array('id'=>$groupid));
-        if($this->validate_object($group)) {
+    private function load_from_database($groupid, \moodle_database $db) {
+        $group = $db->get_record('groups', array('id' => $groupid));
+        if ($this->validate_object($group)) {
             $this->load_from_object($group);
         }
     }
@@ -187,8 +183,8 @@ class group extends domain
     /**
      * @param \stdclass $group
      */
-    private function load_from_object(\stdclass $group){
-        foreach($this->attributes as $attribute){
+    private function load_from_object(\stdclass $group) {
+        foreach ($this->attributes as $attribute) {
             $this->$attribute = $group->$attribute;
         }
     }
@@ -196,34 +192,35 @@ class group extends domain
     /**
      * @return \stdclass $group
      */
-    private function as_object(){
+    private function as_object() {
         $group = new \stdclass();
-        foreach($this->attributes as $attribute){
+        foreach ($this->attributes as $attribute) {
             $group->$attribute = $this->$attribute;
         }
+
         return $group;
     }
 
-
     /**
      * @param stdClass $group
+     *
      * @return bool
      */
-    private function validate_object($group)
-    {
-        if(!is_object($group)){
+    private function validate_object($group) {
+        if (!is_object($group)) {
             return false;
         }
-        if(!isset($group->timecreated)){
+        if (!isset($group->timecreated)) {
             $group->timecreated = time();
         }
-        if(!isset($group->timemodified)){
+        if (!isset($group->timemodified)) {
             $group->timemodified = 0;
         }
+
         return isset($group->id)
-               && $group->id >= 0
-               && strlen($group->name) > 0
-               && strstr($group->idnumber,'autogroup|');
+        && $group->id >= 0
+        && strlen($group->name) > 0
+        && strstr($group->idnumber, 'autogroup|');
     }
 
     /**
@@ -233,8 +230,8 @@ class group extends domain
      * @var array
      */
     protected $attributes = array(
-        'id','courseid','idnumber','name', 'description', 'descriptionformat',
-        'enrolmentkey','picture','hidepicture','timecreated','timemodified'
+        'id', 'courseid', 'idnumber', 'name', 'description', 'descriptionformat',
+        'enrolmentkey', 'picture', 'hidepicture', 'timecreated', 'timemodified'
     );
 
     /**

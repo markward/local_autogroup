@@ -30,8 +30,8 @@
 
 namespace local_autogroup\usecase;
 
-use local_autogroup\usecase;
 use local_autogroup\domain\autogroup_set;
+use local_autogroup\usecase;
 use moodle_database;
 use stdClass;
 
@@ -41,22 +41,20 @@ require_once($CFG->dirroot . '/local/autogroup/lib.php');
  * Class add_default_to_course
  * @package local_autogroup\usecase
  */
-class add_default_to_course extends usecase
-{
+class add_default_to_course extends usecase {
     /**
-     * @param int $courseid
+     * @param int             $courseid
      * @param moodle_database $db
      */
-    public function __construct($courseid, moodle_database $db)
-    {
-        $this->courseid = (int) $courseid;
+    public function __construct($courseid, moodle_database $db) {
+        $this->courseid = (int)$courseid;
         $this->db = $db;
 
         $this->pluginconfig = get_config('local_autogroup');
 
         $this->addtonewcourse = true;
 
-        if($db->record_exists('local_autogroup_set', array('courseid'=>$courseid))){
+        if ($db->record_exists('local_autogroup_set', array('courseid' => $courseid))) {
             //this shouldn't happen, but we want to ensure we avoid duplicates.
             $this->addtonewcourse = false;
         }
@@ -65,9 +63,8 @@ class add_default_to_course extends usecase
     /**
      * @return void
      */
-    public function __invoke()
-    {
-        if($this->addtonewcourse){
+    public function __invoke() {
+        if ($this->addtonewcourse) {
 
             // first generate a new autogroup_set object
             $autogroup_set = new autogroup_set($this->db);
@@ -82,11 +79,12 @@ class add_default_to_course extends usecase
             if ($roles = \get_all_roles()) {
                 $roles = \role_fix_names($roles, null, ROLENAME_ORIGINAL);
                 $newroles = array();
-                foreach ($roles as $role){
-                    $attributename = 'eligiblerole_'.$role->id;
+                foreach ($roles as $role) {
+                    $attributename = 'eligiblerole_' . $role->id;
 
                     if (isset($this->pluginconfig->$attributename) &&
-                        $this->pluginconfig->$attributename){
+                        $this->pluginconfig->$attributename
+                    ) {
 
                         $newroles[] = $role->id;
 

@@ -30,25 +30,23 @@
 
 namespace local_autogroup\sort_module;
 
-use local_autogroup\sort_module;
 use local_autogroup\exception;
-use \stdClass;
+use local_autogroup\sort_module;
+use stdClass;
 use totara_job\job_assignment;
 
-if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
+if (isset($CFG->totara_build) && (int)$CFG->totara_build > 20150302) {
     /**
      * Class course
      *
      * @package local_autogroup\domain
      */
-    class primary_position extends sort_module
-    {
+    class primary_position extends sort_module {
         /**
          * @param stdClass $config
-         * @param int $courseid
+         * @param int      $courseid
          */
-        public function __construct($config, $courseid)
-        {
+        public function __construct($config, $courseid) {
             if ($this->config_is_valid($config)) {
                 $this->field = $config->field;
             }
@@ -57,10 +55,10 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
 
         /**
          * @param stdClass $config
+         *
          * @return bool
          */
-        public function config_is_valid(stdClass $config)
-        {
+        public function config_is_valid(stdClass $config) {
             if (!isset($config->field)) {
                 return false;
             }
@@ -75,10 +73,10 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
 
         /**
          * @param stdClass $user
+         *
          * @return array $result
          */
-        public function eligible_groups_for_user(stdClass $user)
-        {
+        public function eligible_groups_for_user(stdClass $user) {
             global $CFG;
             require_once("{$CFG->dirroot}/totara/hierarchy/prefix/position/lib.php");
 
@@ -111,43 +109,44 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
          *
          * @return array
          */
-        public function get_config_options()
-        {
+        public function get_config_options() {
             $options = array(
                 'organisation' => get_string('organisation', 'totara_hierarchy'),
-                'position' => get_string('position', 'totara_hierarchy'),
-                'manager' => get_string('manager', 'totara_hierarchy'),
+                'position'     => get_string('position', 'totara_hierarchy'),
+                'manager'      => get_string('manager', 'local_autogroup'),
             );
+
             return $options;
         }
 
         /**
          * @return bool|string
          */
-        public function grouping_by()
-        {
+        public function grouping_by() {
             if (empty ($this->field)) {
                 return false;
             }
+
             return (string)$this->field;
         }
 
         /**
          * @param int $id
+         *
          * @return string
          */
-        private function parse_name_manager($id)
-        {
+        private function parse_name_manager($id) {
             $manager = \core_user::get_user($id);
+
             return 'manager: ' . $manager->firstname . ' ' . $manager->lastname;
         }
 
         /**
          * @param int $id
+         *
          * @return string
          */
-        private function parse_name_organisation($id)
-        {
+        private function parse_name_organisation($id) {
             global $DB; // until Totara provide a better method to get org data
 
             return $DB->get_field('org', 'fullname', array('id' => $id));
@@ -155,10 +154,10 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
 
         /**
          * @param int $id
+         *
          * @return string
          */
-        private function parse_name_position($id)
-        {
+        private function parse_name_position($id) {
             global $DB; // until Totara provide a better method to get pos data
 
             return $DB->get_field('pos', 'fullname', array('id' => $id));

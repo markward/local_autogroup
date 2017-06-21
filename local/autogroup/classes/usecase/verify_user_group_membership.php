@@ -30,9 +30,9 @@
 
 namespace local_autogroup\usecase;
 
-use local_autogroup\usecase;
 use local_autogroup\domain;
 use local_autogroup\domain\user;
+use local_autogroup\usecase;
 
 require_once($CFG->dirroot . '/local/autogroup/lib.php');
 
@@ -40,16 +40,14 @@ require_once($CFG->dirroot . '/local/autogroup/lib.php');
  * Class verify_user_group_membership
  * @package local_autogroup\usecase
  */
-class verify_user_group_membership extends usecase
-{
+class verify_user_group_membership extends usecase {
 
     /**
-     * @param int $userid
+     * @param int              $userid
      * @param \moodle_database $db
-     * @param int $courseid
+     * @param int              $courseid
      */
-    public function __construct($userid, \moodle_database $db, $courseid = 0 )
-    {
+    public function __construct($userid, \moodle_database $db, $courseid = 0) {
         $this->user = new user($userid, $db, $courseid);
         $this->db = $db;
     }
@@ -57,11 +55,11 @@ class verify_user_group_membership extends usecase
     /**
      * @return bool
      */
-    public function __invoke()
-    {
-        if(!\local_autogroup\plugin_is_enabled()){
+    public function __invoke() {
+        if (!\local_autogroup\plugin_is_enabled()) {
             return false;
         }
+
         return $this->user->verify_user_group_membership($this->db);
     }
 

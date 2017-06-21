@@ -32,93 +32,93 @@ defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
     array(
-        'eventname' => '\core\event\user_enrolment_created',
-        'callback' => '\local_autogroup\event_handler::user_enrolment_created',
+        'eventname'   => '\core\event\user_enrolment_created',
+        'callback'    => '\local_autogroup\event_handler::user_enrolment_created',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => 'core\event\group_member_added',
-        'callback' => '\local_autogroup\event_handler::group_member_added',
+        'eventname'   => 'core\event\group_member_added',
+        'callback'    => '\local_autogroup\event_handler::group_member_added',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\group_member_removed',
-        'callback' => '\local_autogroup\event_handler::group_member_removed',
+        'eventname'   => '\core\event\group_member_removed',
+        'callback'    => '\local_autogroup\event_handler::group_member_removed',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\user_updated',
-        'callback' => '\local_autogroup\event_handler::user_updated',
+        'eventname'   => '\core\event\user_updated',
+        'callback'    => '\local_autogroup\event_handler::user_updated',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\group_created',
-        'callback' => '\local_autogroup\event_handler::group_created',
+        'eventname'   => '\core\event\group_created',
+        'callback'    => '\local_autogroup\event_handler::group_created',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\group_deleted',
-        'callback' => '\local_autogroup\event_handler::group_change',
+        'eventname'   => '\core\event\group_deleted',
+        'callback'    => '\local_autogroup\event_handler::group_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\group_updated',
-        'callback' => '\local_autogroup\event_handler::group_change',
+        'eventname'   => '\core\event\group_updated',
+        'callback'    => '\local_autogroup\event_handler::group_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\role_assigned',
-        'callback' => '\local_autogroup\event_handler::role_change',
+        'eventname'   => '\core\event\role_assigned',
+        'callback'    => '\local_autogroup\event_handler::role_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\role_unassigned',
-        'callback' => '\local_autogroup\event_handler::role_change',
+        'eventname'   => '\core\event\role_unassigned',
+        'callback'    => '\local_autogroup\event_handler::role_change',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\course_created',
-        'callback' => '\local_autogroup\event_handler::course_created',
+        'eventname'   => '\core\event\course_created',
+        'callback'    => '\local_autogroup\event_handler::course_created',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
 
     array(
-        'eventname' => '\core\event\course_restored',
-        'callback' => '\local_autogroup\event_handler::course_restored',
+        'eventname'   => '\core\event\course_restored',
+        'callback'    => '\local_autogroup\event_handler::course_restored',
         'includefile' => 'local/autogroup/classes/event_handler.php',
         'internal'    => true,
         'priority'    => 0,
     ),
-    
+
     array(
         'eventname'   => '\totara_core\event\position_updated',
         'callback'    => '\local_autogroup\event_handler::position_updated',

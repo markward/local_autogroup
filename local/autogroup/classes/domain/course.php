@@ -45,15 +45,14 @@ use local_autogroup\exception;
  *
  * @package local_autogroup\domain
  */
-class course extends domain
-{
+class course extends domain {
     /**
-     * @param $course
+     * @param                  $course
      * @param \moodle_database $db
+     *
      * @throws exception\invalid_course_argument
      */
-    public function __construct ($course, \moodle_database $db)
-    {
+    public function __construct($course, \moodle_database $db) {
         //get the id for this course
         $this->parse_course_id($course);
 
@@ -69,55 +68,60 @@ class course extends domain
     /**
      * @return array
      */
-    public function get_membership_counts(){
+    public function get_membership_counts() {
         $result = array();
-        foreach($this->autogroups as $autogroup){
+        foreach ($this->autogroups as $autogroup) {
             $result = $result + $autogroup->membership_count();
         }
+
         return $result;
     }
 
     /**
      * @param \moodle_database $db
+     *
      * @return bool
      */
-    public function verify_all_group_membership(\moodle_database $db)
-    {
+    public function verify_all_group_membership(\moodle_database $db) {
         $result = true;
-        foreach ($this->enrolledusers as $user){
+        foreach ($this->enrolledusers as $user) {
             $result &= $this->verify_user_group_membership($user, $db);
         }
+
         return $result;
     }
 
     /**
-     * @param \stdclass $user
+     * @param \stdclass        $user
      * @param \moodle_database $db
+     *
      * @return bool
      */
-    public function verify_user_group_membership(\stdclass $user, \moodle_database $db)
-    {
+    public function verify_user_group_membership(\stdclass $user, \moodle_database $db) {
         $result = true;
-        foreach ($this->autogroups as $autogroup){
+        foreach ($this->autogroups as $autogroup) {
             $result &= $autogroup->verify_user_group_membership($user, $db, $this->context);
         }
+
         return $result;
     }
 
     /**
      * @param object|int $course
+     *
      * @return bool
      * @throws exception\invalid_course_argument
      */
-    private function parse_course_id ($course)
-    {
-        if(is_int($course) && $course > 0){
+    private function parse_course_id($course) {
+        if (is_int($course) && $course > 0) {
             $this->id = $course;
+
             return true;
         }
 
-        if(is_object($course) && isset($course->id) && $course->id > 0){
+        if (is_object($course) && isset($course->id) && $course->id > 0) {
             $this->id = $course->id;
+
             return true;
         }
 
@@ -127,14 +131,14 @@ class course extends domain
     /**
      * @param \moodle_database $db
      */
-    private function get_autogroups(\moodle_database $db){
+    private function get_autogroups(\moodle_database $db) {
 
         $this->autogroups = $db->get_records('local_autogroup_set', array('courseid' => $this->id));
 
-        foreach($this->autogroups as $id => $settings){
+        foreach ($this->autogroups as $id => $settings) {
             try {
                 $this->autogroups[$id] = new autogroup_set($db, $settings);
-            } catch (exception\invalid_autogroup_set_argument $e){
+            } catch (exception\invalid_autogroup_set_argument $e) {
                 unset($this->autogroups[$id]);
             }
         }

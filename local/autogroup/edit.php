@@ -40,17 +40,17 @@ namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');
 
-use \local_autogroup\domain\autogroup_set;
-use \local_autogroup\sort_module;
-use \local_autogroup\form\autogroup_set_delete;
-use \local_autogroup\form\autogroup_set_settings;
-use \local_autogroup\usecase;
-use \local_autogroup_renderer;
-use \moodle_url;
-use \context_course;
-use \stdClass;
+use context_course;
+use local_autogroup\domain\autogroup_set;
+use local_autogroup\form\autogroup_set_delete;
+use local_autogroup\form\autogroup_set_settings;
+use local_autogroup\sort_module;
+use local_autogroup\usecase;
+use local_autogroup_renderer;
+use moodle_url;
+use stdClass;
 
-if(!plugin_is_enabled()){
+if (!plugin_is_enabled()) {
     //do not allow editing for front page.
     die();
 }
@@ -62,21 +62,21 @@ $sortmodule = optional_param('sortmodule', null, PARAM_TEXT);
 
 global $PAGE, $DB, $SITE;
 
-switch($action) {
+switch ($action) {
     case 'edit':
     case 'delete':
-        if($groupsetid < 1){
+        if ($groupsetid < 1) {
             throw new exception\invalid_autogroup_set_argument($groupsetid);
         }
-        $data = $DB->get_record('local_autogroup_set', array('id'=>$groupsetid));
-        $courseid = (int) $data->courseid;
-        $groupset = new autogroup_set($DB,$data);
+        $data = $DB->get_record('local_autogroup_set', array('id' => $groupsetid));
+        $courseid = (int)$data->courseid;
+        $groupset = new autogroup_set($DB, $data);
 
     case 'add':
-        if($courseid < 1 || $courseid == $SITE->id ) {
+        if ($courseid < 1 || $courseid == $SITE->id) {
             throw new exception\invalid_course_argument($courseid);
         }
-        if(!isset($groupset)){
+        if (!isset($groupset)) {
             $groupset = new autogroup_set($DB);
             $groupset->set_course($courseid);
         }
@@ -87,7 +87,7 @@ switch($action) {
 }
 
 // set the sort module if it doesn't match
-if($sortmodule && $groupset->sortmoduleshortname != $sortmodule){
+if ($sortmodule && $groupset->sortmoduleshortname != $sortmodule) {
     $groupset->set_sort_module($sortmodule);
 }
 
@@ -102,7 +102,7 @@ $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortn
 global $PAGE;
 
 $PAGE->set_context($context);
-$PAGE->set_url(local_autogroup_renderer::URL_COURSE_SETTINGS, array('courseid'=>$courseid));
+$PAGE->set_url(local_autogroup_renderer::URL_COURSE_SETTINGS, array('courseid' => $courseid));
 $PAGE->set_title($heading);
 $PAGE->set_heading($heading);
 $PAGE->set_pagelayout('incourse');
@@ -111,20 +111,18 @@ $PAGE->set_course($course);
 $output = $PAGE->get_renderer('local_autogroup');
 
 $returnparams = array('action' => $action, 'sortmodule' => $sortmodule);
-if($groupset->exists()){
+if ($groupset->exists()) {
     $returnparams['gsid'] = $groupset->id;
-}
-else {
+} else {
     $returnparams['courseid'] = $courseid;
 }
 
 $returnurl = new moodle_url(local_autogroup_renderer::URL_COURSE_SETTINGS, $returnparams);
 $aborturl = new moodle_url(local_autogroup_renderer::URL_COURSE_MANAGE, array('courseid' => $courseid));
 
-if($action == 'delete'){
+if ($action == 'delete') {
     $form = new autogroup_set_delete($returnurl, $groupset);
-}
-else {
+} else {
     $form = new autogroup_set_settings($returnurl, $groupset);
 }
 
@@ -137,7 +135,7 @@ if ($data = $form->get_data()) {
     $updategroupmembership = false;
     $cleanupold = isset($data->cleanupold) ? (bool)$data->cleanupold : true;
 
-    if($action == 'delete') {
+    if ($action == 'delete') {
         // user has selected "dont group"
         $groupset->delete($DB, $cleanupold);
 
@@ -145,8 +143,7 @@ if ($data = $form->get_data()) {
         $groupset->set_course($courseid);
 
         $updategroupmembership = true;
-    }
-    else {
+    } else {
 
         $options = new stdClass();
         $options->field = $data->groupby;

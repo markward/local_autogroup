@@ -86,10 +86,10 @@ if ($hassiteconfig) {
     );
     //TODO: This will eventually need reworking to allow for properly dynamic sort modules
     $choices = array(
-        'auth' => get_string('auth', 'local_autogroup'),
-        'department' => get_string('department', 'local_autogroup'),
+        'auth'        => get_string('auth', 'local_autogroup'),
+        'department'  => get_string('department', 'local_autogroup'),
         'institution' => get_string('institution', 'local_autogroup'),
-        'lang' => get_string('lang', 'local_autogroup')
+        'lang'        => get_string('lang', 'local_autogroup')
     );
     $settings->add(
         new admin_setting_configselect(
@@ -119,7 +119,7 @@ if ($hassiteconfig) {
 
             $settings->add(
                 new admin_setting_configcheckbox(
-                    'local_autogroup/eligiblerole_'.$role->id,
+                    'local_autogroup/eligiblerole_' . $role->id,
                     $role->localname,
                     '',
                     $default
@@ -152,7 +152,7 @@ if ($hassiteconfig) {
             true
         )
     );
-    if( isset($CFG->totara_build) ) // Only for Totara
+    if (isset($CFG->totara_build)) // Only for Totara
     {
         $settings->add(
             new admin_setting_configcheckbox(

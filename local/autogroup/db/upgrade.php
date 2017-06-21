@@ -11,7 +11,7 @@ function xmldb_local_autogroup_upgrade($oldversion) {
 
         // Convert "Strict enforcement" settings to new toggles
         $pluginconfig = get_config('local_autogroup');
-        if($pluginconfig->strict){
+        if ($pluginconfig->strict) {
             set_config('listenforgroupchanges', true, 'local_autogroup');
             set_config('listenforgroupmembership', true, 'local_autogroup');
         }
@@ -19,5 +19,6 @@ function xmldb_local_autogroup_upgrade($oldversion) {
         // savepoint reached.
         upgrade_plugin_savepoint(true, 2016062201, 'local', 'autogroup');
     }
+
     return true;
 }

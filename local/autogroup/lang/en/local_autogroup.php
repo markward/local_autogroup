@@ -28,13 +28,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname']  = 'Auto Group';
+$string['pluginname'] = 'Auto Group';
 
 // Course Settings
 $string['actions'] = 'Actions';
 
-$string['coursesettings']  = 'Auto Groups';
-$string['coursesettingstitle']  = 'Auto Groups: {$a}';
+$string['coursesettings'] = 'Auto Groups';
+$string['coursesettingstitle'] = 'Auto Groups: {$a}';
 
 $string['autogroupdescription'] = '"Auto Groups" will automatically assign your users to groups within a course based upon information within their user profile.';
 $string['newsettingsintro'] = 'To start grouping your users, simply select a profile field from the "Group by" option below and click "Save Changes".';
@@ -51,6 +51,7 @@ $string['set_groupby'] = 'Group by';
 $string['confirmdelete'] = 'Are you sure you wish to remove this auto group set?';
 
 $string['create'] = 'Create new group set:';
+$string['manager'] = 'Manager';
 
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
@@ -73,7 +74,7 @@ $string['listenforgroupmembership'] = 'Group Membership';
 $string['listenforgroupmembership_help'] = 'Listen for changes to group membership. This can prevent issues caused by manual changes but will also slow down AutoGroup as it double checks its own actions. Previously configured as "Strict Enforcement".';
 
 // Capabilities
-$string['autogroup:managecourse']  = 'Manage autogroup settings on course';
+$string['autogroup:managecourse'] = 'Manage autogroup settings on course';
 
 // Sort profile field options
 $string['auth'] = "Authentication Method";

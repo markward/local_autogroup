@@ -63,18 +63,20 @@ abstract class usecase {
 
     /**
      * @param $attribute
+     *
      * @return null
      */
-    public function __get($attribute){
+    public function __get($attribute) {
         return null;
     }
 
     /**
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
-    public function __set($attribute, $value){
+    public function __set($attribute, $value) {
         return false;
     }
 }

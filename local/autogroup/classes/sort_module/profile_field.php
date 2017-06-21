@@ -30,40 +30,38 @@
 
 namespace local_autogroup\sort_module;
 
-use local_autogroup\sort_module;
 use local_autogroup\exception;
-use \stdClass;
+use local_autogroup\sort_module;
+use stdClass;
 
 /**
  * Class course
  * @package local_autogroup\domain
  */
-class profile_field extends sort_module
-{
+class profile_field extends sort_module {
     /**
      * @param stdClass $config
-     * @param int $courseid
+     * @param int      $courseid
      */
-    public function __construct($config, $courseid)
-    {
-        if($this->config_is_valid($config)){
+    public function __construct($config, $courseid) {
+        if ($this->config_is_valid($config)) {
             $this->field = $config->field;
         }
-        $this->courseid = (int) $courseid;
+        $this->courseid = (int)$courseid;
     }
 
     /**
      * @param stdClass $config
+     *
      * @return bool
      */
-    public function config_is_valid(stdClass $config)
-    {
-        if(!isset($config->field)){
+    public function config_is_valid(stdClass $config) {
+        if (!isset($config->field)) {
             return false;
         }
 
         //ensure that the stored option is valid
-        if(array_key_exists($config->field, $this->get_config_options())){
+        if (array_key_exists($config->field, $this->get_config_options())) {
             return true;
         }
 
@@ -72,15 +70,14 @@ class profile_field extends sort_module
 
     /**
      * @param stdClass $user
+     *
      * @return array $result
      */
-    public function eligible_groups_for_user(stdClass $user)
-    {
+    public function eligible_groups_for_user(stdClass $user) {
         $field = $this->field;
-        if (isset($user->$field) && !empty($user->$field)){
+        if (isset($user->$field) && !empty($user->$field)) {
             return array($user->$field);
-        }
-        else {
+        } else {
             return array();
         }
     }
@@ -91,24 +88,26 @@ class profile_field extends sort_module
      *
      * @return array
      */
-    public function get_config_options(){
+    public function get_config_options() {
         $options = array(
-            'auth' => get_string('auth', 'local_autogroup'),
-            'department' => get_string('department', 'local_autogroup'),
+            'auth'        => get_string('auth', 'local_autogroup'),
+            'department'  => get_string('department', 'local_autogroup'),
             'institution' => get_string('institution', 'local_autogroup'),
-            'lang' => get_string('lang', 'local_autogroup'),
+            'lang'        => get_string('lang', 'local_autogroup'),
         );
+
         return $options;
     }
 
     /**
      * @return bool|string
      */
-    public function grouping_by(){
-        if(empty ($this->field)){
+    public function grouping_by() {
+        if (empty ($this->field)) {
             return false;
         }
-        return (string) $this->field;
+
+        return (string)$this->field;
     }
 
     /**

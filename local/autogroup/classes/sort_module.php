@@ -30,7 +30,7 @@
 
 namespace local_autogroup;
 
-use \stdClass;
+use stdClass;
 
 /**
  * Sort modules are currently only partially functional. They offer a
@@ -46,7 +46,7 @@ abstract class sort_module {
 
     /**
      * @param stdClass $config
-     * @param int $courseid
+     * @param int      $courseid
      */
     public abstract function __construct($config, $courseid);
 
@@ -60,6 +60,7 @@ abstract class sort_module {
 
     /**
      * @param stdClass $user
+     *
      * @return array $result
      */
     public abstract function eligible_groups_for_user(stdClass $user);
@@ -74,23 +75,24 @@ abstract class sort_module {
 
     /**
      * @param string $attribute
+     *
      * @return array|null
      */
-    public function __get($attribute)
-    {
-        if($attribute = 'groups'){
+    public function __get($attribute) {
+        if ($attribute = 'groups') {
             return $this->eligible_groups();
         }
+
         return null;
     }
 
     /**
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
-    public function __set($attribute,$value)
-    {
+    public function __set($attribute, $value) {
         return false;
     }
 

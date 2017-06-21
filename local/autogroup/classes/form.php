@@ -44,6 +44,5 @@ require_once($CFG->libdir . '/formslib.php');
  *
  * @package local_autogroup
  */
-abstract class form extends moodleform
-{
+abstract class form extends moodleform {
 }

@@ -38,17 +38,17 @@
 
 include_once(__DIR__ . '/locallib.php');
 
-if($CFG->branch == '27') {
+if ($CFG->branch == '27') {
     /**
      * Generates the course settings navigation for Moodle 27
      *
      * @param settings_navigation $settingsnav
-     * @param context $context
+     * @param context             $context
+     *
      * @return bool
      * @throws coding_exception
      */
-    function local_autogroup_extends_settings_navigation(settings_navigation $settingsnav, context $context)
-    {
+    function local_autogroup_extends_settings_navigation(settings_navigation $settingsnav, context $context) {
         if (!local_autogroup\plugin_is_enabled()) {
             return false;
         }
@@ -57,19 +57,17 @@ if($CFG->branch == '27') {
 
         return true;
     }
-}
-
-else {
+} else {
     /**
      * Generates the course settings navigation for Moodle 28 and higher
      *
      * @param settings_navigation $settingsnav
-     * @param context $context
+     * @param context             $context
+     *
      * @return bool
      * @throws coding_exception
      */
-    function local_autogroup_extend_settings_navigation(settings_navigation $settingsnav, context $context)
-    {
+    function local_autogroup_extend_settings_navigation(settings_navigation $settingsnav, context $context) {
         if (!local_autogroup\plugin_is_enabled()) {
             return false;
         }
