@@ -31,7 +31,7 @@
 namespace local_autogroup\usecase;
 
 use local_autogroup\usecase;
-use local_autogroup\domain;
+use local_autogroup\domain\group;
 
 require_once($CFG->dirroot . '/local/autogroup/lib.php');
 
@@ -48,7 +48,7 @@ class verify_group_idnumber extends usecase
     public function __construct($groupid, \moodle_database $db, \moodle_page $page)
     {
         $this->db = $db;
-        $this->group = new domain\group($groupid, $db);
+        $this->group = new group($groupid, $db);
 
         //if we are viewing the group members we should redirect to safety
         if($page->has_set_url() && strstr($page->url, 'group/members.php?group=' . $groupid)) {
@@ -95,7 +95,7 @@ class verify_group_idnumber extends usecase
     }
 
     /**
-     * @var domain\group
+     * @var group
      */
     private $group;
 

@@ -40,9 +40,10 @@ namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');
 
-use \local_autogroup\domain;
+use \local_autogroup\domain\autogroup_set;
 use \local_autogroup\sort_module;
-use \local_autogroup\form;
+use \local_autogroup\form\autogroup_set_delete;
+use \local_autogroup\form\autogroup_set_settings;
 use \local_autogroup\usecase;
 use \local_autogroup_renderer;
 use \moodle_url;
@@ -69,14 +70,14 @@ switch($action) {
         }
         $data = $DB->get_record('local_autogroup_set', array('id'=>$groupsetid));
         $courseid = (int) $data->courseid;
-        $groupset = new domain\autogroup_set($DB,$data);
+        $groupset = new autogroup_set($DB,$data);
 
     case 'add':
         if($courseid < 1 || $courseid == $SITE->id ) {
             throw new exception\invalid_course_argument($courseid);
         }
         if(!isset($groupset)){
-            $groupset = new domain\autogroup_set($DB);
+            $groupset = new autogroup_set($DB);
             $groupset->set_course($courseid);
         }
         break;
@@ -121,10 +122,10 @@ $returnurl = new moodle_url(local_autogroup_renderer::URL_COURSE_SETTINGS, $retu
 $aborturl = new moodle_url(local_autogroup_renderer::URL_COURSE_MANAGE, array('courseid' => $courseid));
 
 if($action == 'delete'){
-    $form = new form\autogroup_set_delete($returnurl, $groupset);
+    $form = new autogroup_set_delete($returnurl, $groupset);
 }
 else {
-    $form = new form\autogroup_set_settings($returnurl, $groupset);
+    $form = new autogroup_set_settings($returnurl, $groupset);
 }
 
 if ($form->is_cancelled()) {
@@ -140,7 +141,7 @@ if ($data = $form->get_data()) {
         // user has selected "dont group"
         $groupset->delete($DB, $cleanupold);
 
-        $groupset = new domain\autogroup_set($DB);
+        $groupset = new autogroup_set($DB);
         $groupset->set_course($courseid);
 
         $updategroupmembership = true;

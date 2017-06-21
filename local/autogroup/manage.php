@@ -37,7 +37,7 @@ namespace local_autogroup;
 
 require_once(dirname(__FILE__) . '/pageinit.php');
 
-use \local_autogroup\domain;
+use \local_autogroup\domain\autogroup_set;
 use \local_autogroup\form;
 use \local_autogroup\usecase;
 use \local_autogroup_renderer;
@@ -61,7 +61,7 @@ $course = $DB->get_record('course', array('id' => $courseid));
 $groupsets = $DB->get_records('local_autogroup_set', array('courseid'=>$courseid));
 
 foreach($groupsets as $k => $groupset) {
-    $groupsets[$k] = new domain\autogroup_set($DB, $groupset);
+    $groupsets[$k] = new autogroup_set($DB, $groupset);
 }
 
 $heading = \get_string('coursesettingstitle', 'local_autogroup', $course->shortname);

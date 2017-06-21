@@ -348,7 +348,7 @@ class autogroup_set extends domain
 
         foreach($this->groups as $k => $group){
             try {
-                $this->groups[$k] = new domain\group($group, $db);
+                $this->groups[$k] = new group($group, $db);
             } catch (exception\invalid_group_argument $e){
                 unset($this->groups[$k]);
             }
@@ -400,7 +400,7 @@ class autogroup_set extends domain
         $data->hidepicture = 0;
 
         try {
-            $newgroup = new domain\group($data, $db);
+            $newgroup = new group($data, $db);
             $newgroup->create();
             $this->groups[$newgroup->id] = $newgroup;
         } catch (exception\invalid_group_argument $e){

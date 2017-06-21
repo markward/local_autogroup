@@ -30,6 +30,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use local_autogroup\domain\autogroup_set;
+
 global $CFG;
 require_once($CFG->libdir . '/outputrenderers.php');
 
@@ -95,7 +97,7 @@ class local_autogroup_renderer extends plugin_renderer_base
         return html_writer::table($table);
     }
 
-    private function groupsets_table_group(local_autogroup\domain\autogroup_set $groupset) {
+    private function groupsets_table_group(autogroup_set $groupset) {
         $row = array();
 
         // get the groupset type

@@ -33,6 +33,7 @@ namespace local_autogroup\sort_module;
 use local_autogroup\sort_module;
 use local_autogroup\exception;
 use \stdClass;
+use totara_job\job_assignment;
 
 if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
     /**

@@ -31,7 +31,7 @@
 namespace local_autogroup\usecase;
 
 use local_autogroup\usecase;
-use local_autogroup\domain;
+use local_autogroup\domain\autogroup_set;
 use moodle_database;
 use stdClass;
 
@@ -70,7 +70,7 @@ class add_default_to_course extends usecase
         if($this->addtonewcourse){
 
             // first generate a new autogroup_set object
-            $autogroup_set = new domain\autogroup_set($this->db);
+            $autogroup_set = new autogroup_set($this->db);
             $autogroup_set->set_course($this->courseid);
 
             // set the sorting options to global default

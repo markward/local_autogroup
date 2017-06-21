@@ -31,7 +31,8 @@
 namespace local_autogroup\usecase;
 
 use local_autogroup\usecase;
-use local_autogroup\domain;
+use local_autogroup\domain\course;
+use local_autogroup\domain\user;
 
 require_once($CFG->dirroot . '/local/autogroup/lib.php');
 
@@ -48,7 +49,7 @@ class verify_course_group_membership extends usecase
      */
     public function __construct($courseid, \moodle_database $db )
     {
-        $this->course = new domain\course($courseid, $db);
+        $this->course = new course($courseid, $db);
         $this->db = $db;
     }
 
@@ -66,7 +67,7 @@ class verify_course_group_membership extends usecase
     }
 
     /**
-     * @var domain\user
+     * @var user
      */
     protected $course;
 

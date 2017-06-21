@@ -30,7 +30,7 @@
 
 namespace local_autogroup\domain;
 
-use local_autogroup\domain;
+use local_autogroup\domain\autogroup_set;
 use local_autogroup\exception;
 
 /**
@@ -133,7 +133,7 @@ class course extends domain
 
         foreach($this->autogroups as $id => $settings){
             try {
-                $this->autogroups[$id] = new domain\autogroup_set($db, $settings);
+                $this->autogroups[$id] = new autogroup_set($db, $settings);
             } catch (exception\invalid_autogroup_set_argument $e){
                 unset($this->autogroups[$id]);
             }
