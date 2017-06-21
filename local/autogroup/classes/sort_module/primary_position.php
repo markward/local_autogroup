@@ -83,12 +83,7 @@ if (isset($CFG->totara_build) && (int)$CFG->totara_build > 20150302) {
             $field = $this->field . 'id';
 
             // Attempt to load the assignment
-            $primarypos = new \position_assignment(
-                array(
-                    'userid'    => $user->id,
-                    'type'      => POSITION_TYPE_PRIMARY
-                )
-            );
+            $primarypos = \totara_job\job_assignment::get_first($user->id, false);
 
             if (isset($primarypos->$field) && !empty($primarypos->$field)) {
                 $method = 'parse_name_' . $this->field; // like parse_name_manager();
