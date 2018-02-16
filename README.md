@@ -33,8 +33,8 @@ moderate them to ensure that groups are kept neat and tidy.
 
 ## Install
 
-1. Copy the plugin directory "autogroup" into moodle\local\.
-2. Check admin notifications to install.
+Install the plugin, like any other plugin.  
+See http://docs.moodle.org/en/Installing_plugins#Installing_a_plugin for details on installing Moodle plugins.
 
 ## Maintainer
 
