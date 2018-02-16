@@ -91,12 +91,14 @@ function sanitise_sort_module_name($name = ''){
     // for when we are passed the full name
     $name = explode('\\',$name);
     $name = array_pop($name);
-
+    $stringkey = 'sort_module:'.$name;
+    if (get_string_manager()->string_exists($stringkey, 'local_autogroup')) {
+        return get_string($stringkey, 'local_autogroup');
+    }
     $name = str_replace('_', ' ', $name);
     $name = ucfirst($name);
     return $name;
 }
-
 function amend_settings_structure(settings_navigation $settingsnav, context $context)
 {
     global $PAGE, $SITE;

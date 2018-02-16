@@ -80,3 +80,7 @@ $string['auth'] = "Authentication Method";
 $string['department'] = "Department";
 $string['institution'] = "Institution";
 $string['lang'] = "Preferred Language";
+
+// Sort module names
+$string['sort_module:profile_field'] = 'Profile field';
+$string['sort_module:user_info_field'] = 'Custom profile field';
