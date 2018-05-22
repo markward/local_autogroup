@@ -61,9 +61,6 @@ class course extends domain
 
         //load autogroup groups for this course
         $this->get_autogroups($db);
-
-        $this->enrolledusers = \get_enrolled_users($this->context);
-
     }
 
     /**
@@ -84,7 +81,8 @@ class course extends domain
     public function verify_all_group_membership(\moodle_database $db)
     {
         $result = true;
-        foreach ($this->enrolledusers as $user){
+        $enrolledusers = \get_enrolled_users($this->context);
+        foreach ($enrolledusers as $user){
             $result &= $this->verify_user_group_membership($user, $db);
         }
         return $result;
@@ -149,10 +147,5 @@ class course extends domain
      * @var \context_course
      */
     private $context;
-
-    /**
-     * @var array
-     */
-    private $enrolledusers = array();
 
 }
