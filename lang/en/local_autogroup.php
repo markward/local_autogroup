@@ -77,6 +77,7 @@ $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
 
 // Sort profile field options
 $string['auth'] = "Authentication Method";
+$string['city'] = "City";
 $string['department'] = "Department";
 $string['institution'] = "Institution";
 $string['lang'] = "Preferred Language";
