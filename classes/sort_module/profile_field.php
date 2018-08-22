@@ -97,6 +97,7 @@ class profile_field extends sort_module
             'department' => get_string('department', 'local_autogroup'),
             'institution' => get_string('institution', 'local_autogroup'),
             'lang' => get_string('lang', 'local_autogroup'),
+            'city' => get_string('city', 'local_autogroup'),
         );
         return $options;
     }
