@@ -76,12 +76,22 @@ class event_handler
             return false;
         }
 
+        global $DB;
         $pluginconfig = get_config('local_autogroup');
+
+        // Add to manually assigned list (local_autogroup_manual).
+        $userid = (int) $event->relateduserid;
+        $groupid = (int) $event->objectid;
+
+        if(!$DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
+            $record = (object) array('userid' => $userid, 'groupid' => $groupid);
+            $DB->insert_record('local_autogroup_manual', $record);
+        }
+        // End of add to manually assigned list (local_autogroup_manual)
+
         if(!$pluginconfig->listenforgroupmembership){
             return false;
         }
-
-        global $DB;
 
         $courseid = (int) $event->courseid;
         $userid = (int) $event->relateduserid;
@@ -101,10 +111,17 @@ class event_handler
             return false;
         }
 
+        global $DB, $PAGE;
         $pluginconfig = get_config('local_autogroup');
 
+        // Remove from manually assigned list (local_autogroup_manual).
+        $userid = (int) $event->relateduserid;
+        $groupid = (int) $event->objectid;
 
-        global $DB, $PAGE;
+        if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
+            $DB->delete_records('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid));
+        }
+        // End of remove from manually assigned list (local_autogroup_manual)
 
         $groupid = (int) $event->objectid;
         $courseid = (int) $event->courseid;
@@ -174,15 +191,21 @@ class event_handler
             return false;
         }
 
-        $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->listenforgroupchanges){
-            return false;
-        }
-
         global $DB, $PAGE;
 
         $courseid = (int) $event->courseid;
         $groupid = (int) $event->objectid;
+
+        // Remove from manually assigned list (local_autogroup_manual).
+        if ($event->eventname === '\core\event\group_deleted') {
+            $DB->delete_records('local_autogroup_manual', array('groupid' => $groupid));
+        }
+        // End of remove from manually assigned list (local_autogroup_manual)
+
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforgroupchanges){
+            return false;
+        }
 
         if($DB->record_exists('groups', array('id'=>$groupid))) {
             $verifygroupidnumber = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);

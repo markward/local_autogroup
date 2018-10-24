@@ -100,6 +100,7 @@ class autogroup_set extends domain
         //this has to be done first to prevent event handler getting in the way
         $db->delete_records('local_autogroup_set', array('id'=>$this->id));
         $db->delete_records('local_autogroup_roles', array('setid'=>$this->id));
+        $db->delete_records('local_autogroup_manual', array('groupid'=>$this->id));
 
         if($cleanupgroups){
             foreach($this->groups as $k => $group){
