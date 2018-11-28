@@ -87,7 +87,6 @@ class event_handler
             $record = (object) array('userid' => $userid, 'groupid' => $groupid);
             $DB->insert_record('local_autogroup_manual', $record);
         }
-        // End of add to manually assigned list (local_autogroup_manual)
 
         if(!$pluginconfig->listenforgroupmembership){
             return false;
@@ -121,7 +120,6 @@ class event_handler
         if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
             $DB->delete_records('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid));
         }
-        // End of remove from manually assigned list (local_autogroup_manual)
 
         $groupid = (int) $event->objectid;
         $courseid = (int) $event->courseid;
@@ -200,7 +198,6 @@ class event_handler
         if ($event->eventname === '\core\event\group_deleted') {
             $DB->delete_records('local_autogroup_manual', array('groupid' => $groupid));
         }
-        // End of remove from manually assigned list (local_autogroup_manual)
 
         $pluginconfig = get_config('local_autogroup');
         if(!$pluginconfig->listenforgroupchanges){
