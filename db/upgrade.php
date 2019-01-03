@@ -5,8 +5,6 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_local_autogroup_upgrade($oldversion) {
     global $DB;
 
-    $dbman = $DB->get_manager();
-
     if ($oldversion < 2016062201) {
 
         // Convert "Strict enforcement" settings to new toggles
@@ -39,6 +37,27 @@ function xmldb_local_autogroup_upgrade($oldversion) {
 
         // Autogroup savepoint reached.
         upgrade_plugin_savepoint(true, 2018102300, 'local', 'autogroup');
+    }
+
+    if ($oldversion < 2019010300)  {
+        require_once(__DIR__ . '/../classes/event_handler.php');
+
+        $roleids = array_keys(get_all_roles());
+        list($sql, $params) = $DB->get_in_or_equal($roleids, SQL_PARAMS_QM, 'param', false);
+        $invalidroleids = $DB->get_fieldset_select('local_autogroup_roles', 'DISTINCT roleid', 'roleid '.$sql, $params);
+        foreach ($invalidroleids as $roleid) {
+            $event = \core\event\role_deleted::create(
+                [
+                    'context' => context_system::instance(),
+                    'objectid' => $roleid,
+                    'other' => [
+                        'shortname' => 'invalidroletoremove'
+                    ]
+                ]
+            );
+            local_autogroup\event_handler::role_deleted($event);
+        }
+        upgrade_plugin_savepoint(true, 2019010300, 'local', 'autogroup');
     }
 
     return true;

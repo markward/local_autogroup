@@ -104,6 +104,14 @@ $observers = array(
     ),
 
     array(
+        'eventname' => '\core\event\role_deleted',
+        'callback' => '\local_autogroup\event_handler::role_deleted',
+        'includefile' => 'local/autogroup/classes/event_handler.php',
+        'internal'    => true,
+        'priority'    => 0,
+    ),
+
+    array(
         'eventname' => '\core\event\course_created',
         'callback' => '\local_autogroup\event_handler::course_created',
         'includefile' => 'local/autogroup/classes/event_handler.php',

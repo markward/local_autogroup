@@ -232,6 +232,19 @@ class event_handler
     }
 
     /**
+     * @param event\role_deleted $event
+     * @return mixed
+     */
+    public static function role_deleted(event\role_deleted $event) {
+        global $DB;
+
+        $DB->delete_records('local_autogroup_roles', ['roleid' => $event->objectid]);
+        unset_config('eligiblerole_'.$event->objectid, 'local_autogroup');
+
+        return true;
+    }
+
+    /**
      * @param event\course_created $event
      * @return mixed
      */
