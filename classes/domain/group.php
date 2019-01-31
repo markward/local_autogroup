@@ -90,6 +90,16 @@ class group extends domain
      * @param int $userid
      */
     public function ensure_user_is_not_member($userid){
+
+        // Do not allow autogroup to remove this User if they were manually assigned to group.
+        $pluginconfig = get_config('local_autogroup');
+        if($pluginconfig->preservemanual) {
+            global $DB;
+            if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $this->id))) {
+                return;
+            }
+        }
+
         foreach($this->members as $member){
             if ($member == $userid) {
                 \groups_remove_member($this->as_object(), $userid);
