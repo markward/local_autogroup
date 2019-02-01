@@ -4,6 +4,7 @@ defined('MOODLE_INTERNAL') || die();
 
 function xmldb_local_autogroup_upgrade($oldversion) {
     global $DB;
+    $dbman = $DB->get_manager();
 
     if ($oldversion < 2016062201) {
 
