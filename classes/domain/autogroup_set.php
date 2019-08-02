@@ -295,18 +295,27 @@ class autogroup_set extends domain
 
         //an array of groupids which will be populated as we ensure membership
         $validgroups = array();
+        $new_group = false;
 
         foreach ($eligiblegroups as $eligiblegroup){
-            if($group = $this->get_or_create_group_by_idnumber($eligiblegroup, $db)) {
+            list($group, $group_created) = $this->get_or_create_group_by_idnumber($eligiblegroup, $db);
+            if($group) {
                 $validgroups[] = $group->id;
                 $group->ensure_user_is_member($user->id);
+                if ($group->courseid == $this->courseid){
+                    if (!$new_group or $group_created){
+                        $new_group = $group->id;
+                    }
+                }
             }
         }
 
         //now run through other groups and ensure user is not a member
         foreach($this->groups as $key => $group){
             if(!in_array($group->id,$validgroups)){
-                $group->ensure_user_is_not_member($user->id);
+                if($group->ensure_user_is_not_member($user->id) and $new_group){
+                    $this->check_forums($user->id, $group->id, $new_group, $db);
+                }
             }
         }
 
@@ -358,7 +367,7 @@ class autogroup_set extends domain
     /**
      * @param string $groupname
      * @param \moodle_database $db
-     * @return bool|domain/group
+     * @return [bool|domain/group, bool]
      */
     private function get_or_create_group_by_idnumber($group, \moodle_database $db)
     {
@@ -372,7 +381,6 @@ class autogroup_set extends domain
         }
 
         $idnumber = $this->generate_group_idnumber($groupidnumber);
-        $result = null;
 
         //firstly run through existing groups and check for matches
         foreach($this->groups as $group){
@@ -383,7 +391,7 @@ class autogroup_set extends domain
                     $group->update();
                 }
 
-                return $group;
+                return [$group, false];
             }
         }
 
@@ -404,10 +412,10 @@ class autogroup_set extends domain
             $newgroup->create();
             $this->groups[$newgroup->id] = $newgroup;
         } catch (exception\invalid_group_argument $e){
-            return false;
+            return [false, false];
         }
 
-        return $this->groups[$newgroup->id];
+        return [$this->groups[$newgroup->id], true];
     }
 
     /**
@@ -600,6 +608,17 @@ class autogroup_set extends domain
         && $autogroupset->id >= 0
         && isset($autogroupset->courseid)
         && $autogroupset->courseid > 0;
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $old_group_id
+     * @param int $new_group_id
+     * @param \moodle_database $db
+     */
+    private function check_forums($user_id, $old_group_id, $new_group_id,  \moodle_database $db){
+        $conditions = ['course' => $this->courseid, 'userid' => $user_id, 'groupid' => $old_group_id];
+        $db->set_field('forum_discussions', 'groupid', $new_group_id, $conditions);
     }
 
     /**
