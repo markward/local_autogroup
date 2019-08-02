@@ -73,21 +73,23 @@ class group extends domain
 
     /**
      * @param int $userid
+     * @return bool
      */
     public function ensure_user_is_member($userid){
         foreach($this->members as $member){
             if ($member == $userid) {
-                return;
+                return false;
             }
         }
 
         //user was not found as a member so will now make member a user
         \groups_add_member($this->as_object(), $userid, 'local_autogroup');
-        return;
+        return true;
     }
 
     /**
      * @param int $userid
+     * @return bool
      */
     public function ensure_user_is_not_member($userid){
 
@@ -103,8 +105,10 @@ class group extends domain
         foreach($this->members as $member){
             if ($member == $userid) {
                 \groups_remove_member($this->as_object(), $userid);
+                return true;
             }
         }
+        return false;
     }
 
     /**
