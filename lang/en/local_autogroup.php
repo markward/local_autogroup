@@ -55,6 +55,7 @@ $string['create'] = 'Create new group set:';
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
 $string['addtorestoredcourses'] = 'Add to restored courses';
+$string['preservemanual'] = 'Manually added Users are not removed when autogroups are updated.';
 $string['defaults'] = 'Default Settings';
 $string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
