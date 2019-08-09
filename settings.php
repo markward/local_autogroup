@@ -75,6 +75,14 @@ if ($hassiteconfig) {
             false
         )
     );
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'local_autogroup/preservemanual',
+            get_string('preservemanual', 'local_autogroup'),
+            '',
+            1
+        )
+    );
 
     // default settings
     $settings->add(
@@ -84,13 +92,15 @@ if ($hassiteconfig) {
             ''
         )
     );
-    //TODO: This will eventually need reworking to allow for properly dynamic sort modules
-    $choices = array(
-        'auth' => get_string('auth', 'local_autogroup'),
-        'department' => get_string('department', 'local_autogroup'),
-        'institution' => get_string('institution', 'local_autogroup'),
-        'lang' => get_string('lang', 'local_autogroup')
-    );
+    //TODO: group by sort module using optgroup when MDL-61248 is fixed. 
+    $choices = [];
+    $modules = \local_autogroup\get_sort_module_list();
+
+    foreach ($modules as $sortedmodulename => $name) {
+        $sortedmodulename = "\\local_autogroup\\sort_module\\$sortedmodulename";
+        $module = new $sortedmodulename(new stdClass(), 1);
+        $choices = array_merge($choices, $module->get_config_options());
+    }
     $settings->add(
         new admin_setting_configselect(
             'local_autogroup/filter',

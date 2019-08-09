@@ -23,8 +23,8 @@
  *
  * @package    local
  * @subpackage autogroup
- * @author     Mark Ward (me@moodlemark.com)
- * @date       December 2014
+ * @author     Arnaud Trouvé (arnaud.trouve@andil.fr)
+ * @date       2017
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ use \stdClass;
  * Class course
  * @package local_autogroup\domain
  */
-class profile_field extends sort_module
+class user_info_field extends sort_module
 {
     /**
      * @param stdClass $config
@@ -76,12 +76,15 @@ class profile_field extends sort_module
      */
     public function eligible_groups_for_user(stdClass $user)
     {
+        global $DB;
+
         $field = $this->field;
-        if (isset($user->$field) && !empty($user->$field)){
-            return array($user->$field);
+        $data = $DB->get_record('user_info_data', ['fieldid' => $field, 'userid' => $user->id]);
+        if ($data && !empty($data->data)){
+            return [$data->data];
         }
         else {
-            return array();
+            return [];
         }
     }
 
@@ -92,12 +95,14 @@ class profile_field extends sort_module
      * @return array
      */
     public function get_config_options(){
-        $options = array(
-            'auth' => get_string('auth', 'local_autogroup'),
-            'department' => get_string('department', 'local_autogroup'),
-            'institution' => get_string('institution', 'local_autogroup'),
-            'lang' => get_string('lang', 'local_autogroup'),
-        );
+        global $DB;
+
+        $options = [];
+        $infofields = $DB->get_records('user_info_field');
+
+        foreach ($infofields as $field) {
+            $options[$field->id] = $field->name;
+        }
         return $options;
     }
 
@@ -105,10 +110,16 @@ class profile_field extends sort_module
      * @return bool|string
      */
     public function grouping_by(){
+        global $DB;
         if(empty ($this->field)){
             return false;
         }
-        return (string) $this->field;
+
+        $field = $DB->get_field('user_info_field', 'name', ['id' => $this->field]);
+        if (empty($field)) {
+            return false;
+        }
+        return (string) $field;
     }
 
     /**

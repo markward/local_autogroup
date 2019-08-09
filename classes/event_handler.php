@@ -76,12 +76,21 @@ class event_handler
             return false;
         }
 
+        global $DB;
         $pluginconfig = get_config('local_autogroup');
+
+        // Add to manually assigned list (local_autogroup_manual).
+        $userid = (int) $event->relateduserid;
+        $groupid = (int) $event->objectid;
+
+        if(!$DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
+            $record = (object) array('userid' => $userid, 'groupid' => $groupid);
+            $DB->insert_record('local_autogroup_manual', $record);
+        }
+
         if(!$pluginconfig->listenforgroupmembership){
             return false;
         }
-
-        global $DB;
 
         $courseid = (int) $event->courseid;
         $userid = (int) $event->relateduserid;
@@ -101,10 +110,16 @@ class event_handler
             return false;
         }
 
+        global $DB, $PAGE;
         $pluginconfig = get_config('local_autogroup');
 
+        // Remove from manually assigned list (local_autogroup_manual).
+        $userid = (int) $event->relateduserid;
+        $groupid = (int) $event->objectid;
 
-        global $DB, $PAGE;
+        if($DB->record_exists('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid))) {
+            $DB->delete_records('local_autogroup_manual', array('userid' => $userid, 'groupid' => $groupid));
+        }
 
         $groupid = (int) $event->objectid;
         $courseid = (int) $event->courseid;
@@ -174,15 +189,20 @@ class event_handler
             return false;
         }
 
-        $pluginconfig = get_config('local_autogroup');
-        if(!$pluginconfig->listenforgroupchanges){
-            return false;
-        }
-
         global $DB, $PAGE;
 
         $courseid = (int) $event->courseid;
         $groupid = (int) $event->objectid;
+
+        // Remove from manually assigned list (local_autogroup_manual).
+        if ($event->eventname === '\core\event\group_deleted') {
+            $DB->delete_records('local_autogroup_manual', array('groupid' => $groupid));
+        }
+
+        $pluginconfig = get_config('local_autogroup');
+        if(!$pluginconfig->listenforgroupchanges){
+            return false;
+        }
 
         if($DB->record_exists('groups', array('id'=>$groupid))) {
             $verifygroupidnumber = new usecase\verify_group_idnumber($groupid, $DB, $PAGE);
@@ -209,6 +229,19 @@ class event_handler
 
         $usecase = new usecase\verify_user_group_membership($userid, $DB);
         return $usecase();
+    }
+
+    /**
+     * @param event\role_deleted $event
+     * @return mixed
+     */
+    public static function role_deleted(event\role_deleted $event) {
+        global $DB;
+
+        $DB->delete_records('local_autogroup_roles', ['roleid' => $event->objectid]);
+        unset_config('eligiblerole_'.$event->objectid, 'local_autogroup');
+
+        return true;
     }
 
     /**

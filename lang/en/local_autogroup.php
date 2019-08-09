@@ -55,6 +55,7 @@ $string['create'] = 'Create new group set:';
 // Admin Settings
 $string['addtonewcourses'] = 'Add to new courses';
 $string['addtorestoredcourses'] = 'Add to restored courses';
+$string['preservemanual'] = 'Manually added Users are not removed when autogroups are updated.';
 $string['defaults'] = 'Default Settings';
 $string['defaultroles'] = 'Default Eligible Roles';
 $string['enabled'] = 'Enabled';
@@ -77,6 +78,11 @@ $string['autogroup:managecourse']  = 'Manage autogroup settings on course';
 
 // Sort profile field options
 $string['auth'] = "Authentication Method";
+$string['city'] = "City";
 $string['department'] = "Department";
 $string['institution'] = "Institution";
 $string['lang'] = "Preferred Language";
+
+// Sort module names
+$string['sort_module:profile_field'] = 'Profile field';
+$string['sort_module:user_info_field'] = 'Custom profile field';
