@@ -72,8 +72,9 @@ class group extends domain
     }
 
     /**
+     * Check that an user is member and add it if necessary.
      * @param int $userid
-     * @return bool
+     * @return bool true if user has just been added as member, false otherwise.
      */
     public function ensure_user_is_member($userid){
         foreach($this->members as $member){
@@ -88,8 +89,9 @@ class group extends domain
     }
 
     /**
+     * Check that an user is NOT member and remove it if necessary.
      * @param int $userid
-     * @return bool
+     * @return bool true if user has just been removed, false otherwise.
      */
     public function ensure_user_is_not_member($userid){
 

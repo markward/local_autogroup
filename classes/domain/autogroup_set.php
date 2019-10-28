@@ -315,7 +315,7 @@ class autogroup_set extends domain
         foreach($this->groups as $key => $group){
             if(!in_array($group->id,$validgroups)){
                 if($group->ensure_user_is_not_member($user->id) and $new_group){
-                    $this->check_forums($user->id, $group->id, $new_group, $db);
+                    $this->update_forums($user->id, $group->id, $new_group, $db);
                 }
             }
         }
@@ -612,12 +612,13 @@ class autogroup_set extends domain
     }
 
     /**
+     * Replace forum_discussions groupid by a new one.
      * @param int $user_id
      * @param int $old_group_id
      * @param int $new_group_id
      * @param \moodle_database $db
      */
-    private function check_forums($user_id, $old_group_id, $new_group_id,  \moodle_database $db){
+    private function update_forums($user_id, $old_group_id, $new_group_id, \moodle_database $db){
         $conditions = ['course' => $this->courseid, 'userid' => $user_id, 'groupid' => $old_group_id];
         $db->set_field('forum_discussions', 'groupid', $new_group_id, $conditions);
     }
