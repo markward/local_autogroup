@@ -92,14 +92,16 @@ if ($hassiteconfig) {
             ''
         )
     );
-    //TODO: group by sort module using optgroup when MDL-61248 is fixed. 
+    //TODO: group by sort module using optgroup when MDL-61248 is fixed.
     $choices = [];
     $modules = \local_autogroup\get_sort_module_list();
 
     foreach ($modules as $sortedmodulename => $name) {
         $sortedmodulename = "\\local_autogroup\\sort_module\\$sortedmodulename";
         $module = new $sortedmodulename(new stdClass(), 1);
-        $choices = array_merge($choices, $module->get_config_options());
+        $options = $module->get_config_options();
+        // FIX array merge doesn't keep array keys.
+        $choices += $options;
     }
     $settings->add(
         new admin_setting_configselect(
