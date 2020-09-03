@@ -76,6 +76,10 @@ class add_default_to_course extends usecase
             // set the sorting options to global default
             $options = new stdClass();
             $options->field = $this->pluginconfig->filter;
+            if(is_numeric($this->pluginconfig->filter)){
+                $autogroup_set->set_sort_module('user_info_field');
+            }
+
             $autogroup_set->set_options($options);
 
             // now we can set the eligible roles to global default

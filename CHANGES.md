@@ -1,3 +1,7 @@
+## v2.5
+  * Solves https://github.com/emmarichardson/local_autogroup/issues/16 default group by
+  * This change requires checking your global config field uses correct key now
+  
 ## v2.4
   * Fixed unnecessary processing on profile update. Thanks to Luuk Verhoeven for this addition.
 
