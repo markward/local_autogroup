@@ -84,7 +84,7 @@ if(isset($CFG->totara_build) && (int) $CFG->totara_build > 20150302) {
             $field = $this->field . 'id';
 
             // Attempt to load the assignment
-            $primarypos = new \position_assignment(
+            $primarypos = new \position(
                 array(
                     'userid'    => $user->id,
                     'type'      => POSITION_TYPE_PRIMARY
